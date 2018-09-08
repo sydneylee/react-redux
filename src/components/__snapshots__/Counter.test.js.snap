@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Counter matches a snapshot with shallow component 1`] = `
+<div>
+  <h1>
+    0
+  </h1>
+  <button
+    onClick={[Function]}
+  >
+    증가 (+)
+  </button>
+  <button
+    onClick={[Function]}
+  >
+    감소 (-)
+  </button>
+</div>
+`;
