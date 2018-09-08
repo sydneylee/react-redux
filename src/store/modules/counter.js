@@ -16,7 +16,7 @@ export function increment(){
 }
 
 export function decrement(){
-    return {type:INCREMENT}
+    return {type:DECREMENT}
 }
 
 
