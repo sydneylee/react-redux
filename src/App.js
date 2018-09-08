@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CounterContainer from './containers/CounterContainer';
+import {BrowserRouter, Switch, Route, Link} from 'react-router-dom';
 
+//TODO : // BrowserRouter 바로 아래에 있는 child 는 single이어야 한다 => 여러개일때는  <div></div>로 wrap할 것
 class App extends Component {
   render() {
     return (
@@ -15,8 +17,26 @@ class App extends Component {
           {/*To get started, edit <code>src/App.js</code> and save to reload.*/}
         {/*</p>*/}
 
-         <CounterContainer></CounterContainer>
 
+        <BrowserRouter>
+            <div>
+                <ul>
+                    <Link to={`/counter`}>COUNTER</Link><span> | </span>
+                    <Link to={`/names`}>NAMES</Link><span> | </span>
+                </ul>
+                <Switch>
+                    <Route exact path="/counter">
+                        <CounterContainer/>
+                    </Route>
+                    <Route exact path="/names">
+                        <div>Names</div>
+                    </Route>
+                    <Route path="*">
+                        <div>* default page</div>
+                    </Route>
+                </Switch>
+            </div>
+        </BrowserRouter>
       </div>
     );
   }
