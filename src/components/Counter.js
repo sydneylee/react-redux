@@ -39,8 +39,8 @@ class Counter extends Component {
         return (
             <div>
                 <h1>{number}</h1>
-                <button onClick={this.handleOnIncrement}>증가 (+)</button>
-                <button onClick={this.handleOnDecrement}>감소 (-)</button>
+                <button id="incBtn" onClick={this.handleOnIncrement}>증가 (+)</button>
+                <button id="decBtn" onClick={this.handleOnDecrement}>감소 (-)</button>
             </div>
         );
     }

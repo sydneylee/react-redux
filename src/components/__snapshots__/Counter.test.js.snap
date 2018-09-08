@@ -6,11 +6,13 @@ exports[`Counter matches a snapshot with shallow component 1`] = `
     0
   </h1>
   <button
+    id="incBtn"
     onClick={[Function]}
   >
     증가 (+)
   </button>
   <button
+    id="decBtn"
     onClick={[Function]}
   >
     감소 (-)

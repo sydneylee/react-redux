@@ -32,4 +32,11 @@ const mapActionDispatchersToProps= (dispatch)=>{
         onDecrement : ()=>{dispatch(counterActionCreators.decrement())},
     };
 };
-export default connect(mapStateToProps, mapActionDispatchersToProps)(CounterContainer);
+//export default connect(mapStateToProps, mapActionDispatchersToProps)(CounterContainer);
+//
+// TODO : enzyme test에서 DOM event test에서는 connect 하지 말것
+/*
+Invariant Violation: Could not find "store" in either the context or props of "Connect(CounterContainer)". Either wrap the root component in a <Provider>, or explicitly pass "store" as a prop to "Connect(CounterContainer)".
+
+ */
+export default CounterContainer;

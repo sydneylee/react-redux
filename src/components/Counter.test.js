@@ -70,16 +70,34 @@ describe('Counter', ()=>{
             expect(component.find('button').exists()).toBe(true);
         });
 
-        // it('simulate onClick for triggering increment', ()=>{
-        //    const mockEvent ={
-        //        target:{
-        //            value : null
-        //        }
-        //    };
-        //     component.find('button.incBtn').simulate('click', mockEvent);
-        //     // console.log(component.state().number);
-        //     expect(component.state().number).toBe(1);
-        // });
+        it('simulate onClick for triggering increment', ()=>{
+           const mockedEvent ={
+               target:{
+                   value : null
+               }
+           };
+           //TODO:sj - Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
+
+            component.find('button#incBtn').simulate('click', mockedEvent);
+
+            //component.find('button').simulate('click', mockEvent);
+            // console.log(component.state().number);
+            expect(component.state().number).toBe(1);
+            component.find('button#incBtn').simulate('click', mockedEvent);
+            expect(component.state().number).toBe(2);
+        });
+
+        it('simulate onClick for triggering decrement', ()=>{
+            const mockedEvent ={
+                target:{
+                    value : null
+                }
+            };
+            component.find('button#decBtn').simulate('click', mockedEvent);
+            expect(component.state().number).toBe(1);
+            component.find('button#decBtn').simulate('click', mockedEvent);
+            expect(component.state().number).toBe(0);
+        });
 
     });
 
