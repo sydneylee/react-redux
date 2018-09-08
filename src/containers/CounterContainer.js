@@ -22,9 +22,10 @@ class CounterContainer extends Component {
         );
     }
 }
-
+//TODO : destructuring
 const mapStateToProps= (state)=>{
-    return {number : state.number};
+    const {counter} = state;
+    return {number : counter.number};
 };
 // Next TODO : define actioType and actionCreators for increment() used here in store/module
 const mapActionDispatchersToProps= (dispatch)=>{

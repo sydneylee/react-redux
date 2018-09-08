@@ -23,8 +23,8 @@ export function decrement(){
 
 
 // 3) initialState
-const initialState = {
-    number : 0
+export const initialState = {
+    number: 0
 };
 
 // 4) export default function Reducer with state and action
