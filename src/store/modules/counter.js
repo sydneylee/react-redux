@@ -67,6 +67,7 @@ export const increment = ()=> dispatch=>{
         dispatch(statusLoadingSync());
         setTimeout(()=>{
             dispatch(incrementSync())
+            //dispatch(statusErrorSync()); //TODO : error test
         }, 3000);
     };
 
@@ -121,16 +122,18 @@ export default function counter(state=initialState, action){
                 loading:false,
                 error:true
             };
-        case INCREMENT:           //TODO -redux-thunk: status : success
+        case INCREMENT:           //TODO -redux-thunk: status : success - loading and error 추가
             return {
                 ...state,
                 loading:false,
                 error:false,
                 number: state.number + 1
             };
-        case DECREMENT:
+        case DECREMENT:          //TODO -redux-thunk: status : success - loading and error 추가
             return {
                 ...state,
+                loading:false,
+                error:false,
                 number: state.number - 1
             } ;
         default:

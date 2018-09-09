@@ -54,6 +54,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import imgSrc from '../assets/img/loading.gif';
 
 class Counter extends Component {
     static defaultProps = {
@@ -73,12 +74,17 @@ class Counter extends Component {
         this.props.onDecrement();
     };
     render() {
-        const {number} = this.props;
+        //TODO - async status를 받아서 status별로 적절히 사용
+        //TODO : for style should be insert as obj : {width: '50px', height:'50px'}
+        //TODO ;  <img src={imgSrc} should be imported and used
+        const {number, loading, error} = this.props;
         return (
             <div>
-                <h1>{number}</h1>
+                {/*<h1>{number}</h1>*/}
+                <h1>{loading? <img src={imgSrc} style={{width: '50px', height:'50px'}} /> : number}</h1>
                 <button id="incBtn" onClick={this.handleOnIncrement}>증가 (+)</button>
                 <button id="decBtn" onClick={this.handleOnDecrement}>감소 (-)</button>
+                {error && <div>error occurrs</div>}
             </div>
         );
 

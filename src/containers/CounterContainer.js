@@ -4,6 +4,25 @@ import {connect} from 'react-redux';
 import Counter from '../components/Counter';
 import * as counterActionCreators from '../store/modules/counter';
 
+// class CounterContainer extends Component {
+//     static defaultProps = {};
+//
+//     static propTypes = {};
+//
+//     state = {};
+//
+//     render() {
+//         const {number, onIncrement, onDecrement} = this.props;
+//         return (
+//             <Counter
+//                 number = {number}
+//                 onIncrement = {onIncrement}
+//                 onDecrement = {onDecrement}
+//             />
+//         );
+//     }
+// }
+
 class CounterContainer extends Component {
     static defaultProps = {};
 
@@ -12,20 +31,19 @@ class CounterContainer extends Component {
     state = {};
 
     render() {
-        const {number, onIncrement, onDecrement} = this.props;
+        //TODO : 좀 더 간단히 모든 props를 그대로 동일 이름으로 넘기는 것
+        //const {number, onIncrement, onDecrement} = this.props;
         return (
-            <Counter
-                number = {number}
-                onIncrement = {onIncrement}
-                onDecrement = {onDecrement}
-            />
+            <Counter {...this.props}/>
         );
     }
 }
-//TODO : destructuring
+
+//TODO : destructuring/ async status -loading and error
 const mapStateToProps= (state)=>{
     const {counter} = state;
-    return {number : counter.number};
+    return {number : counter.number, loading: counter.loading, error: counter.error};
+    // const {number, loading, error} = counter;
 };
 // Next TODO : define actioType and actionCreators for increment() used here in store/module
 const mapActionDispatchersToProps= (dispatch)=>{
