@@ -7,8 +7,8 @@ export const DECREMENT = 'counter/DECREMENT';
 // const INCREMENT_SUCCESS = 'counter/INCREMENT_SUCCESS';//요청이 성공함을 알림
 // const DECREMENT_SUCCESS = 'counter/DECREMENT_SUCCESS';//요청이 성공함을 알림
 
-const ASYNC_STATUS_LOADING = 'counter/INCREMENT_PENDING';//요청이 시작됨을 알림 - common for increment and decrement
-const ASYNC_STATUS_ERROR = 'counter/INCREMENT_ERROR';//요청이 실패함을 알림- common for increment and decrement
+const ASYNC_STATUS_LOADING = 'counter/LOADING';//요청이 시작됨을 알림 - common for increment and decrement
+const ASYNC_STATUS_ERROR = 'counter/ERROR';//요청이 실패함을 알림- common for increment and decrement
 
 // const DECREMENT_PENDING = 'counter/DECREMENT_PENDING';//요청이 시작됨을 알림
 // const DECREMENT_SUCCESS = 'counter/DECREMENT_SUCCESS';//요청이 성공함을 알림

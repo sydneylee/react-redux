@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CounterContainer from './containers/CounterContainer';
+import PostContainer from './containers/post/PostContainer';
 import {BrowserRouter, Switch, Route, Link} from 'react-router-dom';
 import NamesContainer from './containers/names/NamesContainer';
 
@@ -25,6 +26,7 @@ class App extends Component {
                 <ul>
                     <Link to={`/counter`}>COUNTER</Link><span> | </span>
                     <Link to={`/names`}>NAMES</Link><span> | </span>
+                    <Link to={`/post`}>POST</Link><span> | </span>
                 </ul>
                 <Switch>
                     <Route exact path="/counter">
@@ -36,9 +38,16 @@ class App extends Component {
 
                         </div>
                     </Route>
+                    <Route exact path="/post">
+                        <div>
+                           blog post...
+                         <PostContainer/>
+                        </div>
+                    </Route>
                     <Route path="*">
                         <div>* default page</div>
                     </Route>
+
                 </Switch>
             </div>
         </BrowserRouter>
