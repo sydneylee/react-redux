@@ -34,21 +34,27 @@ class App extends Component {
                     <NavLink activeStyle={activeStyle} to={`/post`}>POST</NavLink><span> | </span>
                 </ul>
                 <Switch>
-                    <Route exact path="/counter">
+                    <Route path="/counter">
                         <CounterContainer/>
                     </Route>
-                    <Route exact path="/names">
+                    <Route path="/names">
                         <div>
                             <NamesContainer/>
 
                         </div>
                     </Route>
-                    <Route exact path="/post">
+                    <Route path="/post/:postId" component={PostContainer} />
+                    {/* // TODO : 이 방법으로 하면, location, history, match 등이 component의 props로 전달되지 않는다.
+                    <Route path="/post/:postId" >*/}
+                        {/*<PostContainer/>*/}
+                    {/*</Route>*/}
+                    <Route path="/post">
                         <div>
-                           blog post...
-                         <PostContainer/>
+                            blog post...
+                            <PostContainer/>
                         </div>
                     </Route>
+
                     <Route path="*">
                         <div>* default page</div>
                     </Route>
