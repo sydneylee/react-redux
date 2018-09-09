@@ -11,8 +11,11 @@ describe('CounterContainer', ()=>{
     let buttons = null;
     const mockStore = configureMockStore();
 
+    //TODO - counter아래 number를 넣어야 한다. , counter, names가 합쳐지면서. 생긴 오류 should dispatch increase action by : reason of error
     const mockState = {
-        number: 6
+        counter: {
+            number: 6
+        }
     };
 
     //TODO : mockStore()는 reducer function 이 아니라 mockState를 넣어서 생성함
@@ -32,7 +35,7 @@ describe('CounterContainer', ()=>{
 
     // 이 작동이 일어나면 mockStore는 dispatched action을 받아두고 있는데 이것을 expected action과 비교해보는것.
     it('should dispatch increase action by simulating its child comp button click', ()=>{
-       component.find('button').at(0).simulate('click');
+       component.find('button#incBtn').simulate('click');
        expect(store.getActions()[0]).toEqual(counterExports.increment());
     });
 

@@ -30,7 +30,7 @@ export const initialState = {
 };
 
 // 4) export default function Reducer with state and action
-export default function counter(state=initialState, action){
+export default function names(state=initialState, action){
 
     switch(action.type){
         case CHANGE:

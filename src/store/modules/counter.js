@@ -1,9 +1,9 @@
 // 1) actionTypes
-const INCREMENT = 'counter/INCREMENT';
-const DECREMENT = 'counter/DECREMENT';
+export const INCREMENT = 'counter/INCREMENT';
+export const DECREMENT = 'counter/DECREMENT';
 
-export const incrementAction = {type:INCREMENT};
-export const decrementAction = {type:DECREMENT};
+// export const incrementAction = {type:INCREMENT};
+// export const decrementAction = {type:DECREMENT};
 
 // 2) export functions actionCreators
 // export const increment = ()=>{
@@ -14,11 +14,11 @@ export const decrementAction = {type:DECREMENT};
 // };
 
 export function increment(){
-    return incrementAction;
+    return {type:INCREMENT};
 }
 
 export function decrement(){
-    return decrementAction;
+    return {type:DECREMENT};
 }
 
 

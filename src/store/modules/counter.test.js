@@ -8,8 +8,8 @@ describe('counter module:actionCreators and reducer', ()=>{
 
             //expected actions
             const expectedActions=[
-                counterExports.incrementAction,
-                counterExports.decrementAction,
+                {type:counterExports.INCREMENT},
+                {type:counterExports.DECREMENT}
             ];
             // actual actions from actionCreators
             const actualActionsFrActionCreator=[

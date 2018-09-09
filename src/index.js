@@ -7,6 +7,8 @@ import {createStore, compose} from 'redux';
 import {Provider} from 'react-redux';
 //import counterReducer, * as counterExports from './store/modules/counter'; //TODO
 import reducers from './store/modules';
+
+
 /* //TODO To use redux-devtool extension
 1) import {compose} from 'redux';
 
@@ -22,7 +24,7 @@ window.devToolsExtension? window.devToolsExtension() :f=>f
 const enhancers = compose(
     window.devToolsExtension? window.devToolsExtension() :f=>f
 );
-// initialState
+// initialState - schema
 const initialState = {
     counter: {
         number: 0
