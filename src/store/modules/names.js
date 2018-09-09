@@ -25,7 +25,7 @@ export function submit(name){
 // 3) initialState
 //TODO : state of reducer is own one not whole one
 export const initialState = {
-    name: 'initailName',
+    name: 'initailNameFrNameModule',
     names: ['initialAAA', 'initialBBB', 'initialCCC']
 };
 

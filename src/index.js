@@ -30,19 +30,19 @@ const enhancers = compose(
     applyMiddleware(logger, ReduxThunk),
     window.devToolsExtension? window.devToolsExtension() :f=>f
 );
-// initialState - schema
-const initialState = {
-    counter: {
-        number: -100000
-    },
-    names:{
-        name: 'initailName',
-        names: ['initialAAA', 'initialBBB', 'initialCCC']
-    }
-};
+// initialState - schema //TODO-initialStatus는 각 module별로 각각 해당하는 state만 관리하는 방법을 사용
+// const initialState = {
+//     counter: {
+//         number: -100000
+//     },
+//     names:{
+//         name: 'initailName',
+//         names: ['initialAAA', 'initialBBB', 'initialCCC']
+//     }
+// };
 
 //TODO next - App으로 가서 <Counter />을 <CounterContainer...>로 대체
-const store = createStore(reducers, initialState, enhancers);
+const store = createStore(reducers, undefined, enhancers);
 
 ReactDOM.render(
     <Provider store = {store}>
