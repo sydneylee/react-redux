@@ -87,7 +87,7 @@ export const submit = (payload) => async (dispatch) => {
 // 3) initialState
 //TODO : state of reducer is own one not whole one
 export const initialState = {
-    fullname: {firstname:'firstName', lastname:'lastname'},
+    fullname: {firstname: '', lastname:''},
     names: [{firstname:'firstName', lastname:'lastname'}, {firstname:'firstName2', lastname:'lastname2'}, {firstname:'firstName3', lastname:'lastname3'}]
 };
 

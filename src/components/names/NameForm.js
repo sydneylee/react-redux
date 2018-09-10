@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import validator from '../../utils/validator';
 
 class NameForm extends Component {
     // static defaultProps = {
@@ -10,18 +11,44 @@ class NameForm extends Component {
 
     static propTypes = {};
 
-    //state = {};
+    state = {
+        fullname: {
+            firstname:'',
+            lastname:''
+        },
+        error: false,
+        errorMsg: null
+    };
 
+    // handleOnChange=(e)=>{
+    //     console.log(e.target.value);
+    //     let payload = {};
+    //     payload[e.target.name]=e.target.value;
+    //     this.props.onChange(payload);
+    //     // if(e.target.name == 'firstname') {
+    //     //     this.props.onChange(e.target.value);
+    //     // }else{
+    //     //
+    //     // }
+    // };
     handleOnChange=(e)=>{
-        console.log(e.target.value);
+        
         let payload = {};
         payload[e.target.name]=e.target.value;
-        this.props.onChange(payload);
-        // if(e.target.name == 'firstname') {
-        //     this.props.onChange(e.target.value);
-        // }else{
-        //
-        // }
+        // this.props.onChange(payload);
+        this.setState({
+            ...this.state,
+            fullname:{
+                ...this.state.fullname,
+                ...payload
+            },
+            error:false,
+            errorMsg:null
+        })
+
+        if(!validator.isString(e.target.value)){
+            this.setState({error:true, errorMsg:'Name should be string'})
+        }
     };
 
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
@@ -45,22 +72,25 @@ class NameForm extends Component {
 
 
     render() {
-        const {fullname} = this.props;
+        // const {fullname} = this.props;
+        const {fullname} = this.state;
         return (
             <form onSubmit={this.handleOnSubmit}>
                 <input type="text"
                        name='firstname'
                        value={fullname.firstname}
                        onChange={this.handleOnChange}
-
+                        placeholder='first name'
                 />
                 <input type="text"
                        name='lastname'
                        value={fullname.lastname}
                        onChange={this.handleOnChange}
+                       placeholder='last name'
 
                 />
                 <button type="submit">submit</button>
+                <div style={{fontSize: '10px'}}>{this.state.error && this.state.errorMsg}</div>
             </form>
         );
     }
