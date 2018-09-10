@@ -30,7 +30,7 @@ export const getPost = (postId) => async (dispatch) => {
     try{
         const response = await getPostAPI(postId);
         dispatch({type: ASYNC_STATUS_SUCCESS_POST, payload : response});
-        return response;
+        //return response;
     }
     catch(e){
         dispatch({type:ASYNC_STATUS_ERROR, payload: e});

@@ -8,12 +8,12 @@ import NameList from '../../components/names/NameList';
 class NameContainer extends React.Component{
 
     render(){
-        const {name, names, onSubmit, onChange} = this.props;
+        const {fullname, names, onSubmit, onChange} = this.props;
         return(
 
             <div>
                 <NameForm
-                    name={name}
+                    fullname={fullname}
                     onSubmit={onSubmit}
                     onChange={onChange}
                 />
@@ -32,17 +32,17 @@ const mapStateToProps=(state)=>{
     const {names} = state;
     return {
         names:names.names,
-        name: names.name
+        fullname: names.fullname
     }
 };
 //TODO name should be passed for onSubmit and onChange
 const mapDispatchToProps=(dispatch)=>{
     return {
-        onSubmit:(name)=>{
-            dispatch(namesExports.submit(name));
+        onSubmit:(payload)=>{
+            dispatch(namesExports.submit(payload));
         },
-        onChange:(name)=>{
-            dispatch(namesExports.change(name));
+        onChange:(payload)=>{
+            dispatch(namesExports.change(payload));
         }
     }
 };

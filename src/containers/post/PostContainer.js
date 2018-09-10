@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import * as postExports from '../../store/modules/post';
 import PostItem from '../../components/post/PostItem';
 import PostList from '../../components/post/PostList';
-
+import PostLink from '../../components/post/PostLink';
 class PostContainer extends Component {
     static defaultProps = {};
 
@@ -19,6 +19,8 @@ class PostContainer extends Component {
             <div >
                 <PostItem {...this.props} postId={postId} />
                 <PostList {...this.props} />
+                <PostLink {...this.props} />
+
             </div>
         );
     }
