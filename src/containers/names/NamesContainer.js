@@ -32,7 +32,7 @@ const mapStateToProps=(state)=>{
     const {names} = state;
     return {
         names:names.names,
-        name1: names.name
+        name: names.name
     }
 };
 //TODO name should be passed for onSubmit and onChange
