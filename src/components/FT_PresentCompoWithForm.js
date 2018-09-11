@@ -1,13 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import validator from '../../utils/validator';
+import validator from '../../utils/validator'; //TODO-hs:add customized validator
 
-class NameForm extends Component {
-    // static defaultProps = {
-    //     name : 'default name',
-    //     onChange : ()=>console.warn('TODO : onChange'),
-    //     onSubmit : ()=>console.warn('TODO : onSubmit'),
-    // };
+class ${NAME} extends Component {
 
     static propTypes = {};
 
@@ -19,6 +14,8 @@ class NameForm extends Component {
         error: false,
         errorMsg: null
     };
+
+
 
     // handleOnChange=(e)=>{
     //     console.log(e.target.value);
@@ -32,7 +29,7 @@ class NameForm extends Component {
     //     // }
     // };
     handleOnChange=(e)=>{
-        
+
         let payload = {};
         payload[e.target.name]=e.target.value;
         // this.props.onChange(payload);
@@ -44,7 +41,7 @@ class NameForm extends Component {
             },
             error:false,
             errorMsg:null
-        })
+        });
 
         if(!validator.isString(e.target.value)){
             this.setState({error:true, errorMsg:'Name should be string'})
@@ -80,7 +77,7 @@ class NameForm extends Component {
                        name='firstname'
                        value={fullname.firstname}
                        onChange={this.handleOnChange}
-                        placeholder='first name'
+                       placeholder='first name'
                 />
                 <input type="text"
                        name='lastname'
@@ -96,4 +93,4 @@ class NameForm extends Component {
     }
 }
 
-export default NameForm;
+export default ${NAME};
