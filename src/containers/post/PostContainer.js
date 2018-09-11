@@ -14,7 +14,8 @@ class PostContainer extends Component {
 
     render() {
         //TODO : Route 의 param( /:postId) 을 받아서 처리(이용하는 방법)
-        const {postId} = this.props.match.params;
+        //TODO : check if param(postId) is not null
+        const {postId} = this.props.match? this.props.match.params: {postId : 1};
         return (
             <div >
                 <PostItem {...this.props} postId={postId} />
