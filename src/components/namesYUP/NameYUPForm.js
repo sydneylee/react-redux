@@ -9,24 +9,78 @@ class NameYUPForm extends Component {
 
     state = {
         fullname: {
-            firstname:'aaa',
-            lastname:'bbb'
+            firstname:'',
+            lastname:''
         },
-        error: false,
-        errorMsg: null
+        pristine: {
+            firstname: true,
+            lastname: true,
+        },
+        err: {
+            'fullname.firstname': '',
+            'fullname.lastname': '',
+        }
     };
 
     schema = yup.object().shape(
         {
-            fullname: yup.object({
-                firstname:yup.string().required(),
-                lastname:yup.string().required(),//yup.number().required().positive().integer()
+            fullname: yup.object().shape({
+                firstname: yup.string().required(),
+                lastname: yup.string().required()
             }),
-            error: false,
-            errorMsg: null
+            pristine: yup.object().shape({
+                firstname: yup.boolean(),
+                lastname: yup.boolean()            
+            }),
+            err: yup.object().shape({
+                'fullname.firstname': yup.mixed(),
+                'fullname.lastname': yup.mixed()
+            })
         }
     );
 
+    handleOnBlur = (e)=>{
+      
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
+        // console.log(targetName)
+        const newState = {
+            ...this.state,
+            fullname:{
+                ...this.state.fullname,
+                [targetName]: targetValue
+            },
+            pristine:{
+                ...this.state.pristine,
+                [targetName]: false
+            },
+            err: {
+                'fullname.firstname': '',
+                'fullname.lastname': '',
+            }
+        };
+
+        //3) validate the newState
+        this.schema.validate(newState)
+            .then((value)=>{
+            console.log("success");
+            this.setState(newState);
+        }).catch((err)=>{
+
+            const errState = {
+                ...newState,
+                err:{
+                    ...newState.err,
+                    [err.path]: err.errors
+                }
+            };
+            console.error(errState);
+            this.setState(errState);
+        });
+
+        //4) setState with newState(update) and render
+        // this.setState(newState);
+    }
     // handleOnChange=(e)=>{
     //     console.log(e.target.value);
     //     let payload = {};
@@ -40,33 +94,48 @@ class NameYUPForm extends Component {
     // };
     handleOnChange=(e)=>{
         //1) get payload
-        let payload = {};
-        payload[e.target.name]=e.target.value;
+        // let payload = {};
+        // payload[e.target.name]=e.target.value;
         //let that = this;
-
+        // console.log('e.target.name=', e.target.name);
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
         //2) create newState
         const newState = {
             ...this.state,
             fullname:{
                 ...this.state.fullname,
-                ...payload
+                [targetName]: targetValue
             },
-            error:false,
-            erroMsg:'error'
+            pristine:{
+                ...this.state.pristine,
+                [targetName]: false
+            },
+            err: {
+                'fullname.firstname': '',
+                'fullname.lastname': '',
+            }                      
         };
 
         //3) validate the newState
         this.schema.validate(newState)
-            .then(function(value){
+            .then((value)=>{
             console.log("success");
-            //that.setState(newState);
-        }).catch(function(err){
-            console.error(err);
-            //that.setState(newState);
+            this.setState(newState);
+        }).catch((err)=>{
+            const errState = {
+                ...newState,
+                err:{
+                    ...newState.err,
+                    [err.path]: err.errors
+                }
+            };
+            console.error(errState);
+            this.setState(errState);
         });
 
         //4) setState with newState(update) and render
-        this.setState(newState);
+        // this.setState(newState);
 
         // // this.props.onChange(payload);
         // this.setState({
@@ -109,21 +178,28 @@ class NameYUPForm extends Component {
         const {fullname} = this.state;
         return (
             <form onSubmit={this.handleOnSubmit}>
-                <input type="text"
-                       name='firstname'
-                       value={fullname.firstname}
-                       onChange={this.handleOnChange}
-                       placeholder='first name'
-                />
-                <input type="text"
-                       name='lastname'
-                       value={fullname.lastname}
-                       onChange={this.handleOnChange}
-                       placeholder='last name'
-
-                />
+                <div>
+                    <input type="text"
+                        name='firstname'
+                        value={fullname.firstname}
+                        onChange={this.handleOnChange}
+                        onBlur={this.handleOnBlur}
+                        placeholder='first name'
+                    />
+                    <div style={{fontSize:'10px', color: 'red'}}>{!this.state.pristine.firstname && this.state.err['fullname.firstname']}</div>
+                </div>
+                <div>
+                    <input type="text"
+                        name='lastname'
+                        value={fullname.lastname}
+                        onChange={this.handleOnChange}
+                        onBlur={this.handleOnBlur}
+                        placeholder='last name'
+                    />
+                    <div style={{fontSize:'10px', color: 'red'}}>{!this.state.pristine.lastname && this.state.err['fullname.lastname']}</div>
+                </div>
                 <button type="submit">submit</button>
-                <div style={{fontSize: '10px'}}>{this.state.error && this.state.errorMsg}</div>
+                
             </form>
         );
     }
