@@ -8,21 +8,28 @@ class NameYUPForm extends Component {
 
     static propTypes = {};
 
+    // state = {
+    //     fullname: {
+    //         firstname:'',
+    //         lastname:''
+    //     },
+    //     pristine: {
+    //         firstname: true,
+    //         lastname: true,
+    //     },
+    //     err: {
+    //         firstname: '',
+    //         lastname: '',
+    //     }
+    // };
     state = {
         fullname: {
             firstname:'',
             lastname:''
         },
-        pristine: {
-            firstname: true,
-            lastname: true,
-        },
-        err: {
-            firstname: '',
-            lastname: '',
-        }
+        pristine: {},
+        err: {}
     };
-    
     validate = (targetName, targetValue)=>{
         const error = {targetName: ''};
         if(targetName === 'firstname') {
@@ -79,13 +86,10 @@ class NameYUPForm extends Component {
     //     //4) setState with newState(update) and render
     //     this.setState(newState);
     // }
-    handleOnBlur = (e)=>{
-      
+    validateAndSetNewState = (e) => {
         const targetName = e.target.name;
         const targetValue = e.target.value;
         const error = this.validate(targetName, targetValue);
-        // console.log(targetName)
-        
         const newState = {
             ...this.state,
             fullname:{
@@ -94,86 +98,28 @@ class NameYUPForm extends Component {
             },
             pristine:{
                 ...this.state.pristine,
-                [targetName]: false
             },
             err: {
                 ...this.state.err,
-                [targetName]: error[targetName]
             }
         };
 
+        newState.pristine[targetName] = false;
 
-
-        //4) setState with newState(update) and render
+        if (error[targetName]){
+            newState.err[targetName] = error[targetName]
+        } else {
+            delete newState.err[targetName];
+        }
+        console.log(newState)
         this.setState(newState);
     }
-    // handleOnChange=(e)=>{
-    //     console.log(e.target.value);
-    //     let payload = {};
-    //     payload[e.target.name]=e.target.value;
-    //     this.props.onChange(payload);
-    //     // if(e.target.name == 'firstname') {
-    //     //     this.props.onChange(e.target.value);
-    //     // }else{
-    //     //
-    //     // }
-    // };
-    // handleOnChange=(e)=>{
-    //     //1) get payload
-    //     // let payload = {};
-    //     // payload[e.target.name]=e.target.value;
-    //     //let that = this;
-    //     // console.log('e.target.name=', e.target.name);
-    //     const targetName = e.target.name;
-    //     const targetValue = e.target.value;
-    //     //2) create newState
-    //     const newState = {
-    //         ...this.state,
-    //         fullname:{
-    //             ...this.state.fullname,
-    //             [targetName]: targetValue
-    //         },
-    //         pristine:{
-    //             ...this.state.pristine,
-    //             [targetName]: false
-    //         },
-    //         err: {
-    //             'fullname.firstname': '',
-    //             'fullname.lastname': '',
-    //         }                      
-    //     };
-    //     //4) setState with newState(update) and render
-    //     this.setState(newState);
-    // };
+    handleOnBlur = (e)=>{
+        this.validateAndSetNewState(e)
+    }
+
     handleOnChange=(e)=>{
-        //1) get payload
-        // let payload = {};
-        // payload[e.target.name]=e.target.value;
-        //let that = this;
-        // console.log('e.target.name=', e.target.name);
-        const targetName = e.target.name;
-        const targetValue = e.target.value;
-
-        const error = this.validate(targetName, targetValue);
-
-        //2) create newState
-        const newState = {
-            ...this.state,
-            fullname:{
-                ...this.state.fullname,
-                [targetName]: targetValue
-            },
-            pristine:{
-                ...this.state.pristine,
-                [targetName]: false
-            },
-            err: {
-                ...this.state.err,
-                [targetName]: error[targetName]
-            }                      
-        };
-        //4) setState with newState(update) and render
-        this.setState(newState);
+        this.validateAndSetNewState(e)
     };
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
     nameRef=null;
@@ -208,7 +154,7 @@ class NameYUPForm extends Component {
                         onBlur={this.handleOnBlur}
                         placeholder='first name'
                     />
-                    <div style={{fontSize:'10px', color: 'red'}}>{!this.state.pristine.firstname && this.state.err.firstname}</div>
+                    <div style={{fontSize:'10px', color: 'red'}}>{this.state.pristine && !this.state.pristine.firstname && this.state.err.firstname}</div>
                 </div>
                 <div>
                     <input type="text"
@@ -218,9 +164,10 @@ class NameYUPForm extends Component {
                         onBlur={this.handleOnBlur}
                         placeholder='last name'
                     />
-                    <div style={{fontSize:'10px', color: 'red'}}>{!this.state.pristine.lastname && this.state.err.lastname}</div>
+                    <div style={{fontSize:'10px', color: 'red'}}>{this.state.pristine && !this.state.pristine.lastname && this.state.err.lastname}</div>
                 </div>
-                <button type="submit">submit</button>
+                <button type="submit" disabled={Object.keys(this.state.pristine).length < 2 || Object.keys(this.state.err).length > 0 }>submit</button>
+                <button type="submit" disabled={true}>submit</button>
                 
             </form>
         );
