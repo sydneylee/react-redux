@@ -118,7 +118,7 @@ const formValidator = new FormValidator([
       message: 'last name should be string.' 
     }
   ]);
-
+let validation = null;
 class NameForm extends Component {
 
     // static defaultProps = {
@@ -173,10 +173,11 @@ class NameForm extends Component {
 
     handleInputChange = event => {
         event.preventDefault();
-    
+
         this.setState({
           [event.target.name]: event.target.value,
         });
+        validation = formValidator.validate(this.state);
     }
 
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
@@ -210,7 +211,7 @@ class NameForm extends Component {
                        onChange={this.handleOnChange}
                         placeholder='first name'
                 />
-                <span className="help-block">{validation.email.message}</span>
+                <span className="help-block">{validation && validation.email.message}</span>
                 <input type="text"
                        name='lastname'
                        value={fullname.lastname}
@@ -218,7 +219,7 @@ class NameForm extends Component {
                        placeholder='last name'
 
                 />
-                <span className="help-block">{validation.email.message}</span>
+                <span className="help-block">{validation && validation.email.message}</span>
                 <button type="submit">submit</button>
                 <div style={{fontSize: '10px'}}>{this.state.error && this.state.errorMsg}</div>
             </form>
