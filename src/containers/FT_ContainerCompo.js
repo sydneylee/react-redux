@@ -1,8 +1,16 @@
+/**
+ * ContainerComponent
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 import React from 'react';
 import {connect} from 'react-redux';
-// import * as namesExports from '../../store/modules/names';
-// import NameForm from '../../components/names/NameForm';
-// import NameList from '../../components/names/NameList';
+import * as ${store_modules_modulename}Exports from '../../store/modules/${store_modules_modulename}';
+// import NameForm from '../../components/${store_modules_modulename}/NameForm';
+// import NameList from '../../components/${store_modules_modulename}/NameList';
 
 
 class ${NAME} extends React.Component{
@@ -29,21 +37,24 @@ class ${NAME} extends React.Component{
 
 }
 // lsj-TIP : destructure state into a specific variable(module name)
+// which was combined by combineReducers() in index.js
 const mapStateToProps=(state)=>{
-    // const {names} = state;
+    // const {${store_modules_modulename}} = state;
     // return {
-    //     names:names.names,
-    //     fullname: names.fullname
+    //     names:${store_modules_modulename}.names,
+    //     fullname: ${store_modules_modulename}.fullname
     // }
+    //return ${store_modules_modulename}
+
 };
 // lsj-TIP : pls check if any param is required
 const mapDispatchToProps=(dispatch)=>{
     return {
         // onSubmit:(payload)=>{
-        //     dispatch(namesExports.submit(payload));
+        //     dispatch(${store_modules_modulename}Exports.submit(payload));
         // },
         // onChange:(payload)=>{
-        //     dispatch(namesExports.change(payload));
+        //     dispatch(${store_modules_modulename}Exports.change(payload));
         // }
     }
 };

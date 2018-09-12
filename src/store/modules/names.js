@@ -107,7 +107,6 @@ export default function names(state=initialState, action){
                 loading:false,
                 error : true
             };
-            return{};
         case CHANGE:
             return {
                 ...state,

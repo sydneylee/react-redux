@@ -59,7 +59,6 @@ export default function post(state=initialState, action){
                 loading:false,
                 error : true
             };
-            return{};
         case ASYNC_STATUS_SUCCESS_POST:
             return{
                 ...state,
