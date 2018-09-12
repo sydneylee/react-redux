@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import * as yup from 'yup';
+// import PropTypes from 'prop-types';
+// import * as yup from 'yup';
 import * as validator from 'validator';
 
 class NameYUPForm extends Component {
