@@ -70,26 +70,29 @@ class NameForm extends Component {
         let payload = {};
         payload[e.target.name]=e.target.value;
         // this.props.onChange(payload);
-        this.setState({
+        const newState = {
             ...this.state,
             fullname:{
                 ...this.state.fullname,
-                ...payload
+                payload
             },
             error:false,
             errorMsg:'error'
-        })
-
+        }
         this.schema
-            .validate(this.state)
+            .validate(newState)
             .then(function(value){
                 console.log(value);
             })
             .catch(function(err) {
                 // console.log(err.errors); // => true
                 console.log(err);
-                console.log(err.params.path)
+                //console.log(err.params.path)
             });
+
+        this.setState(newState)
+
+
 
 
         // if(!validator.isString(e.target.value)){
