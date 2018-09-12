@@ -21,7 +21,6 @@ class NameYUPForm extends Component {
             'fullname.lastname': '',
         }
     };
-
     schema = yup.object().shape(
         {
             fullname: yup.object().shape({
@@ -30,7 +29,7 @@ class NameYUPForm extends Component {
             }),
             pristine: yup.object().shape({
                 firstname: yup.boolean(),
-                lastname: yup.boolean()            
+                lastname: yup.boolean()         
             }),
             err: yup.object().shape({
                 'fullname.firstname': yup.mixed(),
@@ -38,7 +37,49 @@ class NameYUPForm extends Component {
             })
         }
     );
+    // schema = yup.object().shape(
+    //     {
+    //         fullname: yup.object().shape({
+    //             firstname: yup.string().required().test('isDulpl', 'duplicated name', (value)=>{
+    //                 return new Promise((resolve, reject)=>{
+    //                     setTimeout(()=>{
+    //                         resolve(!(value === 'aaa'));
+    //                     }, 3000)
+    //                 });
+    //             }),
+    //             lastname: yup.string().required()
+    //         }),
+    //         pristine: yup.object().shape({
+    //             firstname: yup.boolean(),
+    //             lastname: yup.boolean()         
+    //         }),
+    //         err: yup.object().shape({
+    //             'fullname.firstname': yup.mixed(),
+    //             'fullname.lastname': yup.mixed()
+    //         })
+    //     }
+    // );
 
+    // handleOnBlur = (e)=>{
+      
+    //     const targetName = e.target.name;
+    //     const targetValue = e.target.value;
+    //     // console.log(targetName)
+    //     const newState = {
+    //         ...this.state,
+    //         fullname:{
+    //             ...this.state.fullname,
+    //             [targetName]: targetValue
+    //         },
+    //         pristine:{
+    //             ...this.state.pristine,
+    //             [targetName]: false
+    //         },
+    //         err: {
+    //             'fullname.firstname': '',
+    //             'fullname.lastname': '',
+    //         }
+    //     };
     handleOnBlur = (e)=>{
       
         const targetName = e.target.name;
@@ -59,7 +100,6 @@ class NameYUPForm extends Component {
                 'fullname.lastname': '',
             }
         };
-
         //3) validate the newState
         this.schema.validate(newState)
             .then((value)=>{
