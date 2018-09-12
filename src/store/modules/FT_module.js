@@ -135,7 +135,6 @@ export default function ${NAME}(state=initialState, action){
     //             loading:false,
     //             error : true
     //         };
-    //         return{};
     //     case ASYNC_STATUS_SUCCESS_POST:
     //         return{
     //             ...state,

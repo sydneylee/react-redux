@@ -7,6 +7,7 @@ import PostContainer from './containers/post/PostContainer';
 import {BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';//TODO : NavLink for active or hover...Style
 import NamesContainer from './containers/names/NamesContainer';
 import NamesRFFContainer from './containers/namesRFF/NamesRFFContainer';
+import NamesYUPContainer from './containers/namesYUP/NamesYUPContainer';
 
 //TODO : // BrowserRouter(=Router) 와 Route 바로 아래에 있는 child 는 single이어야 한다
 // => 여러개일때는  <div></div>로 wrap할 것
@@ -33,8 +34,8 @@ class App extends Component {
                     <NavLink activeStyle={activeStyle} to={`/counter`}>COUNTER</NavLink><span> | </span>
                     <NavLink activeStyle={activeStyle} to={`/names`}>NAMES</NavLink><span> | </span>
                     <NavLink activeStyle={activeStyle} to={`/namesRFF`}>NamesRFF</NavLink><span> | </span>
+                    <NavLink activeStyle={activeStyle} to={`/namesYUP`}>NamesYUP</NavLink><span> | </span>
                     <NavLink activeStyle={activeStyle} to={`/post`}>POST</NavLink><span> | </span>
-
                 </ul>
                 <Switch>
                     <Route path="/counter">
@@ -61,6 +62,12 @@ class App extends Component {
                     <Route path="/namesRFF">
                         <div>
                             <NamesRFFContainer/>
+
+                        </div>
+                    </Route>
+                    <Route path="/namesYUP">
+                        <div>
+                            <NamesYUPContainer/>
 
                         </div>
                     </Route>
