@@ -8,28 +8,16 @@ class NameYUPForm extends Component {
 
     static propTypes = {};
 
-    // state = {
-    //     fullname: {
-    //         firstname:'',
-    //         lastname:''
-    //     },
-    //     pristine: {
-    //         firstname: true,
-    //         lastname: true,
-    //     },
-    //     err: {
-    //         firstname: '',
-    //         lastname: '',
-    //     }
-    // };
     state = {
         fullname: {
             firstname:'',
             lastname:''
         },
-        pristine: {},
-        err: {}
+        touched:{},
+        error: {}
     };
+
+
     validate = (targetName, targetValue)=>{
         const error = {targetName: ''};
         if(targetName === 'firstname') {
@@ -42,50 +30,6 @@ class NameYUPForm extends Component {
         return error;
     }
 
-    // handleOnBlur = (e)=>{
-      
-    //     const targetName = e.target.name;
-    //     const targetValue = e.target.value;
-    //     // console.log(targetName)
-    //     const newState = {
-    //         ...this.state,
-    //         fullname:{
-    //             ...this.state.fullname,
-    //             [targetName]: targetValue
-    //         },
-    //         pristine:{
-    //             ...this.state.pristine,
-    //             [targetName]: false
-    //         },
-    //         err: {
-    //             'fullname.firstname': '',
-    //             'fullname.lastname': '',
-    //         }
-    //     };
-    // handleOnBlur = (e)=>{
-      
-    //     const targetName = e.target.name;
-    //     const targetValue = e.target.value;
-    //     // console.log(targetName)
-    //     const newState = {
-    //         ...this.state,
-    //         fullname:{
-    //             ...this.state.fullname,
-    //             [targetName]: targetValue
-    //         },
-    //         pristine:{
-    //             ...this.state.pristine,
-    //             [targetName]: false
-    //         },
-    //         err: {
-    //             'fullname.firstname': '',
-    //             'fullname.lastname': '',
-    //         }
-    //     };
-
-    //     //4) setState with newState(update) and render
-    //     this.setState(newState);
-    // }
     validateAndSetNewState = (e) => {
         const targetName = e.target.name;
         const targetValue = e.target.value;
@@ -96,24 +40,24 @@ class NameYUPForm extends Component {
                 ...this.state.fullname,
                 [targetName]: targetValue
             },
-            pristine:{
-                ...this.state.pristine,
-            },
-            err: {
-                ...this.state.err,
-            }
         };
 
-        newState.pristine[targetName] = false;
+        newState.touched[targetName] = true;
 
         if (error[targetName]){
-            newState.err[targetName] = error[targetName]
+            newState.error[targetName] = error[targetName]
         } else {
-            delete newState.err[targetName];
+            delete newState.error[targetName];
         }
-        console.log(newState)
         this.setState(newState);
     }
+    showError = (targetName)=>{
+        return this.state.touched[targetName] && this.state.error[targetName];
+    }
+    checkDisabled = () => {
+        return Object.keys(this.state.error).length > 0 || Object.keys(this.state.touched).length < 2;
+    }
+
     handleOnBlur = (e)=>{
         this.validateAndSetNewState(e)
     }
@@ -121,6 +65,7 @@ class NameYUPForm extends Component {
     handleOnChange=(e)=>{
         this.validateAndSetNewState(e)
     };
+
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
     nameRef=null;
     handleOnSubmit=(e)=>{
@@ -154,7 +99,7 @@ class NameYUPForm extends Component {
                         onBlur={this.handleOnBlur}
                         placeholder='first name'
                     />
-                    <div style={{fontSize:'10px', color: 'red'}}>{this.state.pristine && !this.state.pristine.firstname && this.state.err.firstname}</div>
+                    <div style={{fontSize:'10px', color: 'red'}}>{this.showError('firstname')}</div>
                 </div>
                 <div>
                     <input type="text"
@@ -164,10 +109,9 @@ class NameYUPForm extends Component {
                         onBlur={this.handleOnBlur}
                         placeholder='last name'
                     />
-                    <div style={{fontSize:'10px', color: 'red'}}>{this.state.pristine && !this.state.pristine.lastname && this.state.err.lastname}</div>
+                    <div style={{fontSize:'10px', color: 'red'}}>{this.showError('lastname')}</div>
                 </div>
-                <button type="submit" disabled={Object.keys(this.state.pristine).length < 2 || Object.keys(this.state.err).length > 0 }>submit</button>
-                <button type="submit" disabled={true}>submit</button>
+                <button type="submit" disabled={this.checkDisabled()}>submit</button>
                 
             </form>
         );
