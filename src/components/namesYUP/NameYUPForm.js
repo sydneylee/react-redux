@@ -136,21 +136,65 @@ class NameYUPForm extends Component {
         touched:{},
         errors: {},
         disabled: true,
+        loading: false,
     };
 
 
+    // validate = (targetName, targetValue)=>{
+    //     const error = {targetName: ''};
+    //     if(targetName === 'firstname') {
+    //         if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+    //         else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
+    //     }else if(targetName === 'lastname'){
+    //         if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+    //         else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
+    //     }
+    //     return error;
+    // }
+    isDuplicate = (targetValue)=> {
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                if(targetValue === 'aaa'){
+                    resolve(true);
+                }else{
+                    resolve(false);
+                }
+            }, 3000);
+        });
+    }
+    isDuplicate2 = (targetValue)=> {
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                if(targetValue === 'bbb'){
+                    resolve(true);
+                }else{
+                    resolve(false);
+                }
+            }, 3000);
+        });
+    }
     validate = (targetName, targetValue)=>{
         const error = {targetName: ''};
         if(targetName === 'firstname') {
             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
+
+            // if(!error[targetName]){
+            //     this.isDuplicate(targetValue)
+            //     .then(
+            //         (result)=>{
+            //             if (result) error[targetName] = 'is duplicate.';
+            //             console.log(result);
+            //         }
+            //     );
+            // }
+            
         }else if(targetName === 'lastname'){
             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
         }
         return error;
     }
-
     getNewState = (targetName, targetValue, change, error, state, fieldNum) => {
 
         const newState = {
@@ -181,6 +225,30 @@ class NameYUPForm extends Component {
         }
         const error = this.validate(targetName, targetValue);
         const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
+        if(targetName === 'firstname' && !newState.errors['firstname']){
+            newState.loading = true;
+            this.isDuplicate(targetValue)
+            .then(
+                (result)=>{
+                    if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
+                    newState.loading = false;
+                    this.setState(newState);
+                    // console.log(result);
+                }
+            );
+        } else if(targetName === 'lastname' && !newState.errors['lastname']){
+            newState.loading = true;
+            this.isDuplicate2(targetValue)
+            .then(
+                (result)=>{
+                    if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
+                    newState.loading = false;
+                    this.setState(newState);
+                    // console.log(result);
+                }
+            );
+  
+        } 
         this.setState(newState);
     }
 
@@ -195,7 +263,12 @@ class NameYUPForm extends Component {
         }
         const error = this.validate(targetName, targetValue);
         const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
+
+
+        
         this.setState(newState);
+        
+
     };
 
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
@@ -230,6 +303,7 @@ class NameYUPForm extends Component {
                         onChange={this.handleOnChange}
                         onBlur={this.handleOnBlur}
                         placeholder='first name'
+                        disabled={this.state.loading}
                     />
                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.firstname}</div>
                 </div>
@@ -243,7 +317,7 @@ class NameYUPForm extends Component {
                     />
                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.lastname}</div>
                 </div>
-                <button type="submit" disabled={this.state.disabled}>submit</button>
+                <button type="submit" disabled={this.state.disabled || this.state.loading}>submit</button>
                 
             </form>
         );
