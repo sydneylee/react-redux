@@ -139,18 +139,6 @@ class NameYUPForm extends Component {
         loading: false,
     };
 
-
-    // validate = (targetName, targetValue)=>{
-    //     const error = {targetName: ''};
-    //     if(targetName === 'firstname') {
-    //         if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
-    //         else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
-    //     }else if(targetName === 'lastname'){
-    //         if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
-    //         else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
-    //     }
-    //     return error;
-    // }
     isDuplicate = (targetValue)=> {
         return new Promise((resolve, reject)=>{
             setTimeout(()=>{
@@ -178,17 +166,6 @@ class NameYUPForm extends Component {
         if(targetName === 'firstname') {
             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
-
-            // if(!error[targetName]){
-            //     this.isDuplicate(targetValue)
-            //     .then(
-            //         (result)=>{
-            //             if (result) error[targetName] = 'is duplicate.';
-            //             console.log(result);
-            //         }
-            //     );
-            // }
-            
         }else if(targetName === 'lastname'){
             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
@@ -244,7 +221,6 @@ class NameYUPForm extends Component {
                     if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
                     newState.loading = false;
                     this.setState(newState);
-                    // console.log(result);
                 }
             );
   
@@ -263,12 +239,8 @@ class NameYUPForm extends Component {
         }
         const error = this.validate(targetName, targetValue);
         const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
-
-
         
         this.setState(newState);
-        
-
     };
 
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
@@ -276,20 +248,13 @@ class NameYUPForm extends Component {
     handleOnSubmit=(e)=>{
         e.preventDefault();
         let data = new FormData(e.target);
-        // console.log('data');
-        // for(var pair of data.entries()) {
-        //     console.log(pair[0]+', '+pair[0]);
-        // }
+
         let payload = {};
         for(var pair of data.entries()) {
-            //console.log(pair[0]+', '+pair[0]);
             payload[pair[0]]=pair[1];
         }
         this.props.onSubmit(payload);
-        //this.props.onSubmit(this.nameRef.value);
     };
-
-
 
     render() {
         // const {fullname} = this.props;
