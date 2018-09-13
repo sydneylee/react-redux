@@ -9,8 +9,11 @@ import NamesContainer from './containers/names/NamesContainer';
 import NamesRFFContainer from './containers/namesRFF/NamesRFFContainer';
 import NamesYUPContainer from './containers/namesYUP/NamesYUPContainer';
 import NamesPHSContainer from './containers/namesPHS/NamesPHSContainer';
+//NodeJS server and Home route added
+import HomeContainer from './containers/home/HomeContainer';
 
 //TODO : // BrowserRouter(=Router) 와 Route 바로 아래에 있는 child 는 single이어야 한다
+//TODO : exact 필요 - home route for NavLink and Route
 // => 여러개일때는  <div></div>로 wrap할 것
 class App extends Component {
   render() {
@@ -31,7 +34,7 @@ class App extends Component {
 
         <BrowserRouter>
             <div>
-                <ul>
+                <ul><NavLink activeStyle={activeStyle} to={`/`} exact>HOME</NavLink><span> | </span>
                     <NavLink activeStyle={activeStyle} to={`/counter`}>COUNTER</NavLink><span> | </span>
                     <NavLink activeStyle={activeStyle} to={`/names`}>NAMES</NavLink><span> | </span>
                     <NavLink activeStyle={activeStyle} to={`/namesRFF`}>NamesRFF</NavLink><span> | </span>
@@ -40,6 +43,9 @@ class App extends Component {
                     <NavLink activeStyle={activeStyle} to={`/post`}>POST</NavLink><span> | </span>
                 </ul>
                 <Switch>
+                    <Route exact path="/">
+                        <HomeContainer/>
+                    </Route>
                     <Route path="/counter">
                         <CounterContainer/>
                     </Route>
@@ -49,17 +55,7 @@ class App extends Component {
 
                         </div>
                     </Route>
-                    <Route path="/post/:postId" component={PostContainer} />
-                    {/* // TODO : 이 방법으로 하면, location, history, match 등이 component의 props로 전달되지 않는다.
-                    <Route path="/post/:postId" >*/}
-                        {/*<PostContainer/>*/}
-                    {/*</Route>*/}
-                    <Route path="/post">
-                        <div>
-                            blog post...
-                            <PostContainer/>
-                        </div>
-                    </Route>
+
                     {/*apply react-final-form for validation*/}
                     <Route path="/namesRFF">
                         <div>
@@ -74,6 +70,17 @@ class App extends Component {
                     <Route path="/namesPHS">
                         <div>
                             <NamesPHSContainer/>
+                        </div>
+                    </Route>
+                    <Route path="/post/:postId" component={PostContainer} />
+                    {/* // TODO : 이 방법으로 하면, location, history, match 등이 component의 props로 전달되지 않는다.
+                    <Route path="/post/:postId" >*/}
+                    {/*<PostContainer/>*/}
+                    {/*</Route>*/}
+                    <Route path="/post">
+                        <div>
+                            blog post...
+                            <PostContainer/>
                         </div>
                     </Route>
                     <Route path="*">

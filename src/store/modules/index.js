@@ -6,7 +6,10 @@ import namesYUP from './namesYUP';
 import namesPHS from './namesPHS';
 import post from './post';
 
+import home from './home';
+
 export default combineReducers({
+    home,
     counter,
     names,
     namesRFF,
