@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import validator from '../../utils/validator'; //TODO-hs:add customized validator
 
 class ${NAME} extends Component {
 
@@ -43,9 +42,6 @@ class ${NAME} extends Component {
             errorMsg:null
         });
 
-        if(!validator.isString(e.target.value)){
-            this.setState({error:true, errorMsg:'Name should be string'})
-        }
     };
 
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
