@@ -191,7 +191,43 @@ class NameForm extends Component {
         return newState;
     }
 
-    handleOnBlur = (e)=>{
+    // handleOnBlur = (e)=>{
+    //     const targetName = e.target.name;
+    //     const targetValue = e.target.value;
+    //     const change = {
+    //         fullname: {
+    //             ...this.state.fullname,
+    //             [targetName]: targetValue
+    //         }
+    //     }
+    //     const error = this.validate(targetName, targetValue);
+    //     const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
+    //     if(targetName === 'firstname' && !newState.errors['firstname']){
+    //         newState.loading = true;
+    //         this.isDuplicate(targetValue)
+    //         .then(
+    //             (result)=>{
+    //                 if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
+    //                 newState.loading = false;
+    //                 this.setState(newState);
+    //                 // console.log(result);
+    //             }
+    //         );
+    //     } else if(targetName === 'lastname' && !newState.errors['lastname']){
+    //         newState.loading = true;
+    //         this.isDuplicate2(targetValue)
+    //         .then(
+    //             (result)=>{
+    //                 if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
+    //                 newState.loading = false;
+    //                 this.setState(newState);
+    //             }
+    //         );
+  
+    //     } 
+    //     this.setState(newState);
+    // }
+    handleOnBlur = async (e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
         const change = {
@@ -204,30 +240,20 @@ class NameForm extends Component {
         const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
         if(targetName === 'firstname' && !newState.errors['firstname']){
             newState.loading = true;
-            this.isDuplicate(targetValue)
-            .then(
-                (result)=>{
-                    if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
-                    newState.loading = false;
-                    this.setState(newState);
-                    // console.log(result);
-                }
-            );
+            const result = await this.isDuplicate(targetValue);
+            if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
+            newState.loading = false;
+            this.setState(newState);
+
         } else if(targetName === 'lastname' && !newState.errors['lastname']){
             newState.loading = true;
-            this.isDuplicate2(targetValue)
-            .then(
-                (result)=>{
-                    if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
-                    newState.loading = false;
-                    this.setState(newState);
-                }
-            );
-  
+            const result = await this.isDuplicate2(targetValue);
+            if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
+            newState.loading = false;
+            this.setState(newState);  
         } 
         this.setState(newState);
     }
-
     handleOnChange=(e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
