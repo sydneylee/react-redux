@@ -123,7 +123,7 @@
 import React, {Component} from 'react';
 import * as validator from 'validator';
 
-class NameForm extends Component {
+class NamePHSForm extends Component {
     static defaultProps = {};
 
     static propTypes = {};
@@ -131,8 +131,10 @@ class NameForm extends Component {
     state = {
         fullname: {
             firstname:'',
-            lastname:''
+            lastname:'',
         },
+        password1:'',
+        password2:'',
         touched:{},
         errors: {},
         disabled: true,
@@ -149,7 +151,7 @@ class NameForm extends Component {
                 }
             }, 3000);
         });
-    }
+    };
     isDuplicate2 = (targetValue)=> {
         return new Promise((resolve, reject)=>{
             setTimeout(()=>{
@@ -160,18 +162,49 @@ class NameForm extends Component {
                 }
             }, 3000);
         });
-    }
+    };
+
+    // validator library :
     validate = (targetName, targetValue)=>{
         const error = {targetName: ''};
         if(targetName === 'firstname') {
             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
-        }else if(targetName === 'lastname'){
+        }
+        else if(targetName === 'lastname'){
             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
         }
+        // else if(targetName.indexOf('password')>-1){
+        //     const min = 8, max = 10;
+        //     if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+        //     //else if(!validator.isLength(targetValue, {min: min, max:max})) { error[targetName] = `should be $(min)~$(max)`}
+        //     else if(!validator.isLength(targetValue, {min: min, max:max})) { error[targetName] = 'should be 8~10'}
+        //     else if((targetName === 'password1' && this.state.password2 != '' && targetValue != this.state.password2) ||(targetName === 'password2' && this.state.password1 != '' && targetValue != this.state.password1 )){
+        //         error[targetName] = 'should be same';
+        //     }
+        // }
+        else if(targetName === 'password1'){
+            const min = 8, max = 10;
+            if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+            //else if(!validator.isLength(targetValue, {min: min, max:max})) { error[targetName] = `should be $(min)~$(max)`}
+            else if(!validator.isLength(targetValue, {min: min, max:max})) { error[targetName] = 'should be 8~10'}
+            else if(  this.state.password2 != '' && targetValue != this.state.password2){
+                error[targetName] = 'should be same';
+            }
+
+        }
+        else if(targetName === 'password2'){
+            const min = 8, max = 10;
+            if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+            //else if(!validator.isLength(targetValue, {min: min, max:max})) { error[targetName] = `should be $(min)~$(max)`}
+            else if(!validator.isLength(targetValue, {min: min, max:max})) { error[targetName] = 'should be 8~10'}
+            else if( this.state.password1 != '' && targetValue != this.state.password1){
+                error[targetName] = 'should be same';
+            }
+        }
         return error;
-    }
+    };
     getNewState = (targetName, targetValue, change, error, state, fieldNum) => {
 
         const newState = {
@@ -185,59 +218,33 @@ class NameForm extends Component {
             newState.errors[targetName] = newState.touched[targetName] && error[targetName]
         } else {
             delete newState.errors[targetName];
+            if(targetName === 'password1') { delete newState.errors['password2']}
+            else if(targetName === 'password2'){delete newState.errors['password1']}
         }
         newState.disabled = Object.keys(newState.errors).length > 0 || Object.keys(newState.touched).length < fieldNum;
 
         return newState;
-    }
+    };
 
-    // handleOnBlur = (e)=>{
-    //     const targetName = e.target.name;
-    //     const targetValue = e.target.value;
-    //     const change = {
-    //         fullname: {
-    //             ...this.state.fullname,
-    //             [targetName]: targetValue
-    //         }
-    //     }
-    //     const error = this.validate(targetName, targetValue);
-    //     const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
-    //     if(targetName === 'firstname' && !newState.errors['firstname']){
-    //         newState.loading = true;
-    //         this.isDuplicate(targetValue)
-    //         .then(
-    //             (result)=>{
-    //                 if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
-    //                 newState.loading = false;
-    //                 this.setState(newState);
-    //                 // console.log(result);
-    //             }
-    //         );
-    //     } else if(targetName === 'lastname' && !newState.errors['lastname']){
-    //         newState.loading = true;
-    //         this.isDuplicate2(targetValue)
-    //         .then(
-    //             (result)=>{
-    //                 if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
-    //                 newState.loading = false;
-    //                 this.setState(newState);
-    //             }
-    //         );
-  
-    //     } 
-    //     this.setState(newState);
-    // }
     handleOnBlur = async (e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
-        const change = {
-            fullname: {
-                ...this.state.fullname,
+
+        let change = null;
+        if(targetName === 'firstname' || targetName === 'lastname') {
+           change = {
+                fullname: {
+                    ...this.state.fullname,
+                    [targetName]: targetValue
+                }
+            };
+        }else{
+            change = {
                 [targetName]: targetValue
-            }
+            };
         }
         const error = this.validate(targetName, targetValue);
-        const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
+        const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2);
         if(targetName === 'firstname' && !newState.errors['firstname']){
             newState.loading = true;
             const result = await this.isDuplicate(targetValue);
@@ -250,18 +257,25 @@ class NameForm extends Component {
             const result = await this.isDuplicate2(targetValue);
             if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
             newState.loading = false;
-            this.setState(newState);  
-        } 
+            this.setState(newState);
+        }
         this.setState(newState);
-    }
+    };
     handleOnChange=(e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
-        const change = {
-            fullname: {
-                ...this.state.fullname,
+        let change = null;
+        if(targetName === 'firstname' || targetName === 'lastname') {
+            change = {
+                fullname: {
+                    ...this.state.fullname,
+                    [targetName]: targetValue
+                }
+            };
+        }else{
+            change = {
                 [targetName]: targetValue
-            }
+            };
         }
         const error = this.validate(targetName, targetValue);
         const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2)
@@ -284,10 +298,11 @@ class NameForm extends Component {
 
     render() {
         // const {fullname} = this.props;
-        const {fullname} = this.state;
+        const {fullname, password1, password2} = this.state;
         return (
             <form onSubmit={this.handleOnSubmit}>
                 <div>
+                <span>
                     <input type="text"
                         name='firstname'
                         value={fullname.firstname}
@@ -297,8 +312,8 @@ class NameForm extends Component {
                         disabled={this.state.loading}
                     />
                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.firstname}</div>
-                </div>
-                <div>
+                </span>
+                <span>
                     <input type="text"
                         name='lastname'
                         value={fullname.lastname}
@@ -307,12 +322,32 @@ class NameForm extends Component {
                         placeholder='last name'
                     />
                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.lastname}</div>
+                </span>
                 </div>
+                <div>
+                    <input type="password"
+                           name='password1'
+                           value={password1}
+                           onChange={this.handleOnChange}
+                           onBlur={this.handleOnBlur}
+                           placeholder='password1'
+                    />
+                    <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.password1}</div>
+                    <input type="password"
+                           name='password2'
+                           value={password2}
+                           onChange={this.handleOnChange}
+                           onBlur={this.handleOnBlur}
+                           placeholder='password2'
+                    />
+                    <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.password2}</div>
+                </div>
+                <div>
                 <button type="submit" disabled={this.state.disabled || this.state.loading}>submit</button>
-                
+                </div>
             </form>
         );
     }
 }
 
-export default NameForm;
+export default NamePHSForm;
