@@ -3,6 +3,7 @@ import counter from './counter';
 import names from './names';
 import namesRFF from './namesRFF';
 import namesYUP from './namesYUP';
+import namesPHS from './namesPHS';
 import post from './post';
 
 export default combineReducers({
@@ -10,6 +11,7 @@ export default combineReducers({
     names,
     namesRFF,
     namesYUP,
+    namesPHS,
     post,
 
 })

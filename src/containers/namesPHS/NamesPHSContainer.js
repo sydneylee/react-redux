@@ -1,19 +1,19 @@
 /**
  * ContainerComponent
- * name        : NamesYUPContainer
- * description : Names container using YUP form validation
+ * name        : NamesPHSContainer
+ * description : NamesContainer using PHS form validator + validator library
  * author      : lsj
- * created     : 12/9/18
+ * created     : 13/9/18
  */
 
 import React from 'react';
 import {connect} from 'react-redux';
-import * as namesYUPExports from '../../store/modules/namesYUP';
-import NameYUPForm from '../../components/namesYUP/NameYUPForm';
-// import NameList from '../../components/namesYUP/NameList';
+import * as namesPHSExports from '../../store/modules/namesPHS';
+import NamePHSForm from '../../components/namesPHS/NamePHSForm';
+//import NameList from '../../components/namesPHS/NameList';
 
 
-class NamesYUPContainer extends React.Component {
+class NamesPHSContainer extends React.Component {
 
     render() {
         // return(
@@ -21,12 +21,11 @@ class NamesYUPContainer extends React.Component {
         //         this is names using React-final-form
         //     </div>
         // );
-
         const {fullname, names, onSubmit, onChange} = this.props;
         return(
             <div>
-                names YUP form validation
-                <NameYUPForm
+                names PHS form validation
+                <NamePHSForm
                     fullname={fullname}
                     onSubmit={onSubmit}
                     onChange={onChange}
@@ -57,25 +56,25 @@ class NamesYUPContainer extends React.Component {
 // lsj-TIP : destructure state into a specific variable(module name)
 // which was combined by combineReducers() in index.js
 const mapStateToProps = (state) => {
-    const {namesYUP} = state;
+    const {namesPHS} = state;
     return {
-        names:namesYUP.names,
-        fullname: namesYUP.fullname
-    }
-    return namesYUP
+        names:namesPHS.names,
+        fullname: namesPHS.fullname
+    };
+    return namesPHS
 
 };
 // lsj-TIP : pls check if any param is required
 const mapDispatchToProps = (dispatch) => {
     return {
         onSubmit:(payload)=>{
-            dispatch(namesYUPExports.submit(payload));
+            dispatch(namesPHSExports.submit(payload));
         },
         onChange:(payload)=>{
-            dispatch(namesYUPExports.change(payload));
+            dispatch(namesPHSExports.change(payload));
         }
     }
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(NamesYUPContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(NamesPHSContainer);

@@ -123,7 +123,7 @@
 import React, {Component} from 'react';
 import * as validator from 'validator';
 
-class NameYUPForm extends Component {
+class NameForm extends Component {
     static defaultProps = {};
 
     static propTypes = {};
@@ -289,4 +289,4 @@ class NameYUPForm extends Component {
     }
 }
 
-export default NameYUPForm;
+export default NameForm;
