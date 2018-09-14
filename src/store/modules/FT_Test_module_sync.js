@@ -1,3 +1,11 @@
+/**
+ * Testing module - sync
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 import ${NAME}, * as ${NAME}Exports from './${NAME}';
 
 
@@ -22,7 +30,7 @@ describe('${NAME} module:actionCreators and reducer', ()=>{
         });
 
     });
-    //TODO
+    // lsj-TIP :
     // ${NAME}라는 reducer함수에 state, action를 인자로 넣어서 reduce()함수를 실행시키는데
     // 이때, state가 undefined(not null) 일때는 initialState가 default value로 assign된 상태에서
     //1) 처음 실행될 때는, action도 없어서 default 에 적용되어 initialState가 적용된 state가 returned되는 상황을 테스트

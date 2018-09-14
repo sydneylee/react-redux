@@ -1,3 +1,11 @@
+/**
+ * Presentational Component with form
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
@@ -44,7 +52,7 @@ class ${NAME} extends Component {
 
     };
 
-    //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
+    // lsj-TIP : onSubmit에서 e를 이용해서 form전체의 값을 받기
     nameRef=null;
     handleOnSubmit=(e)=>{
         e.preventDefault();

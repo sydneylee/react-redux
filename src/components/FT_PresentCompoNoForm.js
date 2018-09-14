@@ -1,3 +1,11 @@
+/**
+ * Presentational Component without form
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 import React, {Component} from 'react';
 
 //import imgSrc from '../assets/img/loading.gif';

@@ -1,3 +1,11 @@
+/**
+ * Testing for Presentational Component using Enzyme shallows
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 // // 1) JEST default tesing - component rendering
 // import React from 'react';
 // import reactDOM from 'react-dom';
@@ -76,7 +84,7 @@
 //                    value : null
 //                }
 //            };
-//            //TODO:sj - Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
+//            // lsj-TIP : Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
 //
 //             component.find('button#incBtn').simulate('click', mockedEvent);
 //
@@ -122,7 +130,7 @@
 //         expect(component).toMatchSnapshot();
 //     });
 //
-//     //TODO : Enzyme의 shallow test는 component 하나만 shallow 환경에서 test하는 것이므로, 각 action은 store에서 할것.
+//     // lsj-TIP : Enzyme의 shallow test는 component 하나만 shallow 환경에서 test하는 것이므로, 각 action은 store에서 할것.
 //     // describe('find button from rendered component', ()=>{
 //     //     it('found button', ()=>{
 //     //         expect(component.find('button').exists()).toBe(true);
@@ -134,7 +142,7 @@
 //     //                 value : null
 //     //             }
 //     //         };
-//     //         //TODO:sj - Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
+//     //         // lsj-TIP : Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
 //     //
 //     //         component.find('button#incBtn').simulate('click', mockedEvent);
 //     //
@@ -190,7 +198,7 @@ describe('${NAME}', ()=>{
         expect(component.find('h1').at(0).text(), '1001');
     });
 
-    //TODO : Enzyme의 shallow test는 component 하나만 shallow 환경에서 test하는 것이므로, 각 action은 store에서 할것.
+    // lsj-TIP : Enzyme의 shallow test는 component 하나만 shallow 환경에서 test하는 것이므로, 각 action은 store에서 할것.
     // describe('find button from rendered component', ()=>{
     //     it('found button', ()=>{
     //         expect(component.find('button').exists()).toBe(true);
@@ -202,7 +210,7 @@ describe('${NAME}', ()=>{
     //                 value : null
     //             }
     //         };
-    //         //TODO:sj - Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
+    //         // lsj-TIP : Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
     //
     //         component.find('button#incBtn').simulate('click', mockedEvent);
     //
@@ -234,7 +242,7 @@ describe('${NAME}', ()=>{
         });
 
         it('simulate onClick for triggering increment', ()=>{
-            //TODO:sj - Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
+            // lsj-TIP : Method “simulate” is only meant to be run on a single node. 2 found instead. => use id for selector
 
             //#id
             component.find('button#incBtn').simulate('click');

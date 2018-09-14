@@ -1,3 +1,11 @@
+/**
+ * Testing for Presentational Component using react-test-renderer
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 import React from 'react';
 import renderer from 'react-test-renderer';
 import  ${NAME} from './${NAME}';

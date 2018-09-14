@@ -1,66 +1,55 @@
 /**
  * ContainerComponent
  * name        : HomeContainer
- * description : HomeContainer with post using NodeJS server
+ * description : HomeContainer compo - getItems in async
  * author      : lsj
- * created     : 13/9/18
+ * created     : 14/9/18
  */
 
 import React from 'react';
 import {connect} from 'react-redux';
-import * as homeExports from '../../store/modules/home';
-//import * as postExports from "../../store/modules/post";
-// import NameForm from '../../components/home/NameForm';
-// import NameList from '../../components/home/NameList';
-import Home from '../../components/home/Home';
+import * as homeExports from '../../store/modules/homeOrg';
+import imgSrc from '../../assets/img/loading.gif';
+//import HomeForm  from '../../components/home/HomeForm';
+//import HomeList  from '../../components/home/HomeList';
+import HomeItems from '../../components/home/HomeItemsOrg';
 
 
 class HomeContainer extends React.Component {
 
-    //TODO : temp for testing for app-server connection
-    state = {
-        response : ''
-    };
-
-    //TODO :
+    // lsj-TIP : dispatch action(async) to redux store
     componentDidMount(){
-        this.callApi()
-            .then(res=>this.setState({response:res.express}))
-            .catch(err => console.log(err));
+        this.props.getItems();
     }
 
-    callApi = async ()=>{
-        const response = await fetch('/api/hello');
-        console.log(response);
-        const body = await response.json();
-        if(response.status !== 200) throw Error(body.message);
-        return body;
-    };
 
     render() {
-        //const {} = this.props;
-        //const {postId} = this.props.match? this.props.match.params: {postId : 1};
-        return (
-            <div >
-                <Home {...this.state} />
-                {/*<PostItem {...this.props} postId={postId} />*/}
-                {/*<PostList {...this.props} />*/}
-                {/*<PostLink {...this.props} />*/}
 
+        //return (<div></div>);
+        const sty = {width:'32px',height:'32px'};
+
+        // lsj-TIP :For async : null checking and loading image
+        return (
+            <div>
+            {/*<div>*/}
+                {/*{this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={sty}/> }*/}
+            {/*</div>*/}
+            <div>
+                {this.props.items && this.props.items.length!=0 ? <HomeItems items={this.props.items}/> : <img src={imgSrc} style={sty}/> }
+            </div>
             </div>
         );
 
 
         // const {fullname, names, onSubmit, onChange} = this.props;
         // return(
-        //
         //     <div>
-        //         <NameForm
+        //         <HomeForm
         //             fullname={fullname}
         //             onSubmit={onSubmit}
         //             onChange={onChange}
         //         />
-        //         <NameList
+        //         <HomeList
         //             names={names}
         //         />
         //     </div>
@@ -74,39 +63,38 @@ class HomeContainer extends React.Component {
 // lsj-TIP : destructure state into a specific variable(module name)
 // which was combined by combineReducers() in index.js
 const mapStateToProps = (state) => {
-    const {post} = state;
+    const {home} = state;
     return {
-        posts: post.posts,
-        loading: post.loading,
-        error : post.error,
-        title : post.title,
-        body: post.body
+        loading: home.loading,
+        error: home.error,
+        //  names:     home.names,
+        //  fullname:  home.fullname
+        items :    home.items,
+        item:      home.item,
     };
 
-    // const {home} = state;
-    // return {
-    //     names:home.names,
-    //     fullname: home.fullname
-    // }
     //return home
 
 };
 // lsj-TIP : pls check if any param is required
 const mapDispatchToProps = (dispatch) => {
     return {
-        //getPost : (postId)=>{dispatch(postExports.getPost(postId))}
-
+        // onSubmit:(payload)=>{
+        //     dispatch(homeExports.submit(payload));
+        // },
+        // onChange:(payload)=>{
+        //     dispatch(homeExports.change(payload));
+        // },
+        // getPost : (homeId)=>{
+        //     dispatch(homeExports.getPost(homeId))
+        // },
+        getItems : ()=>{
+            dispatch(homeExports.getItems())
+        },
+        getItem :  (id)=>{
+            dispatch(homeExports.getItem(id))
+        },
     }
-
-    // return {
-    //     // onSubmit:(payload)=>{
-    //     //     dispatch(homeExports.submit(payload));
-    //     // },
-    //     // onChange:(payload)=>{
-    //     //     dispatch(homeExports.change(payload));
-    //     // }
-    //
-    // }
 };
 
 

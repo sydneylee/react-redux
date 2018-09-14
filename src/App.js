@@ -10,7 +10,7 @@ import NamesRFFContainer from './containers/namesRFF/NamesRFFContainer';
 import NamesYUPContainer from './containers/namesYUP/NamesYUPContainer';
 import NamesPHSContainer from './containers/namesPHS/NamesPHSContainer';
 //NodeJS server and Home route added
-import HomeContainer from './containers/home/HomeContainer';
+import HomeContainer from './containers/home/HomeContainerOrg';
 
 //TODO : // BrowserRouter(=Router) 와 Route 바로 아래에 있는 child 는 single이어야 한다
 //TODO : exact 필요 - home route for NavLink and Route

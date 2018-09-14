@@ -1,3 +1,11 @@
+/**
+ * Testing RouterComponent
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 // import React from 'react';
 // import ReactDOM from 'react-dom';
 // import ${NAME} from './${NAME}';
