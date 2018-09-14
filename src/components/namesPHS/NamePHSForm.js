@@ -250,7 +250,6 @@ class NamePHSForm extends Component {
         disabled: true,
         loading: false,
     };
-    newState;
     isDuplicate = (targetValue)=> {
         return new Promise((resolve, reject)=>{
             setTimeout(()=>{
@@ -275,9 +274,9 @@ class NamePHSForm extends Component {
     };
 
     // validator library :
+    newState;
     validate = (targetName, targetValue)=>{
 
-        // let newState;
         if(targetName === 'firstname' || targetName === 'lastname') {
             this.newState = {
                ...this.state,
@@ -318,7 +317,6 @@ class NamePHSForm extends Component {
             else if(targetName==='password2'){delete this.newState.errors['password1']}
         }
         this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < 4;
-        // return newState;
     };
 
     handleOnBlur = async (e)=>{
@@ -333,7 +331,7 @@ class NamePHSForm extends Component {
             this.setState(this.newState);
             
             const result = await this.isDuplicate(targetValue);
-            console.log(result);
+
             if (result) {
                 this.newState.errors[targetName] = 'is duplicate.';
                 this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < 4;
@@ -355,7 +353,6 @@ class NamePHSForm extends Component {
         }else{
             this.setState(this.newState);
         }
-
     };
     handleOnChange=(e)=>{
         const targetName = e.target.name;
@@ -392,7 +389,6 @@ class NamePHSForm extends Component {
                         onChange={this.handleOnChange}
                         onBlur={this.handleOnBlur}
                         placeholder='first name'
-                        disabled={this.state.loading}
                     />
                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.firstname}</div>
                 </span>
