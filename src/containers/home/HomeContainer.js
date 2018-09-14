@@ -12,7 +12,7 @@ import * as homeExports from '../../store/modules/homeOrg';
 import imgSrc from '../../assets/img/loading.gif';
 //import HomeForm  from '../../components/home/HomeForm';
 //import HomeList  from '../../components/home/HomeList';
-import HomeItems from '../../components/home/HomeItemsOrg';
+import HomeItems from '../../components/home/HomeItems';
 
 
 class HomeContainer extends React.Component {
@@ -34,9 +34,10 @@ class HomeContainer extends React.Component {
             {/*<div>*/}
                 {/*{this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={sty}/> }*/}
             {/*</div>*/}
-            <div>
-                {this.props.items && this.props.items.length!=0 ? <HomeItems items={this.props.items}/> : <img src={imgSrc} style={sty}/> }
-            </div>
+                <img src={imgSrc}/>
+                <div>
+                    {this.props.items && this.props.items.length!=0 ? <HomeItems items={this.props.items}/> : <img src={imgSrc} style={sty}/> }
+                </div>
             </div>
         );
 

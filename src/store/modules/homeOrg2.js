@@ -1,9 +1,9 @@
 /**
  * module
- * name        : ${NAME}
- * description : ${description}
+ * name        : home
+ * description : home module
  * author      : lsj
- * created     : ${DATE}
+ * created     : 14/9/18
  */
 
 // 0) import modules if needed
@@ -14,65 +14,47 @@
 // 1) define the async 3 actionTypes:
 // LOADING, ERROR : commonly used for any async actions
 // SUCCESS : needed for each specific async action
-const ASYNC_STATUS_LOADING = '${NAME}/LOADING';
-const ASYNC_STATUS_ERROR =   '${NAME}/ERROR';
+const ASYNC_STATUS_LOADING = 'home/LOADING';
+const ASYNC_STATUS_ERROR = 'home/ERROR';
 
 // 1-1) defines any async actionTypes required
-// const ASYNC_STATUS_SUCCESS_ITEM =   '${NAME}/SUCCESS_ITEM';
-// const ASYNC_STATUS_SUCCESS_ITEMS =  '${NAME}/SUCCESS_ITEMS';
-// const ASYNC_STATUS_SUCCESS_SUBMIT = '${NAME}/SUCCESS_SUBMIT';
-
+// const ASYNC_STATUS_SUCCESS_HOME =   'home/SUCCESS_HOME';
+// const ASYNC_STATUS_SUCCESS_SUBMIT = 'home/SUCCESS_SUBMIT';
+const ASYNC_STATUS_SUCCESS_HOME_ITEMS =   'home/SUCCESS_HOME_ITEMS';
+const ASYNC_STATUS_SUCCESS_ITEM =   'home/SUCCESS_ITEM';
 
 // 1-2) defines any sync actionTypes required
-//const CHANGE = '${NAME}/CHANGE';
+//const CHANGE = 'home/CHANGE';
 
 
 // 2-1) define and exports async actionCreator functions required
 // lsj-TIP : for async Thunk HTTP request
 // - axios.get()
 // - fetch() needs  ".then(function(response){return response.json()})"
-// - template string안에서 ${NAME}Id를 $와 중괄호(curly bracket)안에 올바르게 넣으면, intellij의 FileTemplate parser가 자신의 변수로하게 인식해서
-// file template을 이용하여 파일을 생성시 ${NAME}Id의 기본값을 묻는다.. 따라서 아래에서는 그부분을 $}${NAME}Id{로 임시대체했슴
+// - template string안에서 homeId를 $와 중괄호(curly bracket)안에 올바르게 넣으면, intellij의 FileTemplate parser가 자신의 변수로하게 인식해서
+// file template을 이용하여 파일을 생성시 homeId의 기본값을 묻는다.. 따라서 아래에서는 그부분을 $}homeId{로 임시대체했슴
 
-// function getItemAPI(id){
-//     //return axios.get(`http://jsonplaceholder.typicode.com/${NAME}s/id`);
-//     //return fetch(`http://jsonplaceholder.typicode.com/${NAME}s/id`).then(function(response){return response.json()});
-//
-// }
-// export const getItem = (id) => async (dispatch) => {
-//
-//     dispatch({ type: ASYNC_STATUS_LOADING });
-//     try{
-//         const response = await getItemAPI(id);
-//         dispatch({type: ASYNC_STATUS_SUCCESS_${module_name_in_all_upper}, payload : response});
-//     }
-//     catch(e){
-//         dispatch({type:ASYNC_STATUS_ERROR, payload: e});
-//     }
-// };
+function getItemAPI(id){
+    //return axios.get(`http://jsonplaceholder.typicode.com/homes/$}homeId{`);
+    return fetch(`/api/homeItem/${id}`).then(function(response){return response.json()});
 
-// function getItemsAPI(){
-//     return fetch('/api/${NAME}Items').then(function(response){return response.json()});
-// }
-//
-// export const getItems = () => async (dispatch) => {
-//
-//     dispatch({ type: ASYNC_STATUS_LOADING });
-//     try{
-//         const response = await getItemsAPI();
-//         dispatch({type: ASYNC_STATUS_SUCCESS_ITEMS, payload : response});
-//         //return response;
-//     }
-//     catch(e){
-//         dispatch({type:ASYNC_STATUS_ERROR, payload: e});
-//     }
-// };
+}
+export const getItem = (id) => async (dispatch) => {
 
+    dispatch({ type: ASYNC_STATUS_LOADING });
+    try{
+        const response = await getItemAPI(id);
+        dispatch({type: ASYNC_STATUS_SUCCESS_ITEM, payload : response});
+    }
+    catch(e){
+        dispatch({type:ASYNC_STATUS_ERROR, payload: e});
+    }
+};
 
 // // lsj-TIP : thunk http async request : asios대신 fetch를 사용했는데, 주의할 점은 fetch에서는 .then(function(response){return response.json()})부분까지 처리해주어야 body와 title모두가 들어옴.
 // function submitAPI(payload){
-//     //return axios.get(`http://jsonplaceholder.typicode.com/${NAME}s/id`);
-//     //return fetch(`http://jsonplaceholder.typicode.com/${NAME}s/id`).then(function(response){return response.json()});
+//     //return axios.get(`http://jsonplaceholder.typicode.com/homes/$}homeId{`);
+//     //return fetch(`http://jsonplaceholder.typicode.com/homes/$}homeId{`).then(function(response){return response.json()});
 //     //.then(function(myJson){console.log(JSON.stringify(myJson))});-이 부분은 사용하면 안됨
 //     //return fetch('....', {method:'POST', payload:payload}).then(function(response){return response.json()});
 //     //fail: TODO
@@ -111,6 +93,22 @@ const ASYNC_STATUS_ERROR =   '${NAME}/ERROR';
 //     }
 // };
 
+function getItemsAPI(){
+    return fetch('/api/homeItems').then(function(response){return response.json()});
+}
+
+export const getItems = () => async (dispatch) => {
+
+    dispatch({ type: ASYNC_STATUS_LOADING });
+    try{
+        const response = await getItemsAPI();
+        dispatch({type: ASYNC_STATUS_SUCCESS_HOME_ITEMS, payload : response});
+        //return response;
+    }
+    catch(e){
+        dispatch({type:ASYNC_STATUS_ERROR, payload: e});
+    }
+};
 
 
 //2-2) define and exports sync actionCreator functions required
@@ -120,61 +118,62 @@ const ASYNC_STATUS_ERROR =   '${NAME}/ERROR';
 
 
 //3) define the initialState for a specific module
-export const initialState ={
+export const initialState = {
     loading: false,
     error: false,
     // fullname: {firstname:'firstName', lastname:'lastname'},
     // names: [{firstname:'firstName', lastname:'lastname'}, {firstname:'firstName2', lastname:'lastname2'}, {firstname:'firstName3', lastname:'lastname3'}],
-    // ${NAME}s :[{id:1, title:'aaaaa'},{id:2, title:'bbbbb'},{id:3, title:'ccccc'}],
+    // homes :[{homeId:1, title:'aaaaa'},{homeId:2, title:'bbbbb'},{homeId:3, title:'ccccc'}],
     // title: 'initialStateTitle',
     // body:'initialStateBody',
-    // items :[],
-    // item : {},
-
+    items :[],
+    item :{},
 };
 
 //4) define reducer function for async and sync actionTypes defined above
 // export default handleActions({
-//     [GET_${module_name_in_all_upper}_PENDING]: (state) => ({ ...state, fetching: true, error: false }),
-//     [GET_${module_name_in_all_upper}_SUCCESS]: (state, { payload: { data } }) => ({ ...state, fetching: false, title: data.title, body: data.body }),
-//     [GET_${module_name_in_all_upper}_FAILURE]: (state) => ({ ...state, fetching: false, error: true })
+//     [GET_HOME_PENDING]: (state) => ({ ...state, fetching: true, error: false }),
+//     [GET_HOME_SUCCESS]: (state, { payload: { data } }) => ({ ...state, fetching: false, title: data.title, body: data.body }),
+//     [GET_HOME_FAILURE]: (state) => ({ ...state, fetching: false, error: true })
 // }, initialState);
 
 
-export default function ${NAME}(state=initialState, action){
+export default function home(state = initialState, action) {
 
-    switch(action.type){
+    switch (action.type) {
         case ASYNC_STATUS_LOADING:
-            return{
+            return {
                 ...state,
-                loading:true,
-                error : false
+                loading: true,
+                error: false
             };
         case ASYNC_STATUS_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: true
+            };
+        case ASYNC_STATUS_SUCCESS_ITEM:
             return{
                 ...state,
                 loading:false,
-                error : true
+                error : false,
+                item: action.payload,
+
             };
-        // case ASYNC_STATUS_SUCCESS_ITEM:
-        //     return{
-        //         ...state,
-        //         loading:false,
-        //         error : false,
-        //         item: action.payload,
-        //     };
-        // case ASYNC_STATUS_SUCCESS_ITEMS:
-        //     return{
-        //         ...state,
-        //         loading:false,
-        //         error : false,
-        //         items : action.payload
-        //     };
         // case ASYNC_STATUS_SUCCESS_SUBMIT:
         //      return {
         //         ...state,
         //         names: state.names.concat(action.payload)
         // };
+        case ASYNC_STATUS_SUCCESS_HOME_ITEMS:
+            return{
+                ...state,
+                loading:false,
+                error : false,
+                items : action.payload
+
+            };
         // case CHANGE:
         //     return {
         //         ...state,

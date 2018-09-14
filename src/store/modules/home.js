@@ -18,10 +18,10 @@ const ASYNC_STATUS_LOADING = 'home/LOADING';
 const ASYNC_STATUS_ERROR = 'home/ERROR';
 
 // 1-1) defines any async actionTypes required
-// const ASYNC_STATUS_SUCCESS_HOME =   'home/SUCCESS_HOME';
-// const ASYNC_STATUS_SUCCESS_SUBMIT = 'home/SUCCESS_SUBMIT';
-const ASYNC_STATUS_SUCCESS_HOME_ITEMS =   'home/SUCCESS_HOME_ITEMS';
 const ASYNC_STATUS_SUCCESS_ITEM =   'home/SUCCESS_ITEM';
+const ASYNC_STATUS_SUCCESS_ITEMS =  'home/SUCCESS_ITEMS';
+// const ASYNC_STATUS_SUCCESS_SUBMIT = 'home/SUCCESS_SUBMIT';
+
 
 // 1-2) defines any sync actionTypes required
 //const CHANGE = 'home/CHANGE';
@@ -35,8 +35,8 @@ const ASYNC_STATUS_SUCCESS_ITEM =   'home/SUCCESS_ITEM';
 // file template을 이용하여 파일을 생성시 homeId의 기본값을 묻는다.. 따라서 아래에서는 그부분을 $}homeId{로 임시대체했슴
 
 function getItemAPI(id){
-    //return axios.get(`http://jsonplaceholder.typicode.com/homes/$}homeId{`);
-    return fetch(`/api/homeItem/${id}`).then(function(response){return response.json()});
+    //return axios.get(`http://jsonplaceholder.typicode.com/homes/id`);
+    //return fetch(`http://jsonplaceholder.typicode.com/homes/id`).then(function(response){return response.json()});
 
 }
 export const getItem = (id) => async (dispatch) => {
@@ -44,17 +44,35 @@ export const getItem = (id) => async (dispatch) => {
     dispatch({ type: ASYNC_STATUS_LOADING });
     try{
         const response = await getItemAPI(id);
-        dispatch({type: ASYNC_STATUS_SUCCESS_ITEM, payload : response});
+        dispatch({type: ASYNC_STATUS_SUCCESS_HOME, payload : response});
     }
     catch(e){
         dispatch({type:ASYNC_STATUS_ERROR, payload: e});
     }
 };
 
+function getItemsAPI(){
+    return fetch('/api/homeItems').then(function(response){return response.json()});
+}
+
+export const getItems = () => async (dispatch) => {
+
+    dispatch({ type: ASYNC_STATUS_LOADING });
+    try{
+        const response = await getItemsAPI();
+        dispatch({type: ASYNC_STATUS_SUCCESS_ITEMS, payload : response});
+        //return response;
+    }
+    catch(e){
+        dispatch({type:ASYNC_STATUS_ERROR, payload: e});
+    }
+};
+
+
 // // lsj-TIP : thunk http async request : asios대신 fetch를 사용했는데, 주의할 점은 fetch에서는 .then(function(response){return response.json()})부분까지 처리해주어야 body와 title모두가 들어옴.
 // function submitAPI(payload){
-//     //return axios.get(`http://jsonplaceholder.typicode.com/homes/$}homeId{`);
-//     //return fetch(`http://jsonplaceholder.typicode.com/homes/$}homeId{`).then(function(response){return response.json()});
+//     //return axios.get(`http://jsonplaceholder.typicode.com/homes/id`);
+//     //return fetch(`http://jsonplaceholder.typicode.com/homes/id`).then(function(response){return response.json()});
 //     //.then(function(myJson){console.log(JSON.stringify(myJson))});-이 부분은 사용하면 안됨
 //     //return fetch('....', {method:'POST', payload:payload}).then(function(response){return response.json()});
 //     //fail: TODO
@@ -93,23 +111,6 @@ export const getItem = (id) => async (dispatch) => {
 //     }
 // };
 
-function getItemsAPI(){
-    return fetch('/api/homeItems').then(function(response){return response.json()});
-}
-
-export const getItems = () => async (dispatch) => {
-
-    dispatch({ type: ASYNC_STATUS_LOADING });
-    try{
-        const response = await getItemsAPI();
-        dispatch({type: ASYNC_STATUS_SUCCESS_HOME_ITEMS, payload : response});
-        //return response;
-    }
-    catch(e){
-        dispatch({type:ASYNC_STATUS_ERROR, payload: e});
-    }
-};
-
 
 //2-2) define and exports sync actionCreator functions required
 // export function change(payload){
@@ -123,11 +124,12 @@ export const initialState = {
     error: false,
     // fullname: {firstname:'firstName', lastname:'lastname'},
     // names: [{firstname:'firstName', lastname:'lastname'}, {firstname:'firstName2', lastname:'lastname2'}, {firstname:'firstName3', lastname:'lastname3'}],
-    // homes :[{homeId:1, title:'aaaaa'},{homeId:2, title:'bbbbb'},{homeId:3, title:'ccccc'}],
+    // homes :[{id:1, title:'aaaaa'},{id:2, title:'bbbbb'},{id:3, title:'ccccc'}],
     // title: 'initialStateTitle',
     // body:'initialStateBody',
     items :[],
-    item :{},
+    item : {},
+
 };
 
 //4) define reducer function for async and sync actionTypes defined above
@@ -159,21 +161,19 @@ export default function home(state = initialState, action) {
                 loading:false,
                 error : false,
                 item: action.payload,
-
+            };
+        case ASYNC_STATUS_SUCCESS_ITEMS:
+            return{
+                ...state,
+                loading:false,
+                error : false,
+                items : action.payload
             };
         // case ASYNC_STATUS_SUCCESS_SUBMIT:
         //      return {
         //         ...state,
         //         names: state.names.concat(action.payload)
         // };
-        case ASYNC_STATUS_SUCCESS_HOME_ITEMS:
-            return{
-                ...state,
-                loading:false,
-                error : false,
-                items : action.payload
-
-            };
         // case CHANGE:
         //     return {
         //         ...state,
