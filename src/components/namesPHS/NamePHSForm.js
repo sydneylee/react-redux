@@ -652,6 +652,221 @@
 // }
 
 // export default NamePHSForm;
+// //############################################################
+// import React, {Component} from 'react';
+// import * as validator from 'validator';
+
+// class NamePHSForm extends Component {
+//     static defaultProps = {};
+
+//     static propTypes = {};
+
+//     state = {
+//         fullname: {
+//             firstname:'',
+//             lastname:'',
+//         },
+//         password1:'',
+//         password2:'',
+//         touched:{},
+//         errors: {},
+//         disabled: true,
+//         loading: false,
+//     };
+//     isDuplicate = (targetValue)=> {
+//         return new Promise((resolve, reject)=>{
+//             setTimeout(()=>{
+//                 if(targetValue === 'aaa'){
+//                     resolve(true);
+//                 }else{
+//                     resolve(false);
+//                 }
+//             }, 3000);
+//         });
+//     };
+//     isDuplicate2 = (targetValue)=> {
+//         return new Promise((resolve, reject)=>{
+//             setTimeout(()=>{
+//                 if(targetValue === 'bbb'){
+//                     resolve(true);
+//                 }else{
+//                     resolve(false);
+//                 }
+//             }, 3000);
+//         });
+//     };
+
+//     // validator library :
+//     validate = (targetName, targetValue, state, totalInputNumber)=>{
+
+//         // create new state from previous state
+//         let newState;
+//         if(targetName === 'firstname' || targetName === 'lastname') {
+//             newState = {
+//                ...state,
+//                 fullname: {
+//                     ...state.fullname,
+//                     [targetName]: targetValue
+//                 }
+//             };
+//         }else{
+//             newState = {
+//                 ...state,
+//                 [targetName]: targetValue
+//             };
+//         }
+
+//         // set touched
+//         newState.touched[targetName] = true;
+
+//         //start validation
+//         const error = {targetName: ''};
+//         if(targetName === 'firstname') {
+//             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+//             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
+//         }
+//         else if(targetName === 'lastname'){
+//             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+//             else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
+//         }
+//         else if(targetName.indexOf('password')>-1){
+//             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+//             else if(!validator.isLength(targetValue, {min: 8, max: 10})) { error[targetName] = 'should be 8~10'}
+//             else if(targetName === 'password1' && newState.password2 !== '' && targetValue != newState.password2){ error[targetName] = 'should be same' } 
+//             else if(targetName === 'password2' && newState.password1 !== '' && targetValue != newState.password1){ error[targetName] = 'should be same' } 
+//         }
+
+//         // set error message
+//         if(error[targetName]){
+//             newState.errors[targetName] = error[targetName];
+//         }else{
+//             delete newState.errors[targetName];
+//             if(targetName==='password1'){delete newState.errors['password2']}
+//             else if(targetName==='password2'){delete newState.errors['password1']}
+//         }
+
+//         // set disabled
+//         newState.disabled = Object.keys(newState.errors).length > 0 || Object.keys(newState.touched).length < totalInputNumber;
+
+//         // finally return bew state
+//         return newState;
+//     };
+
+//     handleOnBlur = async (e)=>{
+//         const targetName = e.target.name;
+//         const targetValue = e.target.value;
+//         const totalInputNumber = 4;
+//         const newState = this.validate(targetName, targetValue, this.state, totalInputNumber);
+
+//         if(targetName === 'firstname' && !newState.errors['firstname']){
+//             newState.loading = true;
+//             newState.disabled = true;
+//             this.setState(newState);
+            
+//             const result = await this.isDuplicate(targetValue);
+
+//             if (result) {
+//                 newState.errors[targetName] = 'is duplicate.';
+//             } else {
+//                 newState.disabled = false;
+//             }
+//             newState.loading = false;
+//             this.setState(newState);
+
+//         } else if(targetName === 'lastname' && !newState.errors['lastname']){
+//             newState.loading = true;
+//             newState.disabled = true;
+//             this.setState(newState);
+
+//             const result = await this.isDuplicate2(targetValue);
+//             if (result) {
+//                 newState.errors[targetName] = 'is duplicate.';
+//             } else {
+//                 newState.disabled = false;
+//             }
+//             newState.loading = false;
+//             this.setState(newState);
+            
+//         }else{
+//             this.setState(newState);
+//         }
+//     };
+//     handleOnChange=(e)=>{
+//         const targetName = e.target.name;
+//         const targetValue = e.target.value;
+//         const totalInputNumber = 4;
+//         const newState = this.validate(targetName, targetValue, this.state, totalInputNumber);
+
+//         this.setState(newState);
+//     };
+
+//     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
+//     nameRef=null;
+//     handleOnSubmit=(e)=>{
+//         e.preventDefault();
+//         let data = new FormData(e.target);
+
+//         let payload = {};
+//         for(var pair of data.entries()) {
+//             payload[pair[0]]=pair[1];
+//         }
+//         this.props.onSubmit(payload);
+//     };
+
+//     render() {
+//         // const {fullname} = this.props;
+//         const {fullname, password1, password2} = this.state;
+//         return (
+//             <form onSubmit={this.handleOnSubmit}>
+//                 <div>
+//                 <span>
+//                     <input type="text"
+//                         name='firstname'
+//                         defaultValue={fullname.firstname}
+//                         onChange={this.handleOnChange}
+//                         onBlur={this.handleOnBlur}
+//                         placeholder='first name'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.firstname}</div>
+//                 </span>
+//                 <span>
+//                     <input type="text"
+//                         name='lastname'
+//                         defaultValue={fullname.lastname}
+//                         onChange={this.handleOnChange}
+//                         onBlur={this.handleOnBlur}
+//                         placeholder='last name'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.lastname}</div>
+//                 </span>
+//                 </div>
+//                 <div>
+//                     <input type="password"
+//                            name='password1'
+//                            defaultValue={password1}
+//                            onChange={this.handleOnChange}
+//                            onBlur={this.handleOnBlur}
+//                            placeholder='password1'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.password1}</div>
+//                     <input type="password"
+//                            name='password2'
+//                            defaultValue={password2}
+//                            onChange={this.handleOnChange}
+//                            onBlur={this.handleOnBlur}
+//                            placeholder='password2'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.password2}</div>
+//                 </div>
+//                 <div>
+//                 <button type="submit" disabled={this.state.disabled || this.state.loading}>submit</button>
+//                 </div>
+//             </form>
+//         );
+//     }
+// }
+
+// export default NamePHSForm;
 //############################################################
 import React, {Component} from 'react';
 import * as validator from 'validator';
@@ -697,27 +912,146 @@ class NamePHSForm extends Component {
     };
 
     // validator library :
-    validate = (targetName, targetValue, state, totalInputNumber)=>{
+    // validate = (targetName, targetValue, state, totalInputNumber)=>{
 
-        // create new state from previous state
-        let newState;
-        if(targetName === 'firstname' || targetName === 'lastname') {
-            newState = {
-               ...state,
-                fullname: {
-                    ...state.fullname,
-                    [targetName]: targetValue
-                }
-            };
-        }else{
-            newState = {
-                ...state,
-                [targetName]: targetValue
-            };
-        }
+    //     // create new state from previous state
+    //     let newState;
+    //     if(targetName === 'firstname' || targetName === 'lastname') {
+    //         newState = {
+    //            ...state,
+    //             fullname: {
+    //                 ...state.fullname,
+    //                 [targetName]: targetValue
+    //             }
+    //         };
+    //     }else{
+    //         newState = {
+    //             ...state,
+    //             [targetName]: targetValue
+    //         };
+    //     }
 
-        // set touched
-        newState.touched[targetName] = true;
+    //     // set touched
+    //     newState.touched[targetName] = true;
+
+    //     //start validation
+    //     const error = {targetName: ''};
+    //     if(targetName === 'firstname') {
+    //         if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+    //         else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
+    //     }
+    //     else if(targetName === 'lastname'){
+    //         if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+    //         else if(!validator.isLength(targetValue, {min: 3, max:5})) { error[targetName] = 'should be 3~5'}
+    //     }
+    //     else if(targetName.indexOf('password')>-1){
+    //         if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
+    //         else if(!validator.isLength(targetValue, {min: 8, max: 10})) { error[targetName] = 'should be 8~10'}
+    //         else if(targetName === 'password1' && newState.password2 !== '' && targetValue != newState.password2){ error[targetName] = 'should be same' } 
+    //         else if(targetName === 'password2' && newState.password1 !== '' && targetValue != newState.password1){ error[targetName] = 'should be same' } 
+    //     }
+
+    //     // set error message
+    //     if(error[targetName]){
+    //         newState.errors[targetName] = error[targetName];
+    //     }else{
+    //         delete newState.errors[targetName];
+    //         if(targetName==='password1'){delete newState.errors['password2']}
+    //         else if(targetName==='password2'){delete newState.errors['password1']}
+    //     }
+
+    //     // set disabled
+    //     newState.disabled = Object.keys(newState.errors).length > 0 || Object.keys(newState.touched).length < totalInputNumber;
+
+    //     // finally return bew state
+    //     return newState;
+    // };
+    validators = {
+        firstname:[
+            {
+                method: validator.isEmpty,
+                validWhen: false,
+                message: 'should not be empty'
+            },
+            {
+                method: validator.isLength,
+                args: [{min: 3, max: 5}],
+                validWhen: true,
+                message: 'should be between 3 and 5'
+            },
+            {
+                method: async (value)=>{ const response =  await fetch(); const result = await response.json(); return result; },
+                validwhen: false,
+                message: 'duplicate'
+            }
+        ],
+        lastname:[
+            {
+                method: validator.isEmpty,
+                validWhen: false,
+                message: 'should not be empty'
+            },
+            {
+                method: validator.isLength,
+                args: [{min: 3, max: 5}],
+                validWhen: true,
+                message: 'should be between 3 and 5'
+            }
+        ],
+        password1:[
+            {
+                method: validator.isEmpty,
+                validWhen: false,
+                message: 'should not be empty'
+            },
+            {
+                method: validator.isLength,
+                args: [{min: 8, max: 10}],
+                validWhen: true,
+                message: 'should be between 3 and 5'
+            },
+            {
+                method: validator.equals,
+                args: 'password2',
+                validWhen: true,
+                message: 'should be same as password2'
+            }
+        ],
+        password2:[
+            {
+                method: validator.isEmpty,
+                validWhen: false,
+                message: 'should not be empty'
+            },
+            {
+                method: validator.isLength,
+                args: [{min: 8, max: 10}],
+                validWhen: true,
+                message: 'should be between 3 and 5'
+            }
+            {
+                method: validator.equals,
+                args: 'password1',
+                validWhen: true,
+                message: 'should be same as password1'
+            }
+        ]
+
+    }
+    validate = (e, validators)=>{
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
+
+        //initialize
+        const change = {};
+        change.touched = change.touched || {};
+        change.errors = change.errors || {};
+        change.disabled = change.disabled || true;
+        change.submitting = change.submitting || false;
+
+        // set new values
+        change[targetName] = targetValue;
+        change.touched[targetName] = true;
 
         //start validation
         const error = {targetName: ''};
@@ -732,64 +1066,109 @@ class NamePHSForm extends Component {
         else if(targetName.indexOf('password')>-1){
             if(validator.isEmpty(targetValue))  { error[targetName] = 'should not empty'}
             else if(!validator.isLength(targetValue, {min: 8, max: 10})) { error[targetName] = 'should be 8~10'}
-            else if(targetName === 'password1' && newState.password2 !== '' && targetValue != newState.password2){ error[targetName] = 'should be same' } 
-            else if(targetName === 'password2' && newState.password1 !== '' && targetValue != newState.password1){ error[targetName] = 'should be same' } 
+            else if(targetName === 'password1' && change.password2 !== '' && targetValue != change.password2){ error[targetName] = 'should be same' } 
+            else if(targetName === 'password2' && change.password1 !== '' && targetValue != change.password1){ error[targetName] = 'should be same' } 
         }
 
         // set error message
         if(error[targetName]){
-            newState.errors[targetName] = error[targetName];
+            change.errors[targetName] = error[targetName];
         }else{
-            delete newState.errors[targetName];
-            if(targetName==='password1'){delete newState.errors['password2']}
-            else if(targetName==='password2'){delete newState.errors['password1']}
+            delete change.errors[targetName];
+            if(targetName==='password1'){delete change.errors['password2']}
+            else if(targetName==='password2'){delete change.errors['password1']}
         }
 
         // set disabled
-        newState.disabled = Object.keys(newState.errors).length > 0 || Object.keys(newState.touched).length < totalInputNumber;
+        change.disabled = Object.keys(change.errors).length > 0 || Object.keys(change.touched).length < totalInputNumber;
 
         // finally return bew state
-        return newState;
+        return change;
     };
+    // handleOnBlur = async (e)=>{
+    //     const targetName = e.target.name;
+    //     const targetValue = e.target.value;
+    //     const totalInputNumber = 4;
+    //     const newState = this.validate(targetName, targetValue, this.state, totalInputNumber);
 
-    handleOnBlur = async (e)=>{
-        const targetName = e.target.name;
-        const targetValue = e.target.value;
-        const totalInputNumber = 4;
-        const newState = this.validate(targetName, targetValue, this.state, totalInputNumber);
-
-        if(targetName === 'firstname' && !newState.errors['firstname']){
-            newState.loading = true;
-            newState.disabled = true;
-            this.setState(newState);
+    //     if(targetName === 'firstname' && !newState.errors['firstname']){
+    //         newState.loading = true;
+    //         newState.disabled = true;
+    //         this.setState(newState);
             
-            const result = await this.isDuplicate(targetValue);
+    //         const result = await this.isDuplicate(targetValue);
 
-            if (result) {
-                newState.errors[targetName] = 'is duplicate.';
-            } else {
-                newState.disabled = false;
-            }
-            newState.loading = false;
-            this.setState(newState);
+    //         if (result) {
+    //             newState.errors[targetName] = 'is duplicate.';
+    //         } else {
+    //             newState.disabled = false;
+    //         }
+    //         newState.loading = false;
+    //         this.setState(newState);
 
-        } else if(targetName === 'lastname' && !newState.errors['lastname']){
-            newState.loading = true;
-            newState.disabled = true;
-            this.setState(newState);
+    //     } else if(targetName === 'lastname' && !newState.errors['lastname']){
+    //         newState.loading = true;
+    //         newState.disabled = true;
+    //         this.setState(newState);
 
-            const result = await this.isDuplicate2(targetValue);
-            if (result) {
-                newState.errors[targetName] = 'is duplicate.';
-            } else {
-                newState.disabled = false;
-            }
-            newState.loading = false;
-            this.setState(newState);
+    //         const result = await this.isDuplicate2(targetValue);
+    //         if (result) {
+    //             newState.errors[targetName] = 'is duplicate.';
+    //         } else {
+    //             newState.disabled = false;
+    //         }
+    //         newState.loading = false;
+    //         this.setState(newState);
             
-        }else{
-            this.setState(newState);
-        }
+    //     }else{
+    //         this.setState(newState);
+    //     }
+    // };
+    handleOnBlur = (e)=>{
+
+        const result =  this.validate(e, validators);
+        this.setState( prevState=>({
+            ...prevState,
+            [e.target.name]: e.target.value,
+            ...result
+        }));
+        // const targetName = e.target.name;
+        // const targetValue = e.target.value;
+        // const totalInputNumber = 4;
+        // const newState = this.validate(targetName, targetValue, this.state, totalInputNumber);
+
+        // if(targetName === 'firstname' && !newState.errors['firstname']){
+        //     newState.loading = true;
+        //     newState.disabled = true;
+        //     this.setState(newState);
+            
+        //     const result = await this.isDuplicate(targetValue);
+
+        //     if (result) {
+        //         newState.errors[targetName] = 'is duplicate.';
+        //     } else {
+        //         newState.disabled = false;
+        //     }
+        //     newState.loading = false;
+        //     this.setState(newState);
+
+        // } else if(targetName === 'lastname' && !newState.errors['lastname']){
+        //     newState.loading = true;
+        //     newState.disabled = true;
+        //     this.setState(newState);
+
+        //     const result = await this.isDuplicate2(targetValue);
+        //     if (result) {
+        //         newState.errors[targetName] = 'is duplicate.';
+        //     } else {
+        //         newState.disabled = false;
+        //     }
+        //     newState.loading = false;
+        //     this.setState(newState);
+            
+        // }else{
+        //     this.setState(newState);
+        // }
     };
     handleOnChange=(e)=>{
         const targetName = e.target.name;
