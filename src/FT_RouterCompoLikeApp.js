@@ -21,7 +21,7 @@ import {BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';//NavLink
 // import NamesPHSContainer   from './containers/namesPHS/NamesPHSContainer';//apply PHS for validation
 
 // lsj-TIP : working with NodeJS/Express server
-import HomeContainer       from './containers/home/HomeContainer';
+// import HomeContainer       from './containers/home/HomeContainer';
 
 // lsj-TIP : BrowserRouter(=Router) 와 Route 바로 아래에 있는 child 는 single이어야 한다 : wrap by <div></div>
 // lsj-TIP : exact needed for NavLink and Route for exact matching, Switch is not properly working

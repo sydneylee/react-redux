@@ -1,26 +1,22 @@
 /**
- * Presentational Component without form
+ * Presentational Component to view an item
  * name        : HomeItem
- * description : HomeItem pres. compo
+ * description : HomeItem view item
  * author      : lsj
- * created     : 14/9/18
+ * created     : 15/9/18
  */
 
 import React, {Component} from 'react';
 
 //import imgSrc from '../assets/img/loading.gif';
 
-class HomeItem extends Component {
+class homeItem extends Component {
 
-    static defaultProps = {
-        //number : -1
-    };
+    static defaultProps = {};
 
     static propTypes = {};
 
-    state = {
-        //number:0
-    };
+    state = {};
 
     // handleOnIncrement= ()=>{
     //     this.props.onIncrement();
@@ -42,15 +38,9 @@ class HomeItem extends Component {
             <div>
                 <h2>{this.props.item.title}</h2>
                 <div>{this.props.item.content}</div>
-                {/*<h1>{loading? <img src={imgSrc} style={{width: '50px', height:'50px'}} /> : number}</h1>*/}
-                {/*<button id="incBtn" onClick={this.handleOnIncrement}>증가 (+)</button>*/}
-                {/*<button id="decBtn" onClick={this.handleOnDecrement}>감소 (-)</button>*/}
-                {/*{error && <div>error occurrs</div>}*/}
-
-
             </div>
         );
     }
 }
 
-export default HomeItem;
+export default homeItem;

@@ -37,7 +37,7 @@ class ${NAME} extends React.Component{
         //             {this.props.item && this.props.item.id!=null ? <${module_name_in_upper}Item item={this.props.item}/> : <img src={imgSrc} style={sty}/> }
         //         </div>
         //         <div>
-        //             {this.props.items && this.props.items.length!=0 ? <${module_name_in_upper}Items items={this.props.items}/> : <img src={imgSrc} style={sty}/> }
+        //             {this.props.items && this.props.items.length!=0 ? <${module_name_in_upper}Items {...this.props}/> : <img src={imgSrc} style={sty}/> }
         //         </div>
         //     </div>
         // );
@@ -66,19 +66,19 @@ const mapStateToProps=(state)=>{
     const {${module_name_in_lower}} = state;
     return {
 
-        // names:     ${module_name_in_lower}.names,
-        // fullname:  ${module_name_in_lower}.fullname,
+        // names:         ${module_name_in_lower}.names,
+        // fullname:      ${module_name_in_lower}.fullname,
 
         // itemPending:   ${module_name_in_lower}.itemPending,
         // itemError:     ${module_name_in_lower}.itemError,
-        // item :     ${module_name_in_lower}.item,
+        // item :         ${module_name_in_lower}.item,
 
-        // itemsPending:   ${module_name_in_lower}.itemsPending,
-        // itemsError:     ${module_name_in_lower}.itemsError,
-        // items :    ${module_name_in_lower}.items,
+        // itemsPending:  ${module_name_in_lower}.itemsPending,
+        // itemsError:    ${module_name_in_lower}.itemsError,
+        // items :        ${module_name_in_lower}.items,
 
-        // submitPending:   ${module_name_in_lower}.submitPending,
-        // submitError:     ${module_name_in_lower}.submitError,
+        // submitPending: ${module_name_in_lower}.submitPending,
+        // submitError:   ${module_name_in_lower}.submitError,
 
     };
 

@@ -1,9 +1,9 @@
 /**
  * Container Component
  * name        : HomeContainer
- * description : Home Container compo
+ * description : Home container compo
  * author      : lsj
- * created     : 14/9/18
+ * created     : 15/9/18
  */
 
 import React from 'react';
@@ -19,7 +19,7 @@ class HomeContainer extends React.Component {
 
     // lsj-TIP : dispatch action(async) to redux store
     componentDidMount(){
-        this.props.getItem(0);
+        this.props.getItem(1);
         this.props.getItems();
     }
 
@@ -29,11 +29,11 @@ class HomeContainer extends React.Component {
         const sty = {width: '32px', height: '32px'};
         //return (<div></div>);
 
-        //lsj-TIP :For async : null checking and loading image
+        // lsj-TIP :For async : null checking and loading image
         return (
             <div>
                 <div>
-                    {this.props.loading ? <img src={imgSrc} style={sty}/> : <HomeItem item={this.props.item}/>  }
+                    {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={sty}/> }
                 </div>
                 <div>
                     {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : <img src={imgSrc} style={sty}/> }
@@ -65,12 +65,21 @@ class HomeContainer extends React.Component {
 const mapStateToProps = (state) => {
     const {home} = state;
     return {
-        loading: home.loading,
-        error: home.error,
-        // names:     home.names,
-        // fullname:  home.fullname,
-        item :     home.item,
-        items :    home.items
+
+        // names:         home.names,
+        // fullname:      home.fullname,
+
+        itemPending:   home.itemPending,
+        itemError:     home.itemError,
+        item :         home.item,
+
+        itemsPending:  home.itemsPending,
+        itemsError:    home.itemsError,
+        items :        home.items,
+
+        // submitPending: home.submitPending,
+        // submitError:   home.submitError,
+
     };
 
     //return home

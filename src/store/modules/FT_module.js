@@ -133,9 +133,9 @@ export const initialState ={
     // title: 'initialStateTitle',
     // body:'initialStateBody',
 
-    // itemPending:   false,
-    // itemError:     false,
-    // item :         {},
+    // itemPending:    false,
+    // itemError:      false,
+    // item :          {},
 
     // itemsPending:   false,
     // itemsError:     false,

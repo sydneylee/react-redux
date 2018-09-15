@@ -3,45 +3,44 @@
  * name        : home
  * description : home module
  * author      : lsj
- * created     : 14/9/18
+ * created     : 15/9/18
  */
 
 // 0) import modules if needed
-//handleActions : reducer 함수에 option obj를 인자로 넣어서 처리
 //import {handleActions} from 'redux-actions';
 
 
-// 1) define the async 3 actionTypes:
-// PENDING, ERROR : commonly used for any async actions
-// SUCCESS : needed for each specific async action
-// const ASYNC_STATUS_PENDING = 'home/PENDING';
-// const ASYNC_STATUS_ERROR = 'home/ERROR';
+// 1) define actionTypes:
 
-// 1-1) defines any async actionTypes required
+// 1-1) defines async actionTypes required
 const ASYNC_STATUS_PENDING_ITEM = 'home/PENDING_ITEM';
 const ASYNC_STATUS_ERROR_ITEM = 'home/ERROR_ITEM';
 const ASYNC_STATUS_SUCCESS_ITEM =   'home/SUCCESS_ITEM';
-
+//
 const ASYNC_STATUS_PENDING_ITEMS = 'home/PENDING_ITEMS';
 const ASYNC_STATUS_ERROR_ITEMS = 'home/ERROR_ITEMS';
 const ASYNC_STATUS_SUCCESS_ITEMS =  'home/SUCCESS_ITEMS';
-
+//
 // const ASYNC_STATUS_PENDING_SUBMIT = 'home/PENDING_SUBMIT';
 // const ASYNC_STATUS_ERROR_SUBMIT = 'home/ERROR_SUBMIT';
 // const ASYNC_STATUS_SUCCESS_SUBMIT = 'home/SUCCESS_SUBMIT';
 
 
-// 1-2) defines any sync actionTypes required
+// 1-2) defines sync actionTypes required
 //const CHANGE = 'home/CHANGE';
 
 
-// 2-1) define and exports async actionCreator functions required
+// 2) define and exports actionCreator functions
+
+// 2-1) async actionCreator functions
 // lsj-TIP : for async Thunk HTTP request
 // - axios.get()
 // - fetch() needs  ".then(function(response){return response.json()})"
 // - template string안에서 homeId를 $와 중괄호(curly bracket)안에 올바르게 넣으면, intellij의 FileTemplate parser가 자신의 변수로하게 인식해서
 // file template을 이용하여 파일을 생성시 homeId의 기본값을 묻는다.. 따라서 아래에서는 그부분을 $}homeId{로 임시대체했슴
 
+
+// // async function : getItem(id)
 function getItemAPI(id){
     //return axios.get(`http://jsonplaceholder.typicode.com/Items/$}id{`);
     //return fetch(`http://jsonplaceholder.typicode.com/Items/$}id{`).then(function(response){return response.json()});
@@ -59,6 +58,8 @@ export const getItem = (id) => async (dispatch) => {
     }
 };
 
+
+// // async function : getItems()
 function getItemsAPI(){
     return fetch('/api/items').then(function(response){return response.json()});
 }
@@ -75,9 +76,8 @@ export const getItems = () => async (dispatch) => {
     }
 };
 
-
-// // lsj-TIP : thunk http async request : asios대신 fetch를 사용했는데, 주의할 점은 fetch에서는 .then(function(response){return response.json()})부분까지 처리해주어야 body와 title모두가 들어옴.
-// function submitAPI(payload){
+//     // async function : submit(payload)
+//     // function submitAPI(payload){
 //     //return axios.get(`http://jsonplaceholder.typicode.com/homes/id`);
 //     //return fetch(`http://jsonplaceholder.typicode.com/homes/id`).then(function(response){return response.json()});
 //     //.then(function(myJson){console.log(JSON.stringify(myJson))});-이 부분은 사용하면 안됨
@@ -110,8 +110,6 @@ export const getItems = () => async (dispatch) => {
 //         submitAPI(payload).then((response)=>{
 //             dispatch({type:ASYNC_STATUS_SUCCESS_SUBMIT, payload:response});
 //         });
-//
-//
 //     }
 //     catch(e){
 //         dispatch({type:ASYNC_STATUS_ERROR_SUBMIT, payload: e});
@@ -119,13 +117,15 @@ export const getItems = () => async (dispatch) => {
 // };
 
 
-//2-2) define and exports sync actionCreator functions required
+//2-2) sync actionCreator functions
+
+// // Sync function : change(payload)
 // export function change(payload){
 //     return {type:CHANGE, payload: payload};
 // }
 
 
-//3) define the initialState for a specific module
+//3) define initialState for module
 export const initialState = {
     // fullname: {firstname:'firstName', lastname:'lastname'},
     // names: [{firstname:'firstName', lastname:'lastname'}, {firstname:'firstName2', lastname:'lastname2'}, {firstname:'firstName3', lastname:'lastname3'}],
@@ -133,16 +133,16 @@ export const initialState = {
     // title: 'initialStateTitle',
     // body:'initialStateBody',
 
-    itemPending: false,
-    itemError: false,
-    item : {},
+    itemPending:   false,
+    itemError:     false,
+    item :         {},
 
-    itemsPending: false,
-    itemsError: false,
-    items :[],
+    itemsPending:   false,
+    itemsError:     false,
+    items :         [],
 
-    // submitPending: false,
-    // submitError: false,
+    // submitPending:  false,
+    // submitError:    false,
 
 };
 
