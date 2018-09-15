@@ -1,3 +1,11 @@
+/**
+ * index.js rendering a root/router component like App
+ * name        : ${NAME}
+ * description : ${description}
+ * author      : lsj
+ * created     : ${DATE}
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

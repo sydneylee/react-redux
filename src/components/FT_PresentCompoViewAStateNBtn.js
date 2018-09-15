@@ -1,5 +1,5 @@
 /**
- * Presentational Component without form
+ * Presentational Component to view a state and 2 buttons with its onClick action
  * name        : ${NAME}
  * description : ${description}
  * author      : lsj
@@ -36,7 +36,7 @@ class ${NAME} extends Component {
         // lsj-TIP : for loading image <img src={imgSrc}, imgSrc should be imported and used like a variable
         // lsj-TIP : style should be insert as obj : {width: '50px', height:'50px'}
 
-        // const {number, loading, error} = this.props; //dprp
+        // const {number, itemLoading, itemError} = this.props; //dprp
         return (
             <div>
                 {/*<h1>{loading? <img src={imgSrc} style={{width: '50px', height:'50px'}} /> : number}</h1>*/}

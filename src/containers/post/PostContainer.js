@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import * as postExports from '../../store/modules/postOrg';
+import * as postExports from '../../store/modules/post';
 import PostItem from '../../components/post/PostItem';
 import PostList from '../../components/post/PostList';
 import PostLink from '../../components/post/PostLink';

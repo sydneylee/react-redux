@@ -1,5 +1,5 @@
 /**
- * Presentational Component with rendering list
+ * Presentational Component to view items(item list) with renderList()
  * name        : ${NAME}
  * description : ${description}
  * author      : lsj
@@ -14,13 +14,13 @@ class ${NAME} extends Component {
 
     static propTypes = {};
 
-    // lsj-TIP : null checking required - this.props.${list_name}s || [];
+    // lsj-TIP : null checking required - this.props.items || [];
     renderList=()=>{
         // console.log(this.props);
-        // const ${list_name}s = this.props.${list_name}s || [];
-        // return ${list_name}s.map((${list_name}, i)=>{
-        //     return (<li key={i} >{${list_name}.title + '  ' + ${list_name}.content}</li>);
-        // })
+        const items = this.props.items || [];
+        return items.map((item, i)=>{
+            return (<li key={i} >{item.title + '  ' + item.content}</li>);
+        });
     };
 
     state = {};

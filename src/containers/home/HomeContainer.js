@@ -1,17 +1,17 @@
 /**
- * ContainerComponent
+ * Container Component
  * name        : HomeContainer
- * description : HomeContainer compo - getItems in async
+ * description : Home Container compo
  * author      : lsj
  * created     : 14/9/18
  */
 
 import React from 'react';
 import {connect} from 'react-redux';
-import * as homeExports from '../../store/modules/homeOrg';
+import * as homeExports from '../../store/modules/home';
 import imgSrc from '../../assets/img/loading.gif';
 //import HomeForm  from '../../components/home/HomeForm';
-//import HomeList  from '../../components/home/HomeList';
+import HomeItem from '../../components/home/HomeItem';
 import HomeItems from '../../components/home/HomeItems';
 
 
@@ -19,28 +19,27 @@ class HomeContainer extends React.Component {
 
     // lsj-TIP : dispatch action(async) to redux store
     componentDidMount(){
+        this.props.getItem(0);
         this.props.getItems();
     }
 
 
     render() {
 
+        const sty = {width: '32px', height: '32px'};
         //return (<div></div>);
-        const sty = {width:'32px',height:'32px'};
 
-        // lsj-TIP :For async : null checking and loading image
+        //lsj-TIP :For async : null checking and loading image
         return (
             <div>
-            {/*<div>*/}
-                {/*{this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={sty}/> }*/}
-            {/*</div>*/}
-                <img src={imgSrc}/>
                 <div>
-                    {this.props.items && this.props.items.length!=0 ? <HomeItems items={this.props.items}/> : <img src={imgSrc} style={sty}/> }
+                    {this.props.loading ? <img src={imgSrc} style={sty}/> : <HomeItem item={this.props.item}/>  }
+                </div>
+                <div>
+                    {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : <img src={imgSrc} style={sty}/> }
                 </div>
             </div>
         );
-
 
         // const {fullname, names, onSubmit, onChange} = this.props;
         // return(
@@ -68,10 +67,10 @@ const mapStateToProps = (state) => {
     return {
         loading: home.loading,
         error: home.error,
-        //  names:     home.names,
-        //  fullname:  home.fullname
-        items :    home.items,
-        item:      home.item,
+        // names:     home.names,
+        // fullname:  home.fullname,
+        item :     home.item,
+        items :    home.items
     };
 
     //return home
@@ -80,21 +79,19 @@ const mapStateToProps = (state) => {
 // lsj-TIP : pls check if any param is required
 const mapDispatchToProps = (dispatch) => {
     return {
+        getItem : (id)=>{
+            dispatch(homeExports.getItem(id))
+        },
+        getItems : ()=>{
+            dispatch(homeExports.getItems())
+        },
         // onSubmit:(payload)=>{
         //     dispatch(homeExports.submit(payload));
         // },
         // onChange:(payload)=>{
         //     dispatch(homeExports.change(payload));
         // },
-        // getPost : (homeId)=>{
-        //     dispatch(homeExports.getPost(homeId))
-        // },
-        getItems : ()=>{
-            dispatch(homeExports.getItems())
-        },
-        getItem :  (id)=>{
-            dispatch(homeExports.getItem(id))
-        },
+
     }
 };
 

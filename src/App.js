@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import CounterContainer from './containers/CounterContainer';
-import PostContainer from './containers/post/PostContainer';
-//import {BrowserRouter, Switch, Route, Link} from 'react-router-dom';
-import {BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';//TODO : NavLink for active or hover...Style
-import NamesContainer from './containers/names/NamesContainer';
-import NamesRFFContainer from './containers/namesRFF/NamesRFFContainer';
-import NamesYUPContainer from './containers/namesYUP/NamesYUPContainer';
-import NamesPHSContainer from './containers/namesPHS/NamesPHSContainer';
-//NodeJS server and Home route added
-import HomeContainer from './containers/home/HomeContainerOrg';
 
-//TODO : // BrowserRouter(=Router) 와 Route 바로 아래에 있는 child 는 single이어야 한다
-//TODO : exact 필요 - home route for NavLink and Route
-// => 여러개일때는  <div></div>로 wrap할 것
+import {BrowserRouter, Switch, Route, NavLink} from 'react-router-dom';//NavLink for active style
+
+// lsj-TIP : working with devServer provided by create-react-app
+import CounterContainer    from './containers/CounterContainer';
+import PostContainer       from './containers/post/PostContainer';
+import NamesContainer      from './containers/names/NamesContainer';
+import NamesRFFContainer   from './containers/namesRFF/NamesRFFContainer';//apply react-final-form for validation
+import NamesYUPContainer   from './containers/namesYUP/NamesYUPContainer';//apply YUP for validation
+import NamesPHSContainer   from './containers/namesPHS/NamesPHSContainer';//apply PHS for validation
+
+// lsj-TIP : working with NodeJS/Express server
+import HomeContainer       from './containers/home/HomeContainer';
+
+// lsj-TIP : BrowserRouter(=Router) 와 Route 바로 아래에 있는 child 는 single이어야 한다 : wrap by <div></div>
+// lsj-TIP : exact needed for NavLink and Route for exact matching, Switch is not properly working
 class App extends Component {
   render() {
       const activeStyle = {
@@ -52,11 +54,8 @@ class App extends Component {
                     <Route path="/names">
                         <div>
                             <NamesContainer/>
-
                         </div>
                     </Route>
-
-                    {/*apply react-final-form for validation*/}
                     <Route path="/namesRFF">
                         <div>
                             <NamesRFFContainer/>
@@ -73,10 +72,6 @@ class App extends Component {
                         </div>
                     </Route>
                     <Route path="/post/:postId" component={PostContainer} />
-                    {/* // TODO : 이 방법으로 하면, location, history, match 등이 component의 props로 전달되지 않는다.
-                    <Route path="/post/:postId" >*/}
-                    {/*<PostContainer/>*/}
-                    {/*</Route>*/}
                     <Route path="/post">
                         <div>
                             blog post...
@@ -86,7 +81,6 @@ class App extends Component {
                     <Route path="*">
                         <div>* default page</div>
                     </Route>
-
                 </Switch>
             </div>
         </BrowserRouter>

@@ -10,6 +10,7 @@ app.get('/api/hello', (req, res) => {
 });
 
 const homeItems = [
+    { id:0, title:'title0', content: 'content0' },
     { id:1, title:'title1', content: 'content1' },
     { id:2, title:'title2', content: 'content2' },
     { id:3, title:'title3', content: 'content3' },
@@ -20,17 +21,17 @@ const homeItems = [
     { id:7, title:'title7', content: 'content7' },
     { id:8, title:'title8', content: 'content8' },
     { id:9, title:'title9', content: 'content9' },
-    { id:10, title:'title10', content: 'content10' },
+
 ];
 
-app.get('/api/homeItems', (req, res) => {
-    setTimeout(()=>{res.send(homeItems);}, 10000);
+app.get('/api/items', (req, res) => {
+    setTimeout(()=>{res.send(homeItems);}, 1000);
 });
 
 
-app.get('/api/homeItem/:id', (req, res) => {
+app.get('/api/item/:id', (req, res) => {
     console.log(req.params.id);
-    setTimeout(()=>{res.send(homeItems[req.params.id]);}, 3000);
+    setTimeout(()=>{res.send(homeItems[req.params.id]);}, 1000);
 });
 
 

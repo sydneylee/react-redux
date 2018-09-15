@@ -12,14 +12,22 @@
 
 
 // 1) define the async 3 actionTypes:
-// LOADING, ERROR : commonly used for any async actions
+// PENDING, ERROR : commonly used for any async actions
 // SUCCESS : needed for each specific async action
-const ASYNC_STATUS_LOADING = 'home/LOADING';
-const ASYNC_STATUS_ERROR = 'home/ERROR';
+// const ASYNC_STATUS_PENDING = 'home/PENDING';
+// const ASYNC_STATUS_ERROR = 'home/ERROR';
 
 // 1-1) defines any async actionTypes required
+const ASYNC_STATUS_PENDING_ITEM = 'home/PENDING_ITEM';
+const ASYNC_STATUS_ERROR_ITEM = 'home/ERROR_ITEM';
 const ASYNC_STATUS_SUCCESS_ITEM =   'home/SUCCESS_ITEM';
+
+const ASYNC_STATUS_PENDING_ITEMS = 'home/PENDING_ITEMS';
+const ASYNC_STATUS_ERROR_ITEMS = 'home/ERROR_ITEMS';
 const ASYNC_STATUS_SUCCESS_ITEMS =  'home/SUCCESS_ITEMS';
+
+// const ASYNC_STATUS_PENDING_SUBMIT = 'home/PENDING_SUBMIT';
+// const ASYNC_STATUS_ERROR_SUBMIT = 'home/ERROR_SUBMIT';
 // const ASYNC_STATUS_SUCCESS_SUBMIT = 'home/SUCCESS_SUBMIT';
 
 
@@ -35,36 +43,35 @@ const ASYNC_STATUS_SUCCESS_ITEMS =  'home/SUCCESS_ITEMS';
 // file template을 이용하여 파일을 생성시 homeId의 기본값을 묻는다.. 따라서 아래에서는 그부분을 $}homeId{로 임시대체했슴
 
 function getItemAPI(id){
-    //return axios.get(`http://jsonplaceholder.typicode.com/homes/id`);
-    //return fetch(`http://jsonplaceholder.typicode.com/homes/id`).then(function(response){return response.json()});
-
+    //return axios.get(`http://jsonplaceholder.typicode.com/Items/$}id{`);
+    //return fetch(`http://jsonplaceholder.typicode.com/Items/$}id{`).then(function(response){return response.json()});
+    return fetch('/api/item/'+id).then(function(response){return response.json()});
 }
 export const getItem = (id) => async (dispatch) => {
 
-    dispatch({ type: ASYNC_STATUS_LOADING });
+    dispatch({ type: ASYNC_STATUS_PENDING_ITEM });
     try{
         const response = await getItemAPI(id);
-        dispatch({type: ASYNC_STATUS_SUCCESS_HOME, payload : response});
+        dispatch({type: ASYNC_STATUS_SUCCESS_ITEM, payload : response});
     }
     catch(e){
-        dispatch({type:ASYNC_STATUS_ERROR, payload: e});
+        dispatch({type:ASYNC_STATUS_ERROR_ITEM, payload: e});
     }
 };
 
 function getItemsAPI(){
-    return fetch('/api/homeItems').then(function(response){return response.json()});
+    return fetch('/api/items').then(function(response){return response.json()});
 }
 
 export const getItems = () => async (dispatch) => {
 
-    dispatch({ type: ASYNC_STATUS_LOADING });
+    dispatch({ type: ASYNC_STATUS_PENDING_ITEMS });
     try{
         const response = await getItemsAPI();
         dispatch({type: ASYNC_STATUS_SUCCESS_ITEMS, payload : response});
-        //return response;
     }
     catch(e){
-        dispatch({type:ASYNC_STATUS_ERROR, payload: e});
+        dispatch({type:ASYNC_STATUS_ERROR_ITEMS, payload: e});
     }
 };
 
@@ -92,7 +99,7 @@ export const getItems = () => async (dispatch) => {
 //
 // export const submit = (payload) => async (dispatch) => {
 //
-//     dispatch({ type: ASYNC_STATUS_LOADING });
+//     dispatch({ type: ASYNC_STATUS_PENDING_SUBMIT });
 //     try{
 //         // lsj-TIP : promise -step 2(방법1): 1에서 처리된 prom을 await가 받아서 reponse(결과)를 변수에 assign
 //         //const response = await submitAPI(payload);
@@ -107,7 +114,7 @@ export const getItems = () => async (dispatch) => {
 //
 //     }
 //     catch(e){
-//         dispatch({type:ASYNC_STATUS_ERROR, payload: e});
+//         dispatch({type:ASYNC_STATUS_ERROR_SUBMIT, payload: e});
 //     }
 // };
 
@@ -120,15 +127,22 @@ export const getItems = () => async (dispatch) => {
 
 //3) define the initialState for a specific module
 export const initialState = {
-    loading: false,
-    error: false,
     // fullname: {firstname:'firstName', lastname:'lastname'},
     // names: [{firstname:'firstName', lastname:'lastname'}, {firstname:'firstName2', lastname:'lastname2'}, {firstname:'firstName3', lastname:'lastname3'}],
     // homes :[{id:1, title:'aaaaa'},{id:2, title:'bbbbb'},{id:3, title:'ccccc'}],
     // title: 'initialStateTitle',
     // body:'initialStateBody',
-    items :[],
+
+    itemPending: false,
+    itemError: false,
     item : {},
+
+    itemsPending: false,
+    itemsError: false,
+    items :[],
+
+    // submitPending: false,
+    // submitError: false,
 
 };
 
@@ -143,35 +157,63 @@ export const initialState = {
 export default function home(state = initialState, action) {
 
     switch (action.type) {
-        case ASYNC_STATUS_LOADING:
+        case ASYNC_STATUS_PENDING_ITEM:
             return {
                 ...state,
-                loading: true,
-                error: false
+                itemPending: true,
+                itemError: false,
+                item:{}
             };
-        case ASYNC_STATUS_ERROR:
+        case ASYNC_STATUS_ERROR_ITEM:
             return {
                 ...state,
-                loading: false,
-                error: true
+                itemPending: false,
+                itemError: true
             };
         case ASYNC_STATUS_SUCCESS_ITEM:
             return{
                 ...state,
-                loading:false,
-                error : false,
+                itemPending:false,
+                itemError : false,
                 item: action.payload,
+            };
+        case ASYNC_STATUS_PENDING_ITEMS:
+            return {
+                ...state,
+                itemsPending: true,
+                itemsError: false,
+                items:[]
+            };
+        case ASYNC_STATUS_ERROR_ITEMS:
+            return {
+                ...state,
+                itemsPending: false,
+                itemsError: true
             };
         case ASYNC_STATUS_SUCCESS_ITEMS:
             return{
                 ...state,
-                loading:false,
-                error : false,
+                itemsPending:false,
+                itemsError : false,
                 items : action.payload
             };
+        // case ASYNC_STATUS_PENDING_SUBMIT:
+        //     return {
+        //         ...state,
+        //         submitPending: true,
+        //         submitError: false,
+        //     };
+        // case ASYNC_STATUS_ERROR_SUBMIT:
+        //     return {
+        //         ...state,
+        //         submitPending: false,
+        //         submitError: true
+        //     };
         // case ASYNC_STATUS_SUCCESS_SUBMIT:
         //      return {
         //         ...state,
+        //         submitPending: false,
+        //         submitError: false,
         //         names: state.names.concat(action.payload)
         // };
         // case CHANGE:
