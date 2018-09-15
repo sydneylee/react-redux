@@ -334,8 +334,8 @@ class NameForm extends Component {
         },
         touched:{},
         errors: {},
+        disabled: true,
         loading: false,
-        disabled: true
     };
 
     schemaBlur = yup.object({
@@ -360,15 +360,15 @@ class NameForm extends Component {
         })
     });
 
-    doValidate = (e, state)=>{
+    doValidate = (e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
 
         //create new state
         const newState = {
-            ...state,
+            ...this.state,
             fullname: {
-                ...state.fullname,
+                ...this.state.fullname,
                 [targetName]: targetValue
             }            
         }
@@ -395,10 +395,10 @@ class NameForm extends Component {
         });
     }
     handleOnBlur = (e)=>{
-        this.doValidate(e, this.state);
+        this.doValidate(e);
     }
     handleOnChange=(e)=>{
-        this.doValidate(e, this.state);
+        this.doValidate(e);
     };
 
     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기

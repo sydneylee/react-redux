@@ -1038,7 +1038,7 @@ class NamePHSForm extends Component {
         ]
 
     }
-    validate = (e, validators)=>{
+    validate = (e, validators, totalInputNumber)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
 
@@ -1126,49 +1126,12 @@ class NamePHSForm extends Component {
     // };
     handleOnBlur = (e)=>{
 
-        const result =  this.validate(e, validators);
-        this.setState( prevState=>({
-            ...prevState,
-            [e.target.name]: e.target.value,
-            ...result
-        }));
-        // const targetName = e.target.name;
-        // const targetValue = e.target.value;
-        // const totalInputNumber = 4;
-        // const newState = this.validate(targetName, targetValue, this.state, totalInputNumber);
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
+        const totalInputNumber = 4;
+        const newState = this.validate(targetName, targetValue, this.state, totalInputNumber);
 
-        // if(targetName === 'firstname' && !newState.errors['firstname']){
-        //     newState.loading = true;
-        //     newState.disabled = true;
-        //     this.setState(newState);
-            
-        //     const result = await this.isDuplicate(targetValue);
-
-        //     if (result) {
-        //         newState.errors[targetName] = 'is duplicate.';
-        //     } else {
-        //         newState.disabled = false;
-        //     }
-        //     newState.loading = false;
-        //     this.setState(newState);
-
-        // } else if(targetName === 'lastname' && !newState.errors['lastname']){
-        //     newState.loading = true;
-        //     newState.disabled = true;
-        //     this.setState(newState);
-
-        //     const result = await this.isDuplicate2(targetValue);
-        //     if (result) {
-        //         newState.errors[targetName] = 'is duplicate.';
-        //     } else {
-        //         newState.disabled = false;
-        //     }
-        //     newState.loading = false;
-        //     this.setState(newState);
-            
-        // }else{
-        //     this.setState(newState);
-        // }
+        this.setState(newState);
     };
     handleOnChange=(e)=>{
         const targetName = e.target.name;
