@@ -1028,7 +1028,7 @@ class NamePHSForm extends Component {
                 args: [{min: 8, max: 10}],
                 validWhen: true,
                 message: 'should be between 3 and 5'
-            }
+            },
             {
                 method: validator.equals,
                 args: 'password1',
