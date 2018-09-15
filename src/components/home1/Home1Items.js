@@ -1,7 +1,7 @@
 /**
  * Presentational Component to view items(item list) with renderList()
  * name        : HomeItems
- * description : HomeItems
+ * description : HomeItems to view all items
  * author      : lsj
  * created     : 15/9/18
  */
@@ -10,7 +10,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 
-class HomeItems extends Component {
+class Home1Items extends Component {
 
     static propTypes = {};
 
@@ -18,7 +18,6 @@ class HomeItems extends Component {
     renderList = () => {
         // console.log(this.props);
         const items = this.props.items || [];
-        console.log("***********",items);
         return items.map((item, i) => {
             return (<li key={i}>{item.title + '  ' + item.content}</li>);
         });
@@ -35,4 +34,4 @@ class HomeItems extends Component {
     }
 }
 
-export default HomeItems;
+export default Home1Items;

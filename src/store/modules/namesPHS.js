@@ -19,7 +19,7 @@ const ASYNC_STATUS_ERROR = 'namesPHS/ERROR';
 
 // 1-1) defines any async actionTypes required
 // const ASYNC_STATUS_SUCCESS_POST =   'namesPHS/SUCCESS_POST';
- const ASYNC_STATUS_SUCCESS_SUBMIT = 'namesPHS/SUCCESS_SUBMIT';
+ const ASYNC_STATUS_SUBMIT_SUCCESS = 'namesPHS/SUBMIT_SUCCESS';
 
 // 1-2) defines any sync actionTypes required
 const CHANGE = 'namesPHS/CHANGE';
@@ -77,12 +77,12 @@ export const submit = (payload) => async (dispatch) => {
     try{
         //TODO - promise -step 2(방법1): 1에서 처리된 prom을 await가 받아서 reponse(결과)를 변수에 assign
         //const response = await submitAPI(payload);
-        //dispatch({type:ASYNC_STATUS_SUCCESS_SUBMIT, payload:response});
+        //dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:response});
         ////return response;
 
         //TODO - promise -step 2(방법2): 1에서 처리된 prom을 then()메서드로 받아서, 그 안에서 dispatch를 바로 처리.
         submitAPI(payload).then((response)=>{
-            dispatch({type:ASYNC_STATUS_SUCCESS_SUBMIT, payload:response});
+            dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:response});
         });
 
 
@@ -143,7 +143,7 @@ export default function namesPHS(state = initialState, action) {
         //         body  : action.payload.body
         //
         //     };
-        case ASYNC_STATUS_SUCCESS_SUBMIT:
+        case ASYNC_STATUS_SUBMIT_SUCCESS:
              return {
                 ...state,
                 names: state.names.concat(action.payload)

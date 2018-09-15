@@ -1,21 +1,21 @@
 /**
  * Container Component
- * name        : HomeContainer
- * description : HomeContainer
+ * name        : Home1Container
+ * description : Home1Container for testing FileTemplate
  * author      : lsj
  * created     : 15/9/18
  */
 
 import React from 'react';
 import {connect} from 'react-redux';
-import * as homeExports from '../../store/modules/home';
+import * as home1Exports from '../../store/modules/home1';
 import imgSrc from '../../assets/img/loading.gif';
-import HomeItem      from '../../components/home/HomeItem';
-import HomeItems     from '../../components/home/HomeItems';
-import HomeItemForm  from '../../components/home/HomeItemForm';
+import Home1Item      from '../../components/home1/Home1Item';
+import Home1Items     from '../../components/home1/Home1Items';
+import Home1ItemForm  from '../../components/home1/Home1ItemForm';
 
 
-class HomeContainer extends React.Component {
+class Home1Container extends React.Component {
 
     // lsj-TIP : dispatch action(async) to redux store
     componentDidMount(){
@@ -33,13 +33,13 @@ class HomeContainer extends React.Component {
         return (
             <div>
                 <div>
-                    {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={sty}/> }
+                    {this.props.item && this.props.item.id!=null ? <Home1Item item={this.props.item}/> : <img src={imgSrc} style={sty}/> }
                 </div>
                 <div>
-                    {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : <img src={imgSrc} style={sty}/> }
+                    {this.props.items && this.props.items.length!=0 ? <Home1Items {...this.props}/> : <img src={imgSrc} style={sty}/> }
                 </div>
                 <div>
-                    {<HomeItemForm {...this.props}/>}
+                    {<Home1ItemForm {...this.props}/>}
                 </div>
             </div>
         );
@@ -47,12 +47,12 @@ class HomeContainer extends React.Component {
         // const {fullname, names, onSubmit, onChange} = this.props;
         // return(
         //     <div>
-        //         <HomeForm
+        //         <Home1Form
         //             fullname={fullname}
         //             onSubmit={onSubmit}
         //             onChange={onChange}
         //         />
-        //         <HomeList
+        //         <Home1List
         //             names={names}
         //         />
         //     </div>
@@ -66,22 +66,22 @@ class HomeContainer extends React.Component {
 // lsj-TIP : destructure state into a specific variable(module name)
 // which was combined by combineReducers() in index.js
 const mapStateToProps = (state) => {
-    const {home} = state;
+    const {home1} = state;
     return {
 
-        // names:         home.names,
-        // fullname:      home.fullname,
+        // names:         home1.names,
+        // fullname:      home1.fullname,
 
-        itemPending:   home.itemPending,
-        itemError:     home.itemError,
-        item :         home.item,
+        itemPending:   home1.itemPending,
+        itemError:     home1.itemError,
+        item :         home1.item,
 
-        itemsPending:  home.itemsPending,
-        itemsError:    home.itemsError,
-        items :        home.items,
+        itemsPending:  home1.itemsPending,
+        itemsError:    home1.itemsError,
+        items :        home1.items,
 
-        submitPending: home.submitPending,
-        submitError:   home.submitError,
+        submitPending: home1.submitPending,
+        submitError:   home1.submitError,
 
     };
 
@@ -90,20 +90,20 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onGetItem : (id)=>{
-            dispatch(homeExports.getItem(id))
+            dispatch(home1Exports.getItem(id))
         },
         onGetItems : ()=>{
-            dispatch(homeExports.getItems())
+            dispatch(home1Exports.getItems())
         },
         onSubmit:(payload)=>{
-            dispatch(homeExports.submit(payload));
+            dispatch(home1Exports.submit(payload));
         },
         // onChange:(payload)=>{
-        //     dispatch(homeExports.change(payload));
+        //     dispatch(home1Exports.change(payload));
         // },
 
     }
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(Home1Container);

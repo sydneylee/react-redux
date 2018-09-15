@@ -13,17 +13,17 @@
 // 1) define actionTypes:
 
 // 1-1) defines async actionTypes required
-// const ASYNC_STATUS_PENDING_ITEM = '${NAME}/PENDING_ITEM';
-// const ASYNC_STATUS_ERROR_ITEM = '${NAME}/ERROR_ITEM';
-// const ASYNC_STATUS_SUCCESS_ITEM =   '${NAME}/SUCCESS_ITEM';
+// const ASYNC_STATUS_ITEM_PENDING = '${NAME}/ITEM_PENDING';
+// const ASYNC_STATUS_ITEM_ERROR = '${NAME}/ITEM_ERROR';
+// const ASYNC_STATUS_ITEM_SUCCESS =   '${NAME}/ITEM_SUCCESS';
 //
-// const ASYNC_STATUS_PENDING_ITEMS = '${NAME}/PENDING_ITEMS';
-// const ASYNC_STATUS_ERROR_ITEMS = '${NAME}/ERROR_ITEMS';
-// const ASYNC_STATUS_SUCCESS_ITEMS =  '${NAME}/SUCCESS_ITEMS';
+// const ASYNC_STATUS_ITEMS_PENDING = '${NAME}/ITEMS_PENDING';
+// const ASYNC_STATUS_ITEMS_ERROR = '${NAME}/ITEMS_ERROR';
+// const ASYNC_STATUS_ITEMS_SUCCESS =  '${NAME}/ITEMS_SUCCESS';
 //
-// const ASYNC_STATUS_PENDING_SUBMIT = '${NAME}/PENDING_SUBMIT';
-// const ASYNC_STATUS_ERROR_SUBMIT = '${NAME}/ERROR_SUBMIT';
-// const ASYNC_STATUS_SUCCESS_SUBMIT = '${NAME}/SUCCESS_SUBMIT';
+// const ASYNC_STATUS_SUBMIT_PENDING = '${NAME}/SUBMIT_PENDING';
+// const ASYNC_STATUS_SUBMIT_ERROR = '${NAME}/SUBMIT_ERROR';
+// const ASYNC_STATUS_SUBMIT_SUCCESS = '${NAME}/SUBMIT_SUCCESS';
 
 
 // 1-2) defines sync actionTypes required
@@ -48,13 +48,13 @@
 // }
 // export const getItem = (id) => async (dispatch) => {
 //
-//     dispatch({ type: ASYNC_STATUS_PENDING_ITEM });
+//     dispatch({ type: ASYNC_STATUS_ITEM_PENDING });
 //     try{
 //         const response = await getItemAPI(id);
-//         dispatch({type: ASYNC_STATUS_SUCCESS_ITEM, payload : response});
+//         dispatch({type: ASYNC_STATUS_ITEM_SUCCESS, payload : response});
 //     }
 //     catch(e){
-//         dispatch({type:ASYNC_STATUS_ERROR_ITEM, payload: e});
+//         dispatch({type:ASYNC_STATUS_ITEM_ERROR, payload: e});
 //     }
 // };
 
@@ -66,53 +66,41 @@
 //
 // export const getItems = () => async (dispatch) => {
 //
-//     dispatch({ type: ASYNC_STATUS_PENDING_ITEMS });
+//     dispatch({ type: ASYNC_STATUS_ITEMS_PENDING });
 //     try{
 //         const response = await getItemsAPI();
-//         dispatch({type: ASYNC_STATUS_SUCCESS_ITEMS, payload : response});
+//         dispatch({type: ASYNC_STATUS_ITEMS_SUCCESS, payload : response});
 //     }
 //     catch(e){
-//         dispatch({type:ASYNC_STATUS_ERROR_ITEMS, payload: e});
+//         dispatch({type:ASYNC_STATUS_ITEMS_ERROR, payload: e});
 //     }
 // };
 
-//     // async function : submit(payload)
-//     // function submitAPI(payload){
-//     //return axios.get(`http://jsonplaceholder.typicode.com/${NAME}s/id`);
-//     //return fetch(`http://jsonplaceholder.typicode.com/${NAME}s/id`).then(function(response){return response.json()});
-//     //.then(function(myJson){console.log(JSON.stringify(myJson))});-이 부분은 사용하면 안됨
-//     //return fetch('....', {method:'POST', payload:payload}).then(function(response){return response.json()});
-//     //fail: TODO
-//     // setTimeout(()=>{
-//     //     //return JSON.stringify({firstname : 'newFirstname', lastname: 'newLastname'});
-//     //     return {firstname : 'newFirstname', lastname: 'newLastname'};
-//     // },3000);
-//     //return {firstname : 'newFirstname', lastname: 'newLastname'};
-//     // lsj-TIP : promise -step 1: promise 객체에, resove 경우와 reject 를 설정한 prom  객체를 return
-//     return new Promise(function(resolve, reject){
-//         setTimeout(()=>{
-//             //return JSON.stringify({firstname : 'newFirstname', lastname: 'newLastname'});
-//             resolve({firstname : 'newFirstname', lastname: 'newLastname'});
-//         },3000);
-//     });
+// //async function : submit(payload)
+// function submitAPI(payload){
+//     return fetch(`/api/item/create`, {
+//         method:'POST',
+//         headers:{
+//             "Content-Type":"application/json;charset=utf-8",
+//         },
+//         body:JSON.stringify(payload)
+//     }).then(function(response){return response.json()});
 // }
 //
 // export const submit = (payload) => async (dispatch) => {
-//
-//     dispatch({ type: ASYNC_STATUS_PENDING_SUBMIT });
+//     dispatch({ type: ASYNC_STATUS_SUBMIT_PENDING });
 //     try{
-//         // lsj-TIP : promise -step 2(방법1): 1에서 처리된 prom을 await가 받아서 reponse(결과)를 변수에 assign
-//         //const response = await submitAPI(payload);
-//         //dispatch({type:ASYNC_STATUS_SUCCESS_SUBMIT, payload:response});
-//         ////return response;
+//         // lsj-TIP : promise (방법1): submitAPI(payload)에서 처리된 prom을 then()메서드로 받아서, 그 안에서 dispatch를 바로 처리.
+//         // submitAPI(payload).then((response)=>{
+//         //     dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:response});
+//         // });
+//         // lsj-TIP : promise (방법2) : await로 처리
+//         const newItem = await submitAPI(payload);
+//         dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:newItem});
 //
-//         // lsj-TIP : promise -step 2(방법2): 1에서 처리된 prom을 then()메서드로 받아서, 그 안에서 dispatch를 바로 처리.
-//         submitAPI(payload).then((response)=>{
-//             dispatch({type:ASYNC_STATUS_SUCCESS_SUBMIT, payload:response});
-//         });
 //     }
 //     catch(e){
-//         dispatch({type:ASYNC_STATUS_ERROR_SUBMIT, payload: e});
+//         dispatch({type:ASYNC_STATUS_SUBMIT_ERROR, payload: e});
 //     }
 // };
 
@@ -157,65 +145,64 @@ export const initialState ={
 export default function ${NAME}(state=initialState, action){
 
     switch(action.type){
-        // case ASYNC_STATUS_PENDING_ITEM:
+        // case ASYNC_STATUS_ITEM_PENDING:
         //     return {
         //         ...state,
         //         itemPending: true,
         //         itemError: false,
         //         item:{}
         //     };
-        // case ASYNC_STATUS_ERROR_ITEM:
+        // case ASYNC_STATUS_ITEM_ERROR:
         //     return {
         //         ...state,
         //         itemPending: false,
         //         itemError: true
         //     };
-        // case ASYNC_STATUS_SUCCESS_ITEM:
+        // case ASYNC_STATUS_ITEM_SUCCESS:
         //     return{
         //         ...state,
         //         itemPending:false,
         //         itemError : false,
         //         item: action.payload,
         //     };
-        // case ASYNC_STATUS_PENDING_ITEMS:
+        // case ASYNC_STATUS_ITEMS_PENDING:
         //     return {
         //         ...state,
         //         itemsPending: true,
         //         itemsError: false,
-        //         items:[]
         //     };
-        // case ASYNC_STATUS_ERROR_ITEMS:
+        // case ASYNC_STATUS_ITEMS_ERROR:
         //     return {
         //         ...state,
         //         itemsPending: false,
         //         itemsError: true
         //     };
-        // case ASYNC_STATUS_SUCCESS_ITEMS:
+        // case ASYNC_STATUS_ITEMS_SUCCESS:
         //     return{
         //         ...state,
         //         itemsPending:false,
         //         itemsError : false,
         //         items : action.payload
         //     };
-        // case ASYNC_STATUS_PENDING_SUBMIT:
+        // case ASYNC_STATUS_SUBMIT_PENDING:
         //     return {
         //         ...state,
         //         submitPending: true,
         //         submitError: false,
         //     };
-        // case ASYNC_STATUS_ERROR_SUBMIT:
+        // case ASYNC_STATUS_SUBMIT_ERROR:
         //     return {
         //         ...state,
         //         submitPending: false,
         //         submitError: true
         //     };
-        // case ASYNC_STATUS_SUCCESS_SUBMIT:
-        //      return {
+        // case ASYNC_STATUS_SUBMIT_SUCCESS:
+        //     return {
         //         ...state,
         //         submitPending: false,
         //         submitError: false,
-        //         names: state.names.concat(action.payload)
-        // };
+        //         items: [...state.items, action.payload]
+        //     };
         // case CHANGE:
         //     return {
         //         ...state,

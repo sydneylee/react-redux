@@ -10,7 +10,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 
-class ${NAME} extends Component {
+class ${module_name_in_upper}Items extends Component {
 
     static propTypes = {};
 
@@ -34,4 +34,4 @@ class ${NAME} extends Component {
     }
 }
 
-export default ${NAME};
+export default ${module_name_in_upper}Items;

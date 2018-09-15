@@ -10,9 +10,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as ${module_name_in_lower}Exports from '../../store/modules/${module_name_in_lower}';
 import imgSrc from '../../assets/img/loading.gif';
-//import ${module_name_in_upper}Form  from '../../components/${module_name_in_lower}/${module_name_in_upper}Form';
-//import ${module_name_in_upper}Item from '../../components/${module_name_in_lower}/${module_name_in_upper}Item';
-//import ${module_name_in_upper}Items from '../../components/${module_name_in_lower}/${module_name_in_upper}Items';
+//import ${module_name_in_upper}Item      from '../../components/${module_name_in_lower}/${module_name_in_upper}Item';
+//import ${module_name_in_upper}Items     from '../../components/${module_name_in_lower}/${module_name_in_upper}Items';
+//import ${module_name_in_upper}ItemForm  from '../../components/${module_name_in_lower}/${module_name_in_upper}ItemForm';
 
 
 
@@ -20,8 +20,8 @@ class ${NAME} extends React.Component{
 
     // lsj-TIP : dispatch action(async) to redux store
     // componentDidMount(){
-    //     this.props.getItem(1);
-    //     this.props.getItems();
+    //     this.props.onGetItem(1);
+    //     this.props.onGetItems();
     // }
 
 
@@ -38,6 +38,9 @@ class ${NAME} extends React.Component{
         //         </div>
         //         <div>
         //             {this.props.items && this.props.items.length!=0 ? <${module_name_in_upper}Items {...this.props}/> : <img src={imgSrc} style={sty}/> }
+        //         </div>
+        //         <div>
+        //             {<${module_name_in_upper}ItemForm {...this.props}/>}
         //         </div>
         //     </div>
         // );
@@ -82,16 +85,14 @@ const mapStateToProps=(state)=>{
 
     };
 
-    //return ${module_name_in_lower}
-
 };
 // lsj-TIP : pls check if any param is required
 const mapDispatchToProps=(dispatch)=>{
     return {
-        // getItem : (id)=>{
+        // onGetItem : (id)=>{
         //     dispatch(${module_name_in_lower}Exports.getItem(id))
         // },
-        // getItems : ()=>{
+        // onGetItems : ()=>{
         //     dispatch(${module_name_in_lower}Exports.getItems())
         // },
         // onSubmit:(payload)=>{

@@ -19,7 +19,7 @@ const ASYNC_STATUS_ERROR = 'post/ERROR';
 
 // 1-1) defines any async actionTypes required
 const ASYNC_STATUS_SUCCESS_POST =   'post/SUCCESS_POST';
-// const ASYNC_STATUS_SUCCESS_SUBMIT = 'post/SUCCESS_SUBMIT';
+// const ASYNC_STATUS_SUBMIT_SUCCESS = 'post/SUBMIT_SUCCESS';
 // const ASYNC_STATUS_SUCCESS_POST_ITEMS =   'home/SUCCESS_POST_ITEMS';
 
 // 1-2) defines any sync actionTypes required
@@ -77,12 +77,12 @@ export const getPost = (postId) => async (dispatch) => {
 //     try{
 //         // lsj-TIP : promise -step 2(방법1): 1에서 처리된 prom을 await가 받아서 reponse(결과)를 변수에 assign
 //         //const response = await submitAPI(payload);
-//         //dispatch({type:ASYNC_STATUS_SUCCESS_SUBMIT, payload:response});
+//         //dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:response});
 //         ////return response;
 //
 //         // lsj-TIP : promise -step 2(방법2): 1에서 처리된 prom을 then()메서드로 받아서, 그 안에서 dispatch를 바로 처리.
 //         submitAPI(payload).then((response)=>{
-//             dispatch({type:ASYNC_STATUS_SUCCESS_SUBMIT, payload:response});
+//             dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:response});
 //         });
 //
 //
@@ -161,7 +161,7 @@ export default function post(state = initialState, action) {
                 body  : action.payload.body
 
             };
-        // case ASYNC_STATUS_SUCCESS_SUBMIT:
+        // case ASYNC_STATUS_SUBMIT_SUCCESS:
         //      return {
         //         ...state,
         //         names: state.names.concat(action.payload)

@@ -22,6 +22,7 @@ import NamesPHSContainer   from './containers/namesPHS/NamesPHSContainer';//appl
 
 // lsj-TIP : working with NodeJS/Express server
 import HomeContainer from './containers/home/HomeContainer';
+import Home1Container from './containers/home1/Home1Container';
 
 // lsj-TIP : BrowserRouter(=Router) 와 Route 바로 아래에 있는 child 는 single이어야 한다 : wrap by <div></div>
 // lsj-TIP : exact needed for NavLink and Route for exact matching, Switch is not properly working
@@ -42,6 +43,8 @@ class App extends Component {
                     <div>
                         <ul>
                             <NavLink activeStyle={activeStyle} to={`/`} exact>HOME</NavLink><span> | </span>
+                            <NavLink activeStyle={activeStyle} to={`/home1`} exact>HOME1</NavLink><span> | </span>
+
                             <NavLink activeStyle={activeStyle} to={`/counter`}>COUNTER</NavLink><span> | </span>
                             <NavLink activeStyle={activeStyle} to={`/names`}>NAMES</NavLink><span> | </span>
                             <NavLink activeStyle={activeStyle} to={`/namesRFF`}>NamesRFF</NavLink><span> | </span>
@@ -53,6 +56,10 @@ class App extends Component {
                             <Route exact path="/">
                             <HomeContainer/>
                             </Route>
+                            <Route exact path="/home1">
+                                <HomeContainer/>
+                            </Route>
+
                             <Route path="/counter">
                             <CounterContainer/>
                             </Route>
