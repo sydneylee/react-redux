@@ -339,12 +339,10 @@ class NameForm extends Component {
     };
 
     schemaBlur = yup.object({
-        fullname: yup.object().shape({
+        fullname: yup.object({
             firstname: yup.string().required('first is required').min(3).max(5).test('isDuplicate', 'aaa is duplicate', (value)=>{
-                // this.setState({loading: true});
                 return new Promise((resolve, reject)=>{
                     setTimeout(()=>{
-                        // this.setState({loading: false});
                         resolve(value!=='aaa');
                     }, 3000)
                 })
@@ -379,8 +377,9 @@ class NameForm extends Component {
         this.setState(this.newState);
 
         const path = 'fullname.'+targetName;
-        const schema = e.type === 'blur'? this.schemaBlur: this.schema;
-        // const schema = e.type === 'blur'? this.schema: this.schemaBlur;
+        // const schema = e.type === 'blur'? this.schemaBlur: this.schema;
+        const schema = e.type === 'blur'? this.schema: this.schemaBlur;
+        
         schema.validateAt(path, this.newState).then(value=>{
             delete this.newState.errors[targetName];
             this.newState.loading = false;
@@ -440,7 +439,6 @@ class NameForm extends Component {
                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.lastname}</div>
                 </div>
                 <button type="submit" disabled={this.state.disabled || this.state.loading}>submit</button>
-                
             </form>
         );
     }
