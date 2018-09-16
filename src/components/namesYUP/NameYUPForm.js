@@ -334,8 +334,8 @@ class NameForm extends Component {
         },
         touched:{},
         errors: {},
-        disabled: true,
         loading: false,
+        disabled: true,
     };
 
     schemaBlur = yup.object({
@@ -360,38 +360,37 @@ class NameForm extends Component {
         })
     });
 
+    newState;
     doValidate = (e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
 
         //create new state
-        const newState = {
+        this.newState = {
             ...this.state,
             fullname: {
                 ...this.state.fullname,
                 [targetName]: targetValue
             }            
         }
-        newState.touched[targetName] = true;
-        newState.loading = true;
-        newState.disabled = true;
-        this.setState(newState);
+        this.newState.touched[targetName] = true;
+        this.newState.loading = true;
+        this.newState.disabled = true;
+        this.setState(this.newState);
 
         const path = 'fullname.'+targetName;
         const schema = e.type === 'blur'? this.schemaBlur: this.schema;
-        schema.validateAt(path, newState).then(value=>{
-            // console.log('value=', value);
-            delete newState.errors[targetName];
-            newState.loading = false;
-            newState.disabled = Object.keys(newState.errors).length > 0 || Object.keys(newState.touched).length < 2;
-            this.setState(newState)
-            // this.setState({...this.state, ...newState});
+        // const schema = e.type === 'blur'? this.schema: this.schemaBlur;
+        schema.validateAt(path, this.newState).then(value=>{
+            delete this.newState.errors[targetName];
+            this.newState.loading = false;
+            this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < 2;
+            this.setState(this.newState)
         }).catch(err=>{
-            // console.log('err.path=', err, 'er.errorsr=', err.errors);
-            newState.errors[err.path] = err.errors;
-            newState.loading = false;
-            newState.disabled = true;
-            this.setState(newState)
+            this.newState.errors[err.path] = err.errors;
+            this.newState.loading = false;
+            this.newState.disabled = true;
+            this.setState(this.newState)
         });
     }
     handleOnBlur = (e)=>{
