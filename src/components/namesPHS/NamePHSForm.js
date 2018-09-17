@@ -1613,7 +1613,7 @@ import * as validator from 'validator';
 import * as yup from 'yup';
 
 yup.addMethod(yup.mixed, 'equalTo', function(ref, message) {
-    const msg = message || '${path} should match';
+    const msg = message || '${path} should match ${ref.path}';
     return this.test('equalTo', msg, function (value) {
       let other = this.resolve(ref);
       return !other || !value || value === other;
