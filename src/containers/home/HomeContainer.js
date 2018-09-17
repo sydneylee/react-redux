@@ -1,44 +1,55 @@
 /**
  * Container Component
  * name        : HomeContainer
- * description : HomeContainer
+ * description : HomeContainer compo
  * author      : lsj
- * created     : 15/9/18
+ * created     : 16/9/18
  */
 
 import React from 'react';
 import {connect} from 'react-redux';
 import * as homeExports from '../../store/modules/home';
 import imgSrc from '../../assets/img/loading.gif';
-import HomeItem      from '../../components/home/HomeItem';
-import HomeItems     from '../../components/home/HomeItems';
-import HomeItemForm  from '../../components/home/HomeItemForm';
+import HomeItem         from '../../components/home/HomeItem';
+import HomeItems        from '../../components/home/HomeItems';
+import HomeItemForm     from '../../components/home/HomeItemForm';
 
 
 class HomeContainer extends React.Component {
 
+    //-------------------------------------------------------------------------------------
     // lsj-TIP : dispatch action(async) to redux store
+    //-------------------------------------------------------------------------------------
     componentDidMount(){
         this.props.onGetItem(1);
         this.props.onGetItems();
     }
 
-
+    //-------------------------------------------------------------------------------------
+    // lsj-TIP : dispatch action(async) to redux store : dprp,
+    //-------------------------------------------------------------------------------------
     render() {
 
-        const sty = {width: '32px', height: '32px'};
-        //return (<div></div>);
+        const styLoadingImg = {width: '32px', height: '32px'};
+
+        // return (<div></div>);
 
         // lsj-TIP :For async : null checking and loading image
         return (
             <div>
-                <div>
-                    {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={sty}/> }
+                <div  style={{display:this.props.mode=='view'? 'block':'none'}}>
+                    <div>
+                        {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={styLoadingImg}/> }
+                    </div>
+                    <div>
+                        {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : <img src={imgSrc} style={styLoadingImg}/> }
+                    </div>
+                    <button onClick={this.props.onAddItem}>add</button>
                 </div>
-                <div>
-                    {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : <img src={imgSrc} style={sty}/> }
-                </div>
-                <div>
+                {/*<div>*/}
+                {/*{<HomeItemForm {...this.props}/>}*/}
+                {/*</div>*/}
+                <div style={{display:this.props.mode=='edit'? 'block':'none'}}>
                     {<HomeItemForm {...this.props}/>}
                 </div>
             </div>
@@ -63,22 +74,23 @@ class HomeContainer extends React.Component {
 
 }
 
-// lsj-TIP : destructure state into a specific variable(module name)
-// which was combined by combineReducers() in index.js
+//-------------------------------------------------------------------------------------
+// lsj-TIP : destructure state into a specific variable(=module name)
+//           which was combined by combineReducers() in index.js
+//-------------------------------------------------------------------------------------
 const mapStateToProps = (state) => {
     const {home} = state;
     return {
 
-        // names:         home.names,
-        // fullname:      home.fullname,
+        mode :         home.mode,
 
+        item :         home.item,
         itemPending:   home.itemPending,
         itemError:     home.itemError,
-        item :         home.item,
 
+        items :        home.items,
         itemsPending:  home.itemsPending,
         itemsError:    home.itemsError,
-        items :        home.items,
 
         submitPending: home.submitPending,
         submitError:   home.submitError,
@@ -86,7 +98,10 @@ const mapStateToProps = (state) => {
     };
 
 };
+
+//-------------------------------------------------------------------------------------
 // lsj-TIP : pls check if any param is required
+//-------------------------------------------------------------------------------------
 const mapDispatchToProps = (dispatch) => {
     return {
         onGetItem : (id)=>{
@@ -98,6 +113,12 @@ const mapDispatchToProps = (dispatch) => {
         onSubmit:(payload)=>{
             dispatch(homeExports.submit(payload));
         },
+        onSetMode:(mode)=>{
+            dispatch(homeExports.setMode(mode));
+        },
+        onAddItem : ()=>{
+            dispatch(homeExports.addItem());
+        },
         // onChange:(payload)=>{
         //     dispatch(homeExports.change(payload));
         // },
@@ -105,5 +126,9 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-
+//-------------------------------------------------------------------------------------
+// lsj-TIP : export default the container component after connecting to redux/store
+//-------------------------------------------------------------------------------------
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
+
+

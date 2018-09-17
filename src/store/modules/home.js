@@ -3,36 +3,49 @@
  * name        : home
  * description : home module
  * author      : lsj
- * created     : 15/9/18
+ * created     : 16/9/18
  */
 
+//-------------------------------------------------------------------------------------
 // 0) import modules if needed
+//-------------------------------------------------------------------------------------
 //import {handleActions} from 'redux-actions';
 
 
+//-------------------------------------------------------------------------------------
 // 1) define actionTypes:
-
-// 1-1) defines async actionTypes required
+//-------------------------------------------------------------------------------------
+    // 1-1) defines async actionTypes required : lsjAddActionAsyncInModule
+//-------------------------------------------------------------------------------------
+//async actionTypes for ITEM
 const ASYNC_STATUS_ITEM_PENDING = 'home/ITEM_PENDING';
 const ASYNC_STATUS_ITEM_ERROR = 'home/ITEM_ERROR';
 const ASYNC_STATUS_ITEM_SUCCESS =   'home/ITEM_SUCCESS';
 
+//async actionTypes for ITEMS
 const ASYNC_STATUS_ITEMS_PENDING = 'home/ITEMS_PENDING';
 const ASYNC_STATUS_ITEMS_ERROR = 'home/ITEMS_ERROR';
 const ASYNC_STATUS_ITEMS_SUCCESS =  'home/ITEMS_SUCCESS';
 
+//async actionTypes for SUBMIT
 const ASYNC_STATUS_SUBMIT_PENDING = 'home/SUBMIT_PENDING';
 const ASYNC_STATUS_SUBMIT_ERROR = 'home/SUBMIT_ERROR';
 const ASYNC_STATUS_SUBMIT_SUCCESS = 'home/SUBMIT_SUCCESS';
 
 
-// 1-2) defines sync actionTypes required
-//const CHANGE = 'home/CHANGE';
+//-------------------------------------------------------------------------------------
+// 1-2) defines sync actionTypes required  : lsjAddActionSyncInModule
+//-------------------------------------------------------------------------------------
+// const CHANGE = 'home/CHANGE';
+const SET_MODE = 'home/SET_MODE';
+const ADD_ITEM = 'home/ADD_ITEM';
 
 
+//-------------------------------------------------------------------------------------
 // 2) define and exports actionCreator functions
-
-// 2-1) async actionCreator functions
+//-------------------------------------------------------------------------------------
+// 2-1) async actionCreatorFn and their fetchFns
+//-------------------------------------------------------------------------------------
 // lsj-TIP : for async Thunk HTTP request
 // - axios.get()
 // - fetch() needs  ".then(function(response){return response.json()})"
@@ -41,11 +54,6 @@ const ASYNC_STATUS_SUBMIT_SUCCESS = 'home/SUBMIT_SUCCESS';
 
 
 // async function : getItem(id)
-function getItemAPI(id){
-    //return axios.get(`http://jsonplaceholder.typicode.com/Items/$}id{`);
-    //return fetch(`http://jsonplaceholder.typicode.com/Items/$}id{`).then(function(response){return response.json()});
-    return fetch('/api/item/'+id).then(function(response){return response.json()});
-}
 export const getItem = (id) => async (dispatch) => {
 
     dispatch({ type: ASYNC_STATUS_ITEM_PENDING });
@@ -57,13 +65,13 @@ export const getItem = (id) => async (dispatch) => {
         dispatch({type:ASYNC_STATUS_ITEM_ERROR, payload: e});
     }
 };
+function getItemAPI(id){
+    //return axios.get(`http://jsonplaceholder.typicode.com/Items/$}id{`);
+    return fetch('/api/item/'+id).then(function(response){return response.json()});
+}
 
 
 // async function : getItems()
-function getItemsAPI(){
-    return fetch('/api/items').then(function(response){return response.json()});
-}
-
 export const getItems = () => async (dispatch) => {
 
     dispatch({ type: ASYNC_STATUS_ITEMS_PENDING });
@@ -75,18 +83,12 @@ export const getItems = () => async (dispatch) => {
         dispatch({type:ASYNC_STATUS_ITEMS_ERROR, payload: e});
     }
 };
-
-//async function : submit(payload)
-function submitAPI(payload){
-    return fetch(`/api/item/create`, {
-        method:'POST',
-        headers:{
-            "Content-Type":"application/json;charset=utf-8",
-        },
-        body:JSON.stringify(payload)
-    }).then(function(response){return response.json()});
+function getItemsAPI(){
+    return fetch('/api/items').then(function(response){return response.json()});
 }
 
+
+// async function : submit(payload)
 export const submit = (payload) => async (dispatch) => {
     dispatch({ type: ASYNC_STATUS_SUBMIT_PENDING });
     try{
@@ -103,45 +105,61 @@ export const submit = (payload) => async (dispatch) => {
         dispatch({type:ASYNC_STATUS_SUBMIT_ERROR, payload: e});
     }
 };
+function submitAPI(payload){
+    return fetch(`/api/item/save`, {
+        method:'POST',
+        headers:{
+            "Content-Type":"application/json;charset=utf-8",
+        },
+        body:JSON.stringify(payload)
+    }).then(function(response){return response.json()});
+}
 
 
-//2-2) sync actionCreator functions
-
+//-------------------------------------------------------------------------------------
+//2-2) sync actionCreatorFns
+//-------------------------------------------------------------------------------------
 // // Sync function : change(payload)
 // export function change(payload){
 //     return {type:CHANGE, payload: payload};
 // }
 
 
+// Sync function : setMode(mode) : set mode to 'edit' or 'view'
+export function setMode(mode){
+    return {type:SET_MODE, mode: mode};
+}
+
+// Sync function : addItem() : add item in edit mode
+export function addItem(){
+    return {type : ADD_ITEM, mode:'edit'};
+}
+
+
+//-------------------------------------------------------------------------------------
 //3) define initialState for module
+//-------------------------------------------------------------------------------------
 export const initialState = {
-    // fullname: {firstname:'firstName', lastname:'lastname'},
-    // names: [{firstname:'firstName', lastname:'lastname'}, {firstname:'firstName2', lastname:'lastname2'}, {firstname:'firstName3', lastname:'lastname3'}],
-    // homes :[{id:1, title:'aaaaa'},{id:2, title:'bbbbb'},{id:3, title:'ccccc'}],
-    // title: 'initialStateTitle',
-    // body:'initialStateBody',
 
-    itemPending:    false,
-    itemError:      false,
-    item :          {},
+        mode: 'view',
 
-    itemsPending:   false,
-    itemsError:     false,
-    items :         [],
+        item :          {},
+        itemPending:    false,
+        itemError:      false,
 
-    submitPending:  false,
-    submitError:    false,
+        items :         [],
+        itemsPending:   false,
+        itemsError:     false,
 
-};
+        submitPending:  false,
+        submitError:    false,
 
-//4) define reducer function for async and sync actionTypes defined above
-// export default handleActions({
-//     [GET_HOME_PENDING]: (state) => ({ ...state, fetching: true, error: false }),
-//     [GET_HOME_SUCCESS]: (state, { payload: { data } }) => ({ ...state, fetching: false, title: data.title, body: data.body }),
-//     [GET_HOME_FAILURE]: (state) => ({ ...state, fetching: false, error: true })
-// }, initialState);
+    };
 
 
+//-------------------------------------------------------------------------------------
+//4) define reducer function for both of async and sync actionTypes
+//-------------------------------------------------------------------------------------
 export default function home(state = initialState, action) {
 
     switch (action.type) {
@@ -197,11 +215,25 @@ export default function home(state = initialState, action) {
                 submitError: true
             };
         case ASYNC_STATUS_SUBMIT_SUCCESS:
+            //state.items.((action.payload.id)=>action.payload)
+            
             return {
                 ...state,
                 submitPending: false,
                 submitError: false,
-                items: [...state.items, action.payload]
+                items: [...state.items, action.payload],
+                item: action.payload,
+            };
+        case SET_MODE:
+            return {
+                ...state,
+                mode:action.mode
+            };
+        case ADD_ITEM :
+            return {
+                ...state,
+                mode:action.mode,
+                item: {},
             };
         // case CHANGE:
         //     return {
@@ -216,3 +248,5 @@ export default function home(state = initialState, action) {
     }
 
 }
+
+

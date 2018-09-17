@@ -1,16 +1,16 @@
 /**
  * Presentational Component to view an item
  * name        : HomeItem
- * description : HomeItem view item
+ * description : HomeItem to view item
  * author      : lsj
- * created     : 15/9/18
+ * created     : 16/9/18
  */
 
 import React, {Component} from 'react';
 
 //import imgSrc from '../assets/img/loading.gif';
 
-class homeItem extends Component {
+class HomeItem extends Component {
 
     static defaultProps = {};
 
@@ -18,22 +18,14 @@ class homeItem extends Component {
 
     state = {};
 
-    // handleOnIncrement= ()=>{
-    //     this.props.onIncrement();
-    // };
-    //
-    // handleOnDecrement= ()=>{
-    //     this.props.onDecrement();
-    // };
-
-
     render() {
 
-        // lsj-TIP : for asynchronous actionstatus, render properly according to the status(loading, success, error)
-        // lsj-TIP : for loading image <img src={imgSrc}, imgSrc should be imported and used like a variable
-        // lsj-TIP : style should be insert as obj : {width: '50px', height:'50px'}
+        // Tip : for asynchronous actionstatus, render properly according to the status(loading, success, error)
+        // Tip : for loading image <img src={imgSrc}, imgSrc should be imported and used like a variable
+        // Tip : style should be insert as obj : {width: '50px', height:'50px'}
+        // Tip : dprp
 
-        // const {number, loading, error} = this.props; //dprp
+        // const {number, loading, error} = this.props;
         return (
             <div>
                 <h2>{this.props.item.title}</h2>
@@ -43,4 +35,4 @@ class homeItem extends Component {
     }
 }
 
-export default homeItem;
+export default HomeItem;

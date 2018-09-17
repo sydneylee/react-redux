@@ -124,37 +124,79 @@ class HomeItemForm extends Component {
             payload[pair[0]] = pair[1];
         }
         this.props.onSubmit(payload);
+
         //reset form
-        this.setState({title: '', content: ''});
+        this.setState({id:'', title: '', content: ''});
+
+
+        this.props.onSetMode('view');
     };
 
     render() {
         const styError = {fontSize: '10px', color: 'red'};
+
+        // const {id, title, content, pending, errors, disabled} = this.state;
+        // return (
+        //     <form onSubmit={this.handleOnSubmit}>
+        //         <div>
+        //         <span>
+        //             <input type="text"
+        //                    name='title'
+        //                    value={title}
+        //                    onChange={this.handleOnChange}
+        //                    onBlur={this.handleOnBlur}
+        //                    placeholder='title'
+        //                    disabled={pending}
+        //             />
+        //             <div style={styError}>{errors.title}</div>
+        //         </span>
+        //             <span>
+        //             <input type="text"
+        //                    name='content'
+        //                    value={content}
+        //                    onChange={this.handleOnChange}
+        //                    onBlur={this.handleOnBlur}
+        //                    placeholder='content'
+        //             />
+        //             <div style={styError}>{errors.content}</div>
+        //         </span>
+        //         </div>
+        //         <div>
+        //             <button type="submit" disabled={disabled || pending}>submit</button>
+        //         </div>
+        //     </form>
+        // );
+
+        // Tip : Use defaultValue instead of value : Warning: A component is changing a controlled input of type hidden to be uncontrolled. Input elements should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://fb.me/react-controlled-components
         const {id, title, content, pending, errors, disabled} = this.state;
         return (
             <form onSubmit={this.handleOnSubmit}>
                 <div>
-                <span>
-                    <input type="text"
-                           name='title'
-                           value={title}
-                           onChange={this.handleOnChange}
-                           onBlur={this.handleOnBlur}
-                           placeholder='title'
-                           disabled={pending}
-                    />
-                    <div style={styError}>{errors.title}</div>
-                </span>
                     <span>
-                    <input type="text"
-                           name='content'
-                           value={content}
-                           onChange={this.handleOnChange}
-                           onBlur={this.handleOnBlur}
-                           placeholder='content'
-                    />
-                    <div style={styError}>{errors.content}</div>
-                </span>
+                        <input type="hidden"
+                               name='id'
+                               defaultValue={this.props.mode=='view'? id : this.props.item.id}
+                        />
+                        <input type="text"
+                               name='title'
+                               defaultValue={this.props.mode=='view'? title : this.props.item.title}
+                               onChange={this.handleOnChange}
+                               onBlur={this.handleOnBlur}
+                               placeholder='title'
+                               disabled={pending}
+                        />
+                        <div style={styError}>{errors.title}</div>
+                    </span>
+                    <span>
+                        <input type="text"
+                               name='content'
+                               defaultValue={this.props.mode=='view'? content : this.props.item.content}
+                               onChange={this.handleOnChange}
+                               onBlur={this.handleOnBlur}
+                               placeholder='content'
+                        />
+                        <div style={styError}>{errors.content}</div>
+                    </span>
                 </div>
                 <div>
                     <button type="submit" disabled={disabled || pending}>submit</button>

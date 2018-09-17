@@ -7,10 +7,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 //TODO - proxy port : 제시된 포트는 5000이었으므로,여기서와 package.json에서 proxy를 500에 넣고, home 에서 testing 으로 연결한  fetch('/api/hello')로 시험하자 실패, 7000으로 두곳에서 다 바꾸니 작동
 const port = process.env.PORT || 9999;
 
-// server route :
-app.get('/api/hello', (req, res) => {
-    res.send({ express: 'Hello From Express' });
-});
+
 let id = 100;
 let homeItems = [
     { id:0, title:'title0', content: 'content0' },
@@ -26,22 +23,49 @@ let homeItems = [
 
 ];
 
-app.get('/api/items', (req, res) => {
-    setTimeout(()=>{res.send(homeItems);}, 1000);
-});
+// var array1 = [{id:1,title:'aaa',content:'aaa1'}, 12, {id:2,title:'aaa2',content:'aaa2'}, 130, 44];
+//
+// var found = array1.find(function(element) {
+//     return element.id!=null && element.id == 2;
+// });
+// found;
+function getItem(id){
+    const item = homeItems.find((el) => {
+            return (el.id == id);
+        });
+    return new Promise((resolve, reject)=> {
+        setTimeout(() => {
+            if (item) {
+                resolve(item);
+            }
+            else {
+                reject({error: 'not found' + id});
+            }
+        }, 1000);
+    });
 
+}
 
-app.get('/api/item/:id', (req, res) => {
-    console.log(req.params.id);
-    setTimeout(()=>{res.send(homeItems[req.params.id]);}, 1000);
-});
+function getItemIndex(id){
+    const itemIndex = homeItems.findIndex((el) => {
+        return (el.id == id);
+    });
+    console.log("****", itemIndex);
+    return new Promise((resolve, reject)=> {
+        setTimeout(() => {
+            if (itemIndex != null) {
+                resolve(itemIndex);
+            }
+            else {
+                reject({error: 'not found' + id});
+            }
+        }, 1000);
+    });
+}
 
-app.post('/api/item/create', (req, res) => {
-    console.log(req.body);
+function createItem(req, res){
     const newItem = {id:id++, title:req.body.title, content:req.body.content};
-
     setTimeout(()=>{
-
         try{
             homeItems = [...homeItems, newItem];
             console.log(homeItems);
@@ -52,6 +76,59 @@ app.post('/api/item/create', (req, res) => {
             res.status(404).send(e);
         }
     }, 1000);
+}
+
+async function updateItem(req, res){
+    const newItem = {id:req.body.id, title:req.body.title, content:req.body.content};
+
+    const itemIndex = await getItemIndex(req.body.id);
+
+    setTimeout(()=>{
+        try{
+            const updatedItems = homeItems.splice(itemIndex, 1, newItem);
+
+            console.log(homeItems);
+            console.log(newItem);
+            res.send(newItem);
+        }
+        catch(e){
+            res.status(404).send(e);
+        }
+    }, 1000);
+
+}
+
+// server route :
+app.get('/api/hello', (req, res) => {
+    res.send({ express: 'Hello From Express' });
+});
+
+app.get('/api/items', (req, res) => {
+    setTimeout(()=>{res.send(homeItems);}, 1000);
+});
+
+
+app.get('/api/item/:id', async (req, res) => {
+    //console.log(req.params.id);
+    //homeItems[req.params.id]
+    // const items = homeItems.filter((el) => {
+    //     return (el.id == req.params.id);
+    // });
+    // setTimeout(()=>{res.send(items[0]);}, 1000);
+    result = await getItem(req.params.id);
+    console.log(result);
+    res.send(result);
+});
+
+
+app.post('/api/item/save', (req, res) => {
+    // console.log(req.body);
+    if(req.body.id == ''){
+        createItem(req, res);
+    }
+    else{
+        updateItem(req, res);
+    }
 });
 
 

@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 //import imgSrc from '../assets/img/loading.gif';
 
-class ${module_name_in_upper}Item extends Component {
+class ${module_name_capital}Item extends Component {
 
     static defaultProps = {
 
@@ -21,22 +21,14 @@ class ${module_name_in_upper}Item extends Component {
 
     };
 
-    // handleOnIncrement= ()=>{
-    //     this.props.onIncrement();
-    // };
-    //
-    // handleOnDecrement= ()=>{
-    //     this.props.onDecrement();
-    // };
-
-
     render() {
 
-        // lsj-TIP : for asynchronous actionstatus, render properly according to the status(loading, success, error)
-        // lsj-TIP : for loading image <img src={imgSrc}, imgSrc should be imported and used like a variable
-        // lsj-TIP : style should be insert as obj : {width: '50px', height:'50px'}
+        // Tip : for asynchronous actionstatus, render properly according to the status(loading, success, error)
+        // Tip : for loading image <img src={imgSrc}, imgSrc should be imported and used like a variable
+        // Tip : style should be insert as obj : {width: '50px', height:'50px'}
+        // Tip : dprp
 
-        // const {number, loading, error} = this.props; //dprp
+        // const {number, loading, error} = this.props;
         return (
             <div>
                 <h2>{this.props.item.title}</h2>
@@ -46,4 +38,4 @@ class ${module_name_in_upper}Item extends Component {
     }
 }
 
-export default ${module_name_in_upper}Item;
+export default ${module_name_capital}Item;
