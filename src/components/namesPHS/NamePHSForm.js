@@ -1454,10 +1454,171 @@
 // }
 
 // export default NamePHSForm;
+// // //############################################################
+// import React, {Component} from 'react';
+// import * as validator from 'validator';
+// import * as yup from 'yup';
+
+// class NamePHSForm extends Component {
+//     static defaultProps = {};
+
+//     static propTypes = {};
+
+//     state = {
+//         firstname:'',
+//         lastname:'',
+//         password1:'',
+//         password2:'',
+//         touched:{},
+//         errors: {},
+//         disabled: true,
+//         loading: false,
+//     };
+
+//     schema = yup.object().shape({
+//         firstname: yup.string().required('first is required').min(3).max(5).test('isDuplicate', 'aaa is duplicate', (value)=>{
+//             return new Promise((resolve, reject)=>{
+//                 setTimeout(()=>{
+//                     resolve(value!=='aaa');
+//                 }, 3000)
+//             })
+//         }),
+//         lastname: yup.string().required('first is required').min(3).max(5),
+//         password1: yup.string().required('password is required').min(5).max(8),
+//         password2: yup.string().oneOf([yup.ref('password1')], 'should be same as password1' )
+//     });
+
+//     newState;
+//     doValidate = (e)=>{
+//         const targetName = e.target.name;
+//         const targetValue = e.target.value;
+
+//         //create new state
+//         this.newState = {
+//             ...this.state,
+//             [targetName]: targetValue
+//         }
+//         this.newState.touched[targetName] = true;
+//         this.newState.loading = true;
+//         this.newState.disabled = true;
+//         this.setState(this.newState);
+        
+//         const path = targetName;
+
+//         this.schema.validateAt(path, this.newState).then(value=>{
+//             delete this.newState.errors[targetName];
+
+//             if(targetName=== 'password1'){
+//                 if(targetValue === this.newState.password2){
+//                     delete this.newState.errors.password2;
+//                 }else{
+//                     this.newState.errors[targetName] = 'should match';
+//                 }
+                
+//             }else if(targetName=== 'password2'){
+//                 if(targetValue === this.newState.password1){
+//                     delete this.newState.errors.password1;
+//                 }else{
+//                     this.newState.errors[targetName] = 'should match';
+//                 }
+//             }
+//             this.newState.loading = false;
+//             this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < 4;
+//             this.setState(this.newState)
+//         }).catch(err=>{
+//             this.newState.errors[err.path] = err.errors;
+//             this.newState.loading = false;
+//             this.newState.disabled = true;
+//             this.setState(this.newState)
+//         });
+//     }
+//     handleOnBlur = (e)=>{
+//         this.doValidate(e);
+//     }
+//     handleOnChange=(e)=>{
+//         this.doValidate(e);
+//     };
+
+//     //TODO : onSubmit에서 e를 이용해서 form전체의 값을 받기
+//     nameRef=null;
+//     handleOnSubmit=(e)=>{
+//         e.preventDefault();
+//         let data = new FormData(e.target);
+
+//         let payload = {};
+//         for(var pair of data.entries()) {
+//             payload[pair[0]]=pair[1];
+//         }
+//         this.props.onSubmit(payload);
+//     };
+
+//     render() {
+//         // const {fullname} = this.props;
+//         // const {fullname, password1, password2} = this.state;
+//         const {firstname, lastname, password1, password2} = this.state;
+//         return (
+//             <form onSubmit={this.handleOnSubmit}>
+//                 <div>
+//                 <span>
+//                     <input type="text"
+//                         name='firstname'
+//                         defaultValue={firstname}
+//                         onChange={this.handleOnChange}
+//                         onBlur={this.handleOnBlur}
+//                         placeholder='first name'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.firstname}</div>
+//                 </span>
+//                 <span>
+//                     <input type="text"
+//                         name='lastname'
+//                         defaultValue={lastname}
+//                         onChange={this.handleOnChange}
+//                         onBlur={this.handleOnBlur}
+//                         placeholder='last name'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.lastname}</div>
+//                 </span>
+//                 </div>
+//                 <div>
+//                     <input type="password"
+//                            name='password1'
+//                            defaultValue={password1}
+//                            onChange={this.handleOnChange}
+//                            onBlur={this.handleOnBlur}
+//                            placeholder='password1'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.password1}</div>
+//                     <input type="password"
+//                            name='password2'
+//                            defaultValue={password2}
+//                            onChange={this.handleOnChange}
+//                            onBlur={this.handleOnBlur}
+//                            placeholder='password2'
+//                     />
+//                     <div style={{fontSize:'10px', color: 'red'}}>{this.state.errors.password2}</div>
+//                 </div>
+//                 <div>
+//                 <button type="submit" disabled={this.state.disabled || this.state.loading}>submit</button>
+//                 </div>
+//             </form>
+//         );
+//     }
+// }
+
+// export default NamePHSForm;
 // //############################################################
 import React, {Component} from 'react';
 import * as validator from 'validator';
 import * as yup from 'yup';
+
+yup.addMethod(yup.mixed, 'equalTo', function(ref, message) {
+    const msg = message || '${path} should match';
+    return this.test('equalTo', msg, function (value) {
+      let other = this.resolve(ref);
+      return !other || !value || value === other;
+    })
+})
 
 class NamePHSForm extends Component {
     static defaultProps = {};
@@ -1484,14 +1645,17 @@ class NamePHSForm extends Component {
             })
         }),
         lastname: yup.string().required('first is required').min(3).max(5),
-        password1: yup.string().required('password is required').min(5).max(8),
-        password2: yup.string().oneOf([yup.ref('password1')], 'should be same as password1' )
+        // password1: yup.string().required('password is required').min(5).max(8),
+        // password2: yup.string().oneOf([yup.ref('password1')], 'should be same as password1' )
+        password1: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password2'), 'should be same as password2.'),
+        password2: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password1'), 'should be same as password1.'),
     });
 
     newState;
     doValidate = (e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
+        const fieldNum = 4;
 
         //create new state
         this.newState = {
@@ -1508,22 +1672,13 @@ class NamePHSForm extends Component {
         this.schema.validateAt(path, this.newState).then(value=>{
             delete this.newState.errors[targetName];
 
-            if(targetName=== 'password1'){
-                if(targetValue === this.newState.password2){
-                    delete this.newState.errors.password2;
-                }else{
-                    this.newState.errors[targetName] = 'should match';
-                }
-                
-            }else if(targetName=== 'password2'){
-                if(targetValue === this.newState.password1){
-                    delete this.newState.errors.password1;
-                }else{
-                    this.newState.errors[targetName] = 'should match';
-                }
+            if(targetName=== 'password1' && targetValue === this.newState.password2){
+                delete this.newState.errors.password2;
+            }else if(targetName=== 'password2' && targetValue === this.newState.password1){
+                delete this.newState.errors.password1;
             }
             this.newState.loading = false;
-            this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < 4;
+            this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < fieldNum;
             this.setState(this.newState)
         }).catch(err=>{
             this.newState.errors[err.path] = err.errors;
