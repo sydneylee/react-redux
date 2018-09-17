@@ -8,6 +8,31 @@
 
 import React, {Component} from 'react';
 import * as validator from 'validator';
+import * as yup from 'yup';
+
+// add "equalTo' method to yup - phs
+// Tip: do not use the function to arrow fn as the "this" should refer to "yup"
+// yup.addMethod(): yup.mixed- any method can apply to String, Number, object, array
+// yup.addMethod(yup.mixed, 'equalTo', function(ref, errMessage){
+//     const errMsg = errMessage || '${path} should match ${ref.path}';
+//     // true returned - success
+//     return this.test('equalTo', errMsg, funciton(value) {
+//         let refValue = this.resolve(ref);
+//         return !refValue || !value || value === refValue;
+//     });
+// });
+
+// add "equalTo' method to yup - phs
+// Tip: do not use the function to arrow fn as the "this" should refer to "yup"
+// yup.addMethod(): yup.mixed- any method can apply to String, Number, object, array
+yup.addMethod(yup.mixed, 'equalTo', function(ref, message) {
+    const msg = message || '${path} should match ${ref.path}';
+    return this.test('equalTo', msg, function (value) {
+        let refValue = this.resolve(ref);
+        return !refValue || !value || value === refValue;
+    });
+});
+
 
 class HomeItemForm extends Component {
     static defaultProps = {};
@@ -19,41 +44,60 @@ class HomeItemForm extends Component {
         title: '',
         content: '',
         touched: {},
-        disabled: true,
-        pending: false,
         errors: {},
+        pending: false,
+        disabled: true,
     };
+    
+    //schema - validation schema for yup
+    // schema = yup.object().shape({
+    //     firstname: yup.string().required('first is required').min(3).max(5).test('isDuplicate', 'aaa is duplicate', (value)=>{
+    //         return new Promise((resolve, reject)=>{
+    //             setTimeout(()=>{
+    //                 resolve(value!=='aaa');
+    //             }, 3000)
+    //         })
+    //     }),
+    //     lastname: yup.string().required('first is required').min(3).max(5),
+    //     // password1: yup.string().required('password is required').min(5).max(8),
+    //     // password2: yup.string().oneOf([yup.ref('password1')], 'should be same as password1' )
+    //     password1: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password2'), 'should be same as password2.'),
+    //     password2: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password1'), 'should be same as password1.'),
+    // });
+    schema = yup.object().shape({
+        title: yup.string().required().min(3).max(5),
+        content: yup.string().required().min(10).max(15),
+    });
+    // validationRules = {
+    //     title: {min: 3, max: 10},
+    //     content: {min: 2, max: 30},
+    // };
 
-    validationRules = {
-        title: {min: 3, max: 10},
-        content: {min: 2, max: 30},
-    };
-
-    // validator library :
-    validate = (targetName, targetValue) => {
-        const error = {targetName: ''};
-        if (targetName === 'title') {
-            const min = this.validationRules.title.min;
-            const max = this.validationRules.title.max;
-            if (validator.isEmpty(targetValue)) {
-                error[targetName] = 'should not empty'
-            }
-            else if (!validator.isLength(targetValue, {min: min, max: max})) {
-                error[targetName] = 'should be ' + min + '~ ' + max;
-            }
-        }
-        else if (targetName === 'content') {
-            const min = this.validationRules.content.min;
-            const max = this.validationRules.content.max;
-            if (validator.isEmpty(targetValue)) {
-                error[targetName] = 'should not empty'
-            }
-            else if (!validator.isLength(targetValue, {min: min, max: max})) {
-                error[targetName] = 'should be ' + min + '~ ' + max;
-            }
-        }
-        return error;
-    };
+    // // validator library :
+    // validate = (targetName, targetValue) => {
+    //     const error = {targetName: ''};
+    //     if (targetName === 'title') {
+    //         const min = this.validationRules.title.min;
+    //         const max = this.validationRules.title.max;
+    //         if (validator.isEmpty(targetValue)) {
+    //             error[targetName] = 'should not empty'
+    //         }
+    //         else if (!validator.isLength(targetValue, {min: min, max: max})) {
+    //             error[targetName] = 'should be ' + min + '~ ' + max;
+    //         }
+    //     }
+    //     else if (targetName === 'content') {
+    //         const min = this.validationRules.content.min;
+    //         const max = this.validationRules.content.max;
+    //         if (validator.isEmpty(targetValue)) {
+    //             error[targetName] = 'should not empty'
+    //         }
+    //         else if (!validator.isLength(targetValue, {min: min, max: max})) {
+    //             error[targetName] = 'should be ' + min + '~ ' + max;
+    //         }
+    //     }
+    //     return error;
+    // };
 
     getNewState = (targetName, targetValue, change, error, state, fieldNum) => {
 
