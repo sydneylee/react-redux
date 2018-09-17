@@ -18,23 +18,24 @@
     // 1-1) defines async actionTypes required : lsjAddActionAsyncInModule
 //-------------------------------------------------------------------------------------
 //async actionTypes for ITEM
-const ASYNC_STATUS_ITEM_PENDING = 'home/ITEM_PENDING';
-const ASYNC_STATUS_ITEM_ERROR = 'home/ITEM_ERROR';
-const ASYNC_STATUS_ITEM_SUCCESS =   'home/ITEM_SUCCESS';
+const ASYNC_STATUS_GET_ITEM_PENDING = 'home/GET_ITEM_PENDING';
+const ASYNC_STATUS_GET_ITEM_ERROR   = 'home/GET_ITEM_ERROR';
+const ASYNC_STATUS_GET_ITEM_SUCCESS = 'home/GET_ITEM_SUCCESS';
 
-//async actionTypes for ITEMS
-const ASYNC_STATUS_ITEMS_PENDING = 'home/ITEMS_PENDING';
-const ASYNC_STATUS_ITEMS_ERROR = 'home/ITEMS_ERROR';
-const ASYNC_STATUS_ITEMS_SUCCESS =  'home/ITEMS_SUCCESS';
+// async actionTypes for getItems
+const ASYNC_STATUS_GET_ITEMS_PENDING = 'home/GET_ITEMS_PENDING';
+const ASYNC_STATUS_GET_ITEMS_ERROR   = 'home/GET_ITEMS_ERROR';
+const ASYNC_STATUS_GET_ITEMS_SUCCESS = 'home/GET_ITEMS_SUCCESS';
 
 //async actionTypes for SUBMIT
 const ASYNC_STATUS_SUBMIT_PENDING = 'home/SUBMIT_PENDING';
 const ASYNC_STATUS_SUBMIT_ERROR = 'home/SUBMIT_ERROR';
 const ASYNC_STATUS_SUBMIT_SUCCESS = 'home/SUBMIT_SUCCESS';
 
-const ASYNC_STATUS_REMOVE_PENDING = 'home/REMOVE_PENDING';
-const ASYNC_STATUS_REMOVE_ERROR = 'home/REMOVE_ERROR';
-const ASYNC_STATUS_REMOVE_SUCCESS = 'home/REMOVE_SUCCESS';
+// async actionTypes for removeItem
+const ASYNC_STATUS_REMOVE_ITEM_PENDING = 'home/REMOVE_ITEM_PENDING';
+const ASYNC_STATUS_REMOVE_ITEM_ERROR = 'home/REMOVE_ITEM_ERROR';
+const ASYNC_STATUS_REMOVE_ITEM_SUCCESS = 'home/REMOVE_ITEM_SUCCESS';
 
 //-------------------------------------------------------------------------------------
 // 1-2) defines sync actionTypes required  : lsjAddActionSyncInModule
@@ -56,56 +57,69 @@ const ADD_ITEM = 'home/ADD_ITEM';
 // file template을 이용하여 파일을 생성시 homeId의 기본값을 묻는다.. 따라서 아래에서는 그부분을 $}homeId{로 임시대체했슴
 
 
-// async function : getItem(id)
+// async actionCreatorFn for getItem
 export const getItem = (id) => async (dispatch) => {
-
-    dispatch({ type: ASYNC_STATUS_ITEM_PENDING });
+    dispatch({ type: ASYNC_STATUS_GET_ITEM_PENDING });
     try{
         const response = await getItemAPI(id);
-        dispatch({type: ASYNC_STATUS_ITEM_SUCCESS, payload : response});
+        dispatch({type: ASYNC_STATUS_GET_ITEM_SUCCESS, payload : response});
     }
     catch(e){
-        dispatch({type:ASYNC_STATUS_ITEM_ERROR, payload: e});
+        dispatch({type:ASYNC_STATUS_GET_ITEM_ERROR, payload: e});
     }
 };
+// fetch fn for async actionCreatorFn for getItem
 function getItemAPI(id){
-    console.log("****** getItem *****");
-    //return axios.get(`http://jsonplaceholder.typicode.com/Items/$}id{`);
     return fetch('/api/item/'+id).then(function(response){return response.json()});
 }
 
-
-// async function : getItems()
+// async actionCreatorFn for getItems
 export const getItems = () => async (dispatch) => {
-
-    dispatch({ type: ASYNC_STATUS_ITEMS_PENDING });
+    dispatch({ type: ASYNC_STATUS_GET_ITEMS_PENDING });
     try{
         const response = await getItemsAPI();
-        dispatch({type: ASYNC_STATUS_ITEMS_SUCCESS, payload : response});
+        dispatch({type: ASYNC_STATUS_GET_ITEMS_SUCCESS, payload : response});
     }
     catch(e){
-        dispatch({type:ASYNC_STATUS_ITEMS_ERROR, payload: e});
+        dispatch({type:ASYNC_STATUS_GET_ITEMS_ERROR, payload: e});
     }
 };
+// fetch fn for async actionCreatorFn for getItems
 function getItemsAPI(){
     return fetch('/api/items').then(function(response){return response.json()});
 }
 
-// async actionCreatorFn for remove
+// async actionCreatorFn for removeItem
 export const removeItem = (id) => async (dispatch) => {
-    dispatch({ type: ASYNC_STATUS_REMOVE_PENDING });
+    dispatch({ type: ASYNC_STATUS_REMOVE_ITEM_PENDING });
     try{
         const response = await removeItemAPI(id);
-        dispatch({type: ASYNC_STATUS_REMOVE_SUCCESS, payload : response});
+        dispatch({type: ASYNC_STATUS_REMOVE_ITEM_SUCCESS, payload : response});
     }
     catch(e){
-        dispatch({type:ASYNC_STATUS_REMOVE_ERROR, payload: e});
+        dispatch({type:ASYNC_STATUS_REMOVE_ITEM_ERROR, payload: e});
     }
 };
-// fetch fn for async actionCreatorFn for delete
+// fetch fn for async actionCreatorFn for removeItem
 function removeItemAPI(id){
     return fetch('/api/item/remove/'+id).then(function(response){return response.json()});
 }
+
+// // async actionCreatorFn for remove
+// export const removeItem = (id) => async (dispatch) => {
+//     dispatch({ type: ASYNC_STATUS_REMOVE_PENDING });
+//     try{
+//         const response = await removeItemAPI(id);
+//         dispatch({type: ASYNC_STATUS_REMOVE_SUCCESS, payload : response});
+//     }
+//     catch(e){
+//         dispatch({type:ASYNC_STATUS_REMOVE_ERROR, payload: e});
+//     }
+// };
+// // fetch fn for async actionCreatorFn for delete
+// function removeItemAPI(id){
+//     return fetch('/api/item/remove/'+id).then(function(response){return response.json()});
+// }
 
 // async function : submit(payload)
 export const submit = (payload) => async (dispatch) => {
@@ -162,16 +176,19 @@ export const initialState = {
 
         mode: 'view',
 
-        item :          {},
-        itemPending:    false,
-        itemError:      false,
+        // initialState for async getItem
+        getItemPending  :   false,
+        getItemError    :   false,
+        item            :   {},
 
-        items :         [],
-        itemsPending:   false,
-        itemsError:     false,
+        // initialState for async getItems
+        getItemsPending :   false,
+        getItemsError   :   false,
+        items           :   [],
 
-        removePending:   false,
-        removeError:     false,
+        // initialState for async removeItem
+        removeItemPending:   false,
+        removeItemError:     false,
 
         submitPending:  false,
         submitError:    false,
@@ -186,67 +203,72 @@ export default function home(state = initialState, action) {
     let newItems = null;
     let idx = -1;
     switch (action.type) {
-        case ASYNC_STATUS_ITEM_PENDING:
+        // reducer for async getItem
+        case ASYNC_STATUS_GET_ITEM_PENDING:
             return {
                 ...state,
-                itemPending: true,
-                itemError: false,
-                item:{}
+                getItemPending : true,
+                getItemError : false,
             };
-        case ASYNC_STATUS_ITEM_ERROR:
+        case ASYNC_STATUS_GET_ITEM_ERROR:
             return {
                 ...state,
-                itemPending: false,
-                itemError: true
+                getItemPending : false,
+                getItemError : true
             };
-        case ASYNC_STATUS_ITEM_SUCCESS:
+        case ASYNC_STATUS_GET_ITEM_SUCCESS:
             return{
                 ...state,
-                itemPending:false,
-                itemError : false,
-                item: action.payload,
+                getItemsPending :false,
+                getItemError : false,
+                item : action.payload
             };
-        case ASYNC_STATUS_ITEMS_PENDING:
+
+        // reducer for async getItems
+        case ASYNC_STATUS_GET_ITEMS_PENDING:
             return {
                 ...state,
-                itemsPending: true,
-                itemsError: false,
+                getItemsPending : true,
+                getItemsError : false,
             };
-        case ASYNC_STATUS_ITEMS_ERROR:
+        case ASYNC_STATUS_GET_ITEMS_ERROR:
             return {
                 ...state,
-                itemsPending: false,
-                itemsError: true
+                getItemsPending : false,
+                getItemsError : true
             };
-        case ASYNC_STATUS_ITEMS_SUCCESS:
+        case ASYNC_STATUS_GET_ITEMS_SUCCESS:
             return{
                 ...state,
-                itemsPending:false,
-                itemsError : false,
+                getItemssPending :false,
+                getItemsError : false,
                 items : action.payload
             };
-        case ASYNC_STATUS_REMOVE_PENDING:
+
+        // reducer for async removeItem
+        case ASYNC_STATUS_REMOVE_ITEM_PENDING:
             return {
                 ...state,
-                removePending : true,
-                removeError : false,
+                removeItemPending : true,
+                removeItemError : false,
             };
-        case ASYNC_STATUS_REMOVE_ERROR:
+        case ASYNC_STATUS_REMOVE_ITEM_ERROR:
             return {
                 ...state,
-                removePending : false,
-                removeError : true
+                removeItemPending : false,
+                removeItemError : true
             };
-        case ASYNC_STATUS_REMOVE_SUCCESS:
+        case ASYNC_STATUS_REMOVE_ITEM_SUCCESS:
             newItems = state.items.filter(item=>item.id != action.payload);
             let item = (state.item.id == action.payload)? {} : state.item;
             return{
                 ...state,
-                removePending :false,
-                removeError : false,
+                removeItemsPending :false,
+                removeItemError : false,
                 items : newItems,
                 item : item,
             };
+
         case ASYNC_STATUS_SUBMIT_PENDING:
             return {
                 ...state,

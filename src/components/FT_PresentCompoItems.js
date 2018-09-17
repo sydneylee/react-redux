@@ -21,7 +21,7 @@ class ${module_name_capital}Items extends Component {
         this.props.onGetItem(id);
     };
 
-    handleOnViewItem=(id)=>{
+    handleOnGetItem=(id)=>{
         //this.props.onViewItem(id);
         this.props.onGetItem(id);
     };
@@ -44,7 +44,7 @@ class ${module_name_capital}Items extends Component {
                     {item.title + '  ' + item.content}
                     &nbsp;&nbsp;&nbsp;
                     <span>
-                        <button id={"viewItemBtn"+item.id}  onClick={()=>this.handleOnViewItem(item.id)}>view</button>&nbsp;
+                        <button id={"viewItemBtn"+item.id}  onClick={()=>this.handleOnGetItem(item.id)}>view</button>&nbsp;
                         <button id={"editItemBtn"+item.id}  onClick={()=>this.handleOnEditItem(item.id)}>edit</button>
                     </span>
                 </li>);

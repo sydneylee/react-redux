@@ -7,8 +7,8 @@
 // 2) Add handleOn$actionType_Cap$Fn in PresentCompo and apply it to element in render()
 // 3) Add mapStateToProps and mapDispatchToProps in ContainerCompo
 // 4) Add actiontype Async, actionCreatorFn, initialStates, reducer in module
-
-// 5) server api
+// 5) remove not-needed for params or actionOption
+// 6) server api
 //======== Add handleOn$actionType_Cap$Fn in PresentCompo ==================================
 // handleOn$actionType_Cap$ = (e, $idIfNeeded$) => {
 //     e.stopPropagation();
@@ -74,6 +74,6 @@
 //         ...state,
 //         $actionType_camel$sPending :false,
 //         $actionType_camel$Error : false,
-//         $actionType_camel$ : action.payload
+//         $newState$ : action.payload
 //     };
 //========================================================================================

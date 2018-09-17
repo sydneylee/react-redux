@@ -39,7 +39,7 @@ class HomeContainer extends React.Component {
             <div>
                 <div  style={{display:this.props.mode=='view'? 'block':'none'}}>
                     <div>
-                        {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : this.props.itemPending ? <img src={imgSrc} style={styLoadingImg}/> : '' }
+                        {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : this.props.getItemPending ? <img src={imgSrc} style={styLoadingImg}/> : '' }
                     </div>
                     <div>
                         {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : this.props.itemsPending ? <img src={imgSrc} style={styLoadingImg}/> : '' }
@@ -67,25 +67,26 @@ const mapStateToProps = (state) => {
     const {home} = state;
     return {
 
-        mode :         home.mode,
+        mode :            home.mode,
 
-        item :         home.item,
-        itemPending:   home.itemPending,
-        itemError:     home.itemError,
+        getItemPending  : home.getItemPending,
+        getItemError    : home.getItemError,
+        item            : home.item,
 
-        items :        home.items,
-        itemsPending:  home.itemsPending,
-        itemsError:    home.itemsError,
+        getItemsPending : home.getItemsPending,
+        getItemsError   : home.getItemsError,
+        items           : home.items,
 
-        removeItemPending: home.submitPending,
-        removeItemError:   home.submitError,
+        removeItemPending: home.removeItemPending,
+        removeItemError  : home.removeItemError,
 
-        submitPending: home.submitPending,
+        submitPending : home.submitPending,
         submitError:   home.submitError,
 
     };
 
 };
+
 
 //-------------------------------------------------------------------------------------
 // lsj-TIP : pls check if any param is required

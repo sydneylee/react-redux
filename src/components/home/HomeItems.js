@@ -15,14 +15,9 @@ class HomeItems extends Component {
 
     static propTypes = {};
 
-    // Tip : e는 기본으로 제공됨 by onClick={(e)=>{this.handleOnClick(id)}}
-    handleOnClick = (e, id) => {
-        //console.log('key=', e.target.key);
-        this.props.onGetItem(id);
-    };
+    //Tip : onGetItems는 presentCompo에서 처리하지 않고, containerCompo에서 바로 사용
 
-    handleOnViewItem = (e, id) => {
-        //this.props.onViewItem(id);
+    handleOnGetItem = (e, id) => {
         e.stopPropagation();
         this.props.onGetItem(id);
     };
@@ -49,12 +44,12 @@ class HomeItems extends Component {
 
         return items.map((item, i) => {
             return (
-                <li key={i} onClick={(e) => this.handleOnClick(e, item.id)}>
+                <li key={i} >
                     {item.title + '  ' + item.content}
                     &nbsp;&nbsp;&nbsp;
                     <span>
                         <button id={"viewItemBtn" + item.id}
-                                onClick={(e) => this.handleOnViewItem(e, item.id)}>view</button>
+                                onClick={(e) => this.handleOnGetItem(e, item.id)}>view</button>
                         &nbsp;
                         <button id={"editItemBtn" + item.id}
                                 onClick={(e) => this.handleOnEditItem(e, item.id)}>edit</button>

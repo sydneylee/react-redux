@@ -128,44 +128,11 @@ class HomeItemForm extends Component {
         //reset form
         this.setState({id:'', title: '', content: ''});
 
-
         this.props.onSetMode('view');
     };
 
     render() {
         const styError = {fontSize: '10px', color: 'red'};
-
-        // const {id, title, content, pending, errors, disabled} = this.state;
-        // return (
-        //     <form onSubmit={this.handleOnSubmit}>
-        //         <div>
-        //         <span>
-        //             <input type="text"
-        //                    name='title'
-        //                    value={title}
-        //                    onChange={this.handleOnChange}
-        //                    onBlur={this.handleOnBlur}
-        //                    placeholder='title'
-        //                    disabled={pending}
-        //             />
-        //             <div style={styError}>{errors.title}</div>
-        //         </span>
-        //             <span>
-        //             <input type="text"
-        //                    name='content'
-        //                    value={content}
-        //                    onChange={this.handleOnChange}
-        //                    onBlur={this.handleOnBlur}
-        //                    placeholder='content'
-        //             />
-        //             <div style={styError}>{errors.content}</div>
-        //         </span>
-        //         </div>
-        //         <div>
-        //             <button type="submit" disabled={disabled || pending}>submit</button>
-        //         </div>
-        //     </form>
-        // );
 
         // Tip : Use defaultValue instead of value : Warning: A component is changing a controlled input of type hidden to be uncontrolled. Input elements should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://fb.me/react-controlled-components
         const {id, title, content, pending, errors, disabled} = this.state;
