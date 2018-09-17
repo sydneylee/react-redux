@@ -39,10 +39,10 @@ class HomeContainer extends React.Component {
             <div>
                 <div  style={{display:this.props.mode=='view'? 'block':'none'}}>
                     <div>
-                        {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : <img src={imgSrc} style={styLoadingImg}/> }
+                        {this.props.item && this.props.item.id!=null ? <HomeItem item={this.props.item}/> : this.props.itemPending ? <img src={imgSrc} style={styLoadingImg}/> : '' }
                     </div>
                     <div>
-                        {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : <img src={imgSrc} style={styLoadingImg}/> }
+                        {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : this.props.itemsPending ? <img src={imgSrc} style={styLoadingImg}/> : '' }
                     </div>
                     <button onClick={this.props.onAddItem}>add</button>
                 </div>
@@ -54,21 +54,6 @@ class HomeContainer extends React.Component {
                 </div>
             </div>
         );
-
-        // const {fullname, names, onSubmit, onChange} = this.props;
-        // return(
-        //     <div>
-        //         <HomeForm
-        //             fullname={fullname}
-        //             onSubmit={onSubmit}
-        //             onChange={onChange}
-        //         />
-        //         <HomeList
-        //             names={names}
-        //         />
-        //     </div>
-        //
-        // );
 
     }
 
@@ -92,6 +77,9 @@ const mapStateToProps = (state) => {
         itemsPending:  home.itemsPending,
         itemsError:    home.itemsError,
 
+        removeItemPending: home.submitPending,
+        removeItemError:   home.submitError,
+
         submitPending: home.submitPending,
         submitError:   home.submitError,
 
@@ -109,6 +97,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         onGetItems : ()=>{
             dispatch(homeExports.getItems())
+        },
+        onRemoveItem : (id)=>{
+            dispatch(homeExports.removeItem(id))
         },
         onSubmit:(payload)=>{
             dispatch(homeExports.submit(payload));

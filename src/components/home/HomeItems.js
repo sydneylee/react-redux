@@ -15,22 +15,31 @@ class HomeItems extends Component {
 
     static propTypes = {};
 
-    // Tip : e는 이미 제공됨 by onClick={(e)=>{this.handleOnClick(id)}}
-    handleOnClick = (id) => {
+    // Tip : e는 기본으로 제공됨 by onClick={(e)=>{this.handleOnClick(id)}}
+    handleOnClick = (e, id) => {
         //console.log('key=', e.target.key);
         this.props.onGetItem(id);
     };
 
-    handleOnViewItem = (id) => {
+    handleOnViewItem = (e, id) => {
         //this.props.onViewItem(id);
+        e.stopPropagation();
         this.props.onGetItem(id);
     };
 
     // Tip : getItem(i)에 의해서 인자로 주어진 id에 해당하는 item이 this.props.state.item에 load된다.(home module에 처리코드 있슴)
-    handleOnEditItem = (id) => {
+    handleOnEditItem = (e, id) => {
+        e.stopPropagation();
         this.props.onGetItem(id);
         this.props.onSetMode('edit');
     };
+
+    handleOnRemoveItem = (e, id) => {
+        e.stopPropagation();
+        this.props.onRemoveItem(id);
+    };
+
+
 
     // Tip : null checking required - this.props.items || [];
     // Tip : <button id={"viewItemBtn"+item.id} is for unit test
@@ -40,15 +49,18 @@ class HomeItems extends Component {
 
         return items.map((item, i) => {
             return (
-                <li key={i} onClick={() => this.handleOnClick(item.id)}>
+                <li key={i} onClick={(e) => this.handleOnClick(e, item.id)}>
                     {item.title + '  ' + item.content}
                     &nbsp;&nbsp;&nbsp;
                     <span>
                         <button id={"viewItemBtn" + item.id}
-                                onClick={() => this.handleOnViewItem(item.id)}>view</button>
+                                onClick={(e) => this.handleOnViewItem(e, item.id)}>view</button>
                         &nbsp;
                         <button id={"editItemBtn" + item.id}
-                                onClick={() => this.handleOnEditItem(item.id)}>edit</button>
+                                onClick={(e) => this.handleOnEditItem(e, item.id)}>edit</button>
+                        &nbsp;
+                        <button id={"removeItemBtn" + item.id}
+                                onClick={(e) => this.handleOnRemoveItem(e, item.id)}>delete</button>
                     </span>
                 </li>);
         });

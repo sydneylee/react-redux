@@ -215,11 +215,19 @@ export default function ${module_name_lower}(state = initialState, action) {
         //         submitError: true
         //     };
         // case ASYNC_STATUS_SUBMIT_SUCCESS:
+        //     let newItems = Array.from(state.items);
+        //     const idx = newItems.findIndex(el=>el.id == action.payload.id);
+        //     if(idx == null){
+        //         newItems.push(action.payload);
+        //     }
+        //     else{
+        //         newItems[idx] = action.payload;
+        //     }
         //     return {
         //         ...state,
         //         submitPending: false,
         //         submitError: false,
-        //         items: [...state.items, action.payload],
+        //         items: newItems,
         //         item: action.payload,
         //     };
         // case SET_MODE:

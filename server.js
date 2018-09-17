@@ -43,14 +43,29 @@ function getItem(id){
             }
         }, 1000);
     });
+}
 
+function removeItem(id){
+    const itemIndex = homeItems.findIndex((el) => {
+        return (el.id == id);
+    });
+    return new Promise((resolve, reject)=> {
+        setTimeout(() => {
+            if (itemIndex != null) {
+                homeItems = homeItems.filter(el=>el.id != id);
+                resolve(id);
+            }
+            else {
+                reject({error: 'not found' + id});
+            }
+        }, 1000);
+    });
 }
 
 function getItemIndex(id){
     const itemIndex = homeItems.findIndex((el) => {
         return (el.id == id);
     });
-    console.log("****", itemIndex);
     return new Promise((resolve, reject)=> {
         setTimeout(() => {
             if (itemIndex != null) {
@@ -77,6 +92,7 @@ function createItem(req, res){
         }
     }, 1000);
 }
+
 
 async function updateItem(req, res){
     const newItem = {id:req.body.id, title:req.body.title, content:req.body.content};
@@ -107,6 +123,12 @@ app.get('/api/items', (req, res) => {
     setTimeout(()=>{res.send(homeItems);}, 1000);
 });
 
+app.get('/api/item/remove/:id', async (req, res) => {
+    console.log("delete********");
+    console.log(req.params.id);
+    result = await removeItem(req.params.id);
+    res.send(result);
+});
 
 app.get('/api/item/:id', async (req, res) => {
     //console.log(req.params.id);
@@ -119,7 +141,6 @@ app.get('/api/item/:id', async (req, res) => {
     console.log(result);
     res.send(result);
 });
-
 
 app.post('/api/item/save', (req, res) => {
     // console.log(req.body);

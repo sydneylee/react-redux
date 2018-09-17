@@ -1,50 +1,79 @@
-//======== Add actiontype Async in module ==================================================
-// // async actionTypes for $actionType$
-// const ASYNC_STATUS_$actionType_Upper$_PENDING = '$module$/$actionType_Upper$_PENDING';
-// const ASYNC_STATUS_$actionType_Upper$_ERROR = '$module$/$actionType_Upper$_ERROR';
-// const ASYNC_STATUS_$actionType_Upper$_SUCCESS = '$module$/$actionType_Upper$_SUCCESS';
+//========================================================================================
+// async actionTypes for $actionType$, $module$
+//       $actionType_camel$, $actionType_Cap$, $actionType_ALL_CAP$, $module_Cap$
+
+// Tips :
+// 1) If there is some intermediate compos... relay the props for states and actionDispatchers
+// 2) Add handleOn$actionType_Cap$Fn in PresentCompo and apply it to element in render()
+// 3) Add mapStateToProps and mapDispatchToProps in ContainerCompo
+// 4) Add actiontype Async, actionCreatorFn, initialStates, reducer in module
+
+// 5) server api
+//======== Add handleOn$actionType_Cap$Fn in PresentCompo ==================================
+// handleOn$actionType_Cap$ = (e, $idIfNeeded$) => {
+//     e.stopPropagation();
+//     this.props.on$actionType_Cap$($idIfNeeded$);
+// };
+
+//======== Add mapStateToProps and mapDispatchToProps in ContainerCompo ====================
+// // mapStateToProps for $actionType$
 //
-// // async actionCreatorFn for $actionType$ and $actionOption$
-// export const $actionCreatorFn$ = () => async (dispatch) => {
-//     dispatch({ type: ASYNC_STATUS_$actionType_Upper$_PENDING });
+// $actionType_camel$Pending: $module$.$actionType_camel$Pending,
+// $actionType_camel$Error :  $module$.$actionType_camel$Error,
+// $newState$ :  $module$.$newState$,
+//
+// // mapDispatchToProps for $actionType$
+// on$actionType_Cap$ : ($idIfNeeded$)=>{
+//     dispatch($module$Exports.$actionType_camel$($idIfNeeded$))
+// },
+
+//======== Add actiontype Async, actionCreatorFn, initialStates, reducer in module ==========
+// // async actionTypes for $actionType$
+// const ASYNC_STATUS_$actionType_ALL_CAP$_PENDING = '$module$/$actionType_ALL_CAP$_PENDING';
+// const ASYNC_STATUS_$actionType_ALL_CAP$_ERROR = '$module$/$actionType_ALL_CAP$_ERROR';
+// const ASYNC_STATUS_$actionType_ALL_CAP$_SUCCESS = '$module$/$actionType_ALL_CAP$_SUCCESS';
+//
+// // async actionCreatorFn for $actionType$
+// export const $actionType_camel$ = ($idIfNeeded$) => async (dispatch) => {
+//     dispatch({ type: ASYNC_STATUS_$actionType_ALL_CAP$_PENDING });
 //     try{
-//         const response = await $actionCreatorFn$API();
-//         dispatch({type: ASYNC_STATUS_$actionType_Upper$_SUCCESS, $actionOption$ : response});
+//         const response = await $actionType_camel$API($idIfNeeded$);
+//         dispatch({type: ASYNC_STATUS_$actionType_ALL_CAP$_SUCCESS, payload : response});
 //     }
 //     catch(e){
-//         dispatch({type:ASYNC_STATUS_$actionType_Upper$_ERROR, $actionOption$: e});
+//         dispatch({type:ASYNC_STATUS_$actionType_ALL_CAP$_ERROR, payload: e});
 //     }
 // };
 // // fetch fn for async actionCreatorFn for $actionType$
-// function $actionCreatorFn$API(){
-//     return fetch('/api/$endPoint$').then(function(response){return response.json()});
+// function $actionType_camel$API($idIfNeeded$){
+//     return fetch('/api/$endPoint$/'+$idIfNeeded$).then(function(response){return response.json()});
 // }
 //
 //
-// // initialState for async action of $actionType$
-// $targetState$ :         [], // if initial state needed
-// $targetState$Pending:   false,
-// $targetState$Error:     false,
+// // initialState for async $actionType$
+// $actionType_camel$Pending:   false,
+// $actionType_camel$Error:     false,
+// $newState$ :     $newStateInitalValue$, // if new initial state needed
 //
 //
-// // reducer for async action $actionType$
-// case ASYNC_STATUS_$actionType_Upper$_PENDING:
+// // reducer for async $actionType$
+// case ASYNC_STATUS_$actionType_ALL_CAP$_PENDING:
 //     return {
 //         ...state,
-//         $targetState$Pending : true,
-//         $targetState$Error : false,
+//         $actionType_camel$Pending : true,
+//         $actionType_camel$Error : false,
 //     };
-// case ASYNC_STATUS_$actionType_Upper$_ERROR:
+// case ASYNC_STATUS_$actionType_ALL_CAP$_ERROR:
 //     return {
 //         ...state,
-//         $targetState$Pending : false,
-//         $targetState$Error : true
+//         $actionType_camel$Pending : false,
+//         $actionType_camel$Error : true
 //     };
-// case ASYNC_STATUS_$actionType_Upper$_SUCCESS:
+// case ASYNC_STATUS_$actionType_ALL_CAP$_SUCCESS:
 //     return{
 //         ...state,
-//         $targetState$sPending :false,
-//         $targetState$Error : false,
-//         $targetState$ : action.$actionOption$
+//         $actionType_camel$sPending :false,
+//         $actionType_camel$Error : false,
+//         $actionType_camel$ : action.payload
 //     };
-//====================================================================
+//========================================================================================

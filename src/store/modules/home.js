@@ -32,6 +32,9 @@ const ASYNC_STATUS_SUBMIT_PENDING = 'home/SUBMIT_PENDING';
 const ASYNC_STATUS_SUBMIT_ERROR = 'home/SUBMIT_ERROR';
 const ASYNC_STATUS_SUBMIT_SUCCESS = 'home/SUBMIT_SUCCESS';
 
+const ASYNC_STATUS_REMOVE_PENDING = 'home/REMOVE_PENDING';
+const ASYNC_STATUS_REMOVE_ERROR = 'home/REMOVE_ERROR';
+const ASYNC_STATUS_REMOVE_SUCCESS = 'home/REMOVE_SUCCESS';
 
 //-------------------------------------------------------------------------------------
 // 1-2) defines sync actionTypes required  : lsjAddActionSyncInModule
@@ -66,6 +69,7 @@ export const getItem = (id) => async (dispatch) => {
     }
 };
 function getItemAPI(id){
+    console.log("****** getItem *****");
     //return axios.get(`http://jsonplaceholder.typicode.com/Items/$}id{`);
     return fetch('/api/item/'+id).then(function(response){return response.json()});
 }
@@ -87,6 +91,21 @@ function getItemsAPI(){
     return fetch('/api/items').then(function(response){return response.json()});
 }
 
+// async actionCreatorFn for remove
+export const removeItem = (id) => async (dispatch) => {
+    dispatch({ type: ASYNC_STATUS_REMOVE_PENDING });
+    try{
+        const response = await removeItemAPI(id);
+        dispatch({type: ASYNC_STATUS_REMOVE_SUCCESS, payload : response});
+    }
+    catch(e){
+        dispatch({type:ASYNC_STATUS_REMOVE_ERROR, payload: e});
+    }
+};
+// fetch fn for async actionCreatorFn for delete
+function removeItemAPI(id){
+    return fetch('/api/item/remove/'+id).then(function(response){return response.json()});
+}
 
 // async function : submit(payload)
 export const submit = (payload) => async (dispatch) => {
@@ -151,6 +170,9 @@ export const initialState = {
         itemsPending:   false,
         itemsError:     false,
 
+        removePending:   false,
+        removeError:     false,
+
         submitPending:  false,
         submitError:    false,
 
@@ -161,7 +183,8 @@ export const initialState = {
 //4) define reducer function for both of async and sync actionTypes
 //-------------------------------------------------------------------------------------
 export default function home(state = initialState, action) {
-
+    let newItems = null;
+    let idx = -1;
     switch (action.type) {
         case ASYNC_STATUS_ITEM_PENDING:
             return {
@@ -202,6 +225,28 @@ export default function home(state = initialState, action) {
                 itemsError : false,
                 items : action.payload
             };
+        case ASYNC_STATUS_REMOVE_PENDING:
+            return {
+                ...state,
+                removePending : true,
+                removeError : false,
+            };
+        case ASYNC_STATUS_REMOVE_ERROR:
+            return {
+                ...state,
+                removePending : false,
+                removeError : true
+            };
+        case ASYNC_STATUS_REMOVE_SUCCESS:
+            newItems = state.items.filter(item=>item.id != action.payload);
+            let item = (state.item.id == action.payload)? {} : state.item;
+            return{
+                ...state,
+                removePending :false,
+                removeError : false,
+                items : newItems,
+                item : item,
+            };
         case ASYNC_STATUS_SUBMIT_PENDING:
             return {
                 ...state,
@@ -215,8 +260,8 @@ export default function home(state = initialState, action) {
                 submitError: true
             };
         case ASYNC_STATUS_SUBMIT_SUCCESS:
-            let newItems = Array.from(state.items);
-            const idx = newItems.findIndex(el=>el.id == action.payload.id);
+            newItems = Array.from(state.items);
+            idx = newItems.findIndex(el=>el.id == action.payload.id);
             if(idx == null){
                 newItems.push(action.payload);
             }
