@@ -146,54 +146,12 @@ export function setMode(mode){
    return {type : SET_MODE, mode:mode};
 }
 
-// // Sync function : addItem() : create a item and set state mode to 'edit'
-// export function addItem(){
-//     return {type : ADD_ITEM, mode:'edit'};
-// }
 // Sync actionCreatorFn : setAddItemMode passing params of action's type and opts
 export function setAddItemMode(mode){
    return {type : SET_ADD_ITEM_MODE, mode:mode};
 }
 
-//=========================================================================================
-// sync actionTypes for setAddItemMode, home
-//       setAddItemMode, SetAddItemMode, SET_ADD_ITEM_MODE, Home
 
-// Tips :
-// 1) If there is some intermediate compos... relay the props for states and actionDispatchers
-// 2) Add handleOnSetAddItemModeFn in PresentCompo and apply it to element in render()
-// 3) Add mapStateToProps and mapDispatchToProps in ContainerCompo
-// 4) Add actiontype sync, actionCreatorFn, initialStates, reducer in module
-// 5) remove not-needed for params or actionOption
-//======== Add handleOnSetAddItemModeFn in PresentCompo ==================================
-// handleOnSetAddItemMode = (e, mode) => {
-//     e.stopPropagation();
-//     this.props.onSetAddItemMode(mode);
-// };
-
-//======== Add mapStateToProps and mapDispatchToProps in ContainerCompo ====================
-// // mapStateToProps for setAddItemMode
-//
-// not-needed :  home.not-needed,
-//
-// // mapDispatchToProps for setAddItemMode
-
-//============ add actionType sync in module ===============================================
-// sync actionType for setAddItemMode
-//
-
-//
-// // initialState for setAddItemMode
-//    not-needed :     not-needed, // if new initial state needed
-
-// reducer
-//case SET_ADD_ITEM_MODE :
-//    return {
-//        ...state,
-//        mode:action.mode,
-//        [not-needed]
-//    };
-//=========================================================================================
 //-------------------------------------------------------------------------------------
 //3) define initialState for module
 //-------------------------------------------------------------------------------------
