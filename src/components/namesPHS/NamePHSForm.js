@@ -1612,13 +1612,15 @@ import React, {Component} from 'react';
 import * as validator from 'validator';
 import * as yup from 'yup';
 
-yup.addMethod(yup.mixed, 'equalTo', function(ref, message) {
-    const msg = message || '${path} should match ${ref.path}';
-    return this.test('equalTo', msg, function (value) {
-      let other = this.resolve(ref);
-      return !other || !value || value === other;
-    })
-})
+// yup.addMethod(yup.mixed, 'equalTo', function(ref, message) {
+//     const msg = message || '${path} should match ${ref.path}';
+//     return this.test('equalTo', msg, function (value) {
+//       let refValue = this.resolve(ref);
+//       console.log(this.path, ';', this.parent.errors[this.path] , ';');
+//       if (!this.parent.errors[this.path]) delete this.parent.errors[ref.path];
+//       return !refValue || !value || value === refValue;
+//     })
+// })
 
 class NamePHSForm extends Component {
     static defaultProps = {};
@@ -1645,10 +1647,14 @@ class NamePHSForm extends Component {
             })
         }),
         lastname: yup.string().required('first is required').min(3).max(5),
-        // password1: yup.string().required('password is required').min(5).max(8),
-        // password2: yup.string().oneOf([yup.ref('password1')], 'should be same as password1' )
-        password1: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password2'), 'should be same as password2.'),
-        password2: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password1'), 'should be same as password1.'),
+        password1: yup.string().required('password is required').min(5).max(8).oneOf([yup.ref('password2')], 'should be same as password2' ),
+        password2: yup.string().oneOf([yup.ref('password1')], 'should be same as password1' )
+        // password1: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password2'), 'should be same as password2.'),
+        // password2: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password1'), 'should be same as password1.'),
+        // errors: yup.object().shape({
+        //     password1: yup.string(),
+        //     password2: yup.string(),
+        // })
     });
 
     newState;
@@ -1672,11 +1678,11 @@ class NamePHSForm extends Component {
         this.schema.validateAt(path, this.newState).then(value=>{
             delete this.newState.errors[targetName];
 
-            if(targetName=== 'password1' && targetValue === this.newState.password2){
-                delete this.newState.errors.password2;
-            }else if(targetName=== 'password2' && targetValue === this.newState.password1){
-                delete this.newState.errors.password1;
-            }
+            // if(targetName=== 'password1' && targetValue === this.newState.password2){
+            //     delete this.newState.errors.password2;
+            // }else if(targetName=== 'password2' && targetValue === this.newState.password1){
+            //     delete this.newState.errors.password1;
+            // }
             this.newState.loading = false;
             this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < fieldNum;
             this.setState(this.newState)
