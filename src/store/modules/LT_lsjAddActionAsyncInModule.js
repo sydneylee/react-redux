@@ -1,4 +1,4 @@
-//========================================================================================
+//=========================================================================================================
 // async actionTypes for $actionType$, $module$
 //       $actionType_camel$, $actionType_Cap$, $actionType_ALL_CAP$, $module_Cap$
 
@@ -9,13 +9,13 @@
 // 4) Add actiontype Async, actionCreatorFn, initialStates, reducer in module
 // 5) remove not-needed for params or actionOption
 // 6) server api
-//======== Add handleOn$actionType_Cap$Fn in PresentCompo ==================================
+//======== Add handleOn$actionType_Cap$Fn in PresentCompo or ContainerCompo if any params passed ==========
 // handleOn$actionType_Cap$ = (e, $idIfNeeded$) => {
 //     e.stopPropagation();
 //     this.props.on$actionType_Cap$($idIfNeeded$);
 // };
 
-//======== Add mapStateToProps and mapDispatchToProps in ContainerCompo ====================
+//======== Add mapStateToProps and mapDispatchToProps in ContainerCompo ====================================
 // // mapStateToProps for $actionType$
 //
 // $actionType_camel$Pending: $module$.$actionType_camel$Pending,
@@ -27,7 +27,7 @@
 //     dispatch($module$Exports.$actionType_camel$($idIfNeeded$))
 // },
 
-//======== Add actiontype Async, actionCreatorFn, initialStates, reducer in module ==========
+//======== Add actiontype Async, actionCreatorFn, initialStates, reducer in module ==========================
 // // async actionTypes for $actionType$
 // const ASYNC_STATUS_$actionType_ALL_CAP$_PENDING = '$module$/$actionType_ALL_CAP$_PENDING';
 // const ASYNC_STATUS_$actionType_ALL_CAP$_ERROR = '$module$/$actionType_ALL_CAP$_ERROR';
@@ -72,8 +72,8 @@
 // case ASYNC_STATUS_$actionType_ALL_CAP$_SUCCESS:
 //     return{
 //         ...state,
-//         $actionType_camel$sPending :false,
+//         $actionType_camel$Pending :false,
 //         $actionType_camel$Error : false,
 //         $newState$ : action.payload
 //     };
-//========================================================================================
+//========================================================================================================

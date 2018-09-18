@@ -18,7 +18,15 @@ import HomeItemForm     from '../../components/home/HomeItemForm';
 class HomeContainer extends React.Component {
 
     //-------------------------------------------------------------------------------------
-    // lsj-TIP : dispatch action(async) to redux store
+    // TIP : handle functions for the props.on... functions need any params passed
+    //-------------------------------------------------------------------------------------
+    handleOnSetAddItemMode = (e) => {
+        e.stopPropagation();
+        this.props.onSetAddItemMode('edit');
+    };
+
+    //-------------------------------------------------------------------------------------
+    // TIP : dispatch action(async) to redux store
     //-------------------------------------------------------------------------------------
     componentDidMount(){
         this.props.onGetItem(1);
@@ -26,7 +34,7 @@ class HomeContainer extends React.Component {
     }
 
     //-------------------------------------------------------------------------------------
-    // lsj-TIP : dispatch action(async) to redux store : dprp,
+    // TIP : dispatch action(async) to redux store : dprp,
     //-------------------------------------------------------------------------------------
     render() {
 
@@ -34,7 +42,7 @@ class HomeContainer extends React.Component {
 
         // return (<div></div>);
 
-        // lsj-TIP :For async : null checking and loading image
+        // TIP :For async : null checking and loading image
         return (
             <div>
                 <div  style={{display:this.props.mode=='view'? 'block':'none'}}>
@@ -44,7 +52,7 @@ class HomeContainer extends React.Component {
                     <div>
                         {this.props.items && this.props.items.length!=0 ? <HomeItems {...this.props}/> : this.props.itemsPending ? <img src={imgSrc} style={styLoadingImg}/> : '' }
                     </div>
-                    <button onClick={this.props.onAddItem}>add</button>
+                    <button onClick={this.handleOnSetAddItemMode}>add</button>
                 </div>
                 {/*<div>*/}
                 {/*{<HomeItemForm {...this.props}/>}*/}
@@ -60,28 +68,28 @@ class HomeContainer extends React.Component {
 }
 
 //-------------------------------------------------------------------------------------
-// lsj-TIP : destructure state into a specific variable(=module name)
+// TIP : destructure state into a specific variable(=module name)
 //           which was combined by combineReducers() in index.js
 //-------------------------------------------------------------------------------------
 const mapStateToProps = (state) => {
     const {home} = state;
     return {
 
-        mode :            home.mode,
+        mode             : home.mode,
 
-        getItemPending  : home.getItemPending,
-        getItemError    : home.getItemError,
-        item            : home.item,
+        getItemPending   : home.getItemPending,
+        getItemError     : home.getItemError,
+        item             : home.item,
 
-        getItemsPending : home.getItemsPending,
-        getItemsError   : home.getItemsError,
-        items           : home.items,
+        getItemsPending  : home.getItemsPending,
+        getItemsError    : home.getItemsError,
+        items            : home.items,
 
         removeItemPending: home.removeItemPending,
         removeItemError  : home.removeItemError,
 
-        submitPending : home.submitPending,
-        submitError:   home.submitError,
+        saveItemPending  : home.saveItemPending,
+        saveItemError    : home.saveItemError,
 
     };
 
@@ -89,37 +97,33 @@ const mapStateToProps = (state) => {
 
 
 //-------------------------------------------------------------------------------------
-// lsj-TIP : pls check if any param is required
+// TIP : pls check if any param is required
 //-------------------------------------------------------------------------------------
 const mapDispatchToProps = (dispatch) => {
     return {
+        onSetMode : (mode)=>{
+            dispatch(homeExports.setMode(mode))
+        },
         onGetItem : (id)=>{
             dispatch(homeExports.getItem(id))
         },
         onGetItems : ()=>{
             dispatch(homeExports.getItems())
         },
+        onSetAddItemMode : (mode)=>{
+            dispatch(homeExports.setAddItemMode(mode))
+        },
         onRemoveItem : (id)=>{
             dispatch(homeExports.removeItem(id))
         },
-        onSubmit:(payload)=>{
-            dispatch(homeExports.submit(payload));
+        onSaveItem : (id)=>{
+            dispatch(homeExports.saveItem(id))
         },
-        onSetMode:(mode)=>{
-            dispatch(homeExports.setMode(mode));
-        },
-        onAddItem : ()=>{
-            dispatch(homeExports.addItem());
-        },
-        // onChange:(payload)=>{
-        //     dispatch(homeExports.change(payload));
-        // },
-
     }
 };
 
 //-------------------------------------------------------------------------------------
-// lsj-TIP : export default the container component after connecting to redux/store
+// TIP : export default the container component after connecting to redux/store
 //-------------------------------------------------------------------------------------
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
 

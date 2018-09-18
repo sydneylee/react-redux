@@ -13,31 +13,30 @@ import * as yup from 'yup';
 // add "equalTo' method to yup - phs
 // Tip: do not use the function to arrow fn as the "this" should refer to "yup"
 // yup.addMethod(): yup.mixed- any method can apply to String, Number, object, array
-// yup.addMethod(yup.mixed, 'equalTo', function(ref, errMessage){
-//     const errMsg = errMessage || '${path} should match ${ref.path}';
-//     // true returned - success
-//     return this.test('equalTo', errMsg, funciton(value) {
+// usage : to confirm password
+// yup.addMethod(yup.mixed, 'equalTo', function(ref, message) {
+//     const msg = message || '${path} should match ${ref.path}';
+//     return this.test('equalTo', msg, function (value) {
 //         let refValue = this.resolve(ref);
 //         return !refValue || !value || value === refValue;
 //     });
 // });
-
-// add "equalTo' method to yup - phs
-// Tip: do not use the function to arrow fn as the "this" should refer to "yup"
-// yup.addMethod(): yup.mixed- any method can apply to String, Number, object, array
-yup.addMethod(yup.mixed, 'equalTo', function(ref, message) {
-    const msg = message || '${path} should match ${ref.path}';
-    return this.test('equalTo', msg, function (value) {
-        let refValue = this.resolve(ref);
-        return !refValue || !value || value === refValue;
-    });
-});
 
 
 class HomeItemForm extends Component {
     static defaultProps = {};
 
     static propTypes = {};
+
+    initialState = {
+        id: '',
+        title: '',
+        content: '',
+        touched: {},
+        errors: {},
+        pending: false,
+        disabled: true,
+    };
 
     state = {
         id: '',
@@ -49,7 +48,7 @@ class HomeItemForm extends Component {
         disabled: true,
     };
     
-    //schema - validation schema for yup
+    //schema - validation schema for yup - server checking (async validation)
     // schema = yup.object().shape({
     //     firstname: yup.string().required('first is required').min(3).max(5).test('isDuplicate', 'aaa is duplicate', (value)=>{
     //         return new Promise((resolve, reject)=>{
@@ -64,102 +63,80 @@ class HomeItemForm extends Component {
     //     password1: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password2'), 'should be same as password2.'),
     //     password2: yup.string().required('password is required').min(5).max(8).equalTo(yup.ref('password1'), 'should be same as password1.'),
     // });
+
     schema = yup.object().shape({
         title: yup.string().required().min(3).max(5),
         content: yup.string().required().min(10).max(15),
     });
-    // validationRules = {
-    //     title: {min: 3, max: 10},
-    //     content: {min: 2, max: 30},
-    // };
 
-    // // validator library :
-    // validate = (targetName, targetValue) => {
-    //     const error = {targetName: ''};
-    //     if (targetName === 'title') {
-    //         const min = this.validationRules.title.min;
-    //         const max = this.validationRules.title.max;
-    //         if (validator.isEmpty(targetValue)) {
-    //             error[targetName] = 'should not empty'
-    //         }
-    //         else if (!validator.isLength(targetValue, {min: min, max: max})) {
-    //             error[targetName] = 'should be ' + min + '~ ' + max;
-    //         }
-    //     }
-    //     else if (targetName === 'content') {
-    //         const min = this.validationRules.content.min;
-    //         const max = this.validationRules.content.max;
-    //         if (validator.isEmpty(targetValue)) {
-    //             error[targetName] = 'should not empty'
-    //         }
-    //         else if (!validator.isLength(targetValue, {min: min, max: max})) {
-    //             error[targetName] = 'should be ' + min + '~ ' + max;
-    //         }
-    //     }
-    //     return error;
-    // };
-
-    getNewState = (targetName, targetValue, change, error, state, fieldNum) => {
-
-        const newState = {
-            ...state,
-            ...change
-        };
-
-        newState.touched[targetName] = true;
-
-        if (error[targetName]) {
-            newState.errors[targetName] = newState.touched[targetName] && error[targetName]
-        } else {
-            delete newState.errors[targetName];
-        }
-        newState.disabled = Object.keys(newState.errors).length > 0 || Object.keys(newState.touched).length < fieldNum;
-
-        return newState;
-    };
-
-    handleOnBlur = async (e) => {
+    newState;
+    doValidate = (e)=>{
         const targetName = e.target.name;
         const targetValue = e.target.value;
+        const fieldNum = 2;
 
-        const change = {
+        //create new state
+        this.newState = {
+            ...this.state,
             [targetName]: targetValue
         };
-        const error = this.validate(targetName, targetValue);
-        const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2);
-        //async validation
-        // if(targetName === 'title' && !newState.errors['title']){
-        //     newState.loading = true;
-        //     const result = await this.isDuplicate(targetValue);
-        //     if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
-        //     newState.loading = false;
-        //     this.setState(newState);
-        //
-        // } else if(targetName === 'content' && !newState.errors['content']){
-        //     newState.loading = true;
-        //     const result = await this.isDuplicate2(targetValue);
-        //     if (result) newState.errors[targetName] = newState.touched[targetName] && 'is duplicate.';
-        //     newState.loading = false;
-        //     this.setState(newState);
-        // }
-        this.setState(newState);
-    };
-    handleOnChange = (e) => {
-        const targetName = e.target.name;
-        const targetValue = e.target.value;
 
-        const change = {
-            [targetName]: targetValue
-        };
-        const error = this.validate(targetName, targetValue);
-        const newState = this.getNewState(targetName, targetValue, change, error, this.state, 2);
+        this.newState.touched[targetName] = true;
+        this.newState.loading = true;
+        this.newState.disabled = true;
+        this.setState(this.newState);
 
-        this.setState(newState);
+        const path = targetName;
+
+        //Tip : validateAt : validate only the path while validate validates all.
+        this.schema.validateAt(path, this.newState).then(value=>{
+            delete this.newState.errors[targetName];
+
+            // if(targetName === 'password1' && targetValue === this.newState.password2){
+            //     delete this.newState.errors.password2;
+            // }else if(targetName === 'password2' && targetValue === this.newState.password1){
+            //     delete this.newState.errors.password1;
+            // }
+
+            this.newState.loading = false;
+            this.newState.disabled = Object.keys(this.newState.errors).length > 0 || Object.keys(this.newState.touched).length < fieldNum;
+            this.setState(this.newState)
+        }).catch(err=>{
+            this.newState.errors[err.path] = err.errors;
+            this.newState.loading = false;
+            this.newState.disabled = true;
+            this.setState(this.newState)
+        });
     };
 
-    // lsj-TIP : onSubmit에서 e를 이용해서 form전체의 값을 받기
-    nameRef = null;
-    handleOnSubmit = (e) => {
+    handleOnBlur = (e)=>{
+        //this.doValidate(e);
+    };
+
+    handleOnChange=(e)=>{
+        this.doValidate(e);
+    };
+
+    // Tip : onSubmit에서 e를 이용해서 form전체의 값을 받기
+    //nameRef = null;
+    // handleOnSubmit = (e) => {
+    //     e.preventDefault();
+    //     let data = new FormData(e.target);
+    //
+    //     let payload = {};
+    //     for (var pair of data.entries()) {
+    //         payload[pair[0]] = pair[1];
+    //     }
+    //     this.props.onSubmit(payload);
+    //
+    //     //reset form with the initialState
+    //     this.setState({...this.initialState});
+    //     //this.setState({id:'', title: '', content: ''});
+    //
+    //     this.props.onSetMode('view');
+    // };
+
+    handleOnSaveItem = (e) => {
         e.preventDefault();
         let data = new FormData(e.target);
 
@@ -167,13 +144,54 @@ class HomeItemForm extends Component {
         for (var pair of data.entries()) {
             payload[pair[0]] = pair[1];
         }
-        this.props.onSubmit(payload);
+        this.props.onSaveItem(payload);
 
-        //reset form
-        this.setState({id:'', title: '', content: ''});
+        //reset form with the initialState
+        this.setState({...this.initialState});
 
         this.props.onSetMode('view');
     };
+
+
+    //========================================================================================
+    // async actionTypes for saveItem, home
+    //       saveItem, SaveItem, SAVE_ITEM, Home
+
+    // Tips :
+    // 1) If there is some intermediate compos... relay the props for states and actionDispatchers
+    // 2) Add handleOnSaveItemFn in PresentCompo and apply it to element in render()
+    // 3) Add mapStateToProps and mapDispatchToProps in ContainerCompo
+    // 4) Add actiontype Async, actionCreatorFn, initialStates, reducer in module
+    // 5) remove not-needed for params or actionOption
+    // 6) server api
+    //======== Add handleOnSaveItemFn in PresentCompo ==================================
+
+    //======== Add mapStateToProps and mapDispatchToProps in ContainerCompo ====================
+    // // mapStateToProps for saveItem
+    //
+    //
+
+    //======== Add actiontype Async, actionCreatorFn, initialStates, reducer in module ==========
+    //
+    // // async actionCreatorFn for saveItem
+    // export const saveItem = (id) => async (dispatch) => {
+    //     dispatch({ type: ASYNC_STATUS_SAVE_ITEM_PENDING });
+    //     try{
+    //         const response = await saveItemAPI(id);
+    //         dispatch({type: ASYNC_STATUS_SAVE_ITEM_SUCCESS, payload : response});
+    //     }
+    //     catch(e){
+    //         dispatch({type:ASYNC_STATUS_SAVE_ITEM_ERROR, payload: e});
+    //     }
+    // };
+    // // fetch fn for async actionCreatorFn for saveItem
+    // function saveItemAPI(id){
+    //     return fetch('/api/save/'+id).then(function(response){return response.json()});
+    // }
+    //
+    //
+    //========================================================================================
+
 
     render() {
         const styError = {fontSize: '10px', color: 'red'};
@@ -181,7 +199,7 @@ class HomeItemForm extends Component {
         // Tip : Use defaultValue instead of value : Warning: A component is changing a controlled input of type hidden to be uncontrolled. Input elements should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://fb.me/react-controlled-components
         const {id, title, content, pending, errors, disabled} = this.state;
         return (
-            <form onSubmit={this.handleOnSubmit}>
+            <form onSubmit={this.handleOnSaveItem}>
                 <div>
                     <span>
                         <input type="hidden"

@@ -27,10 +27,10 @@ const ASYNC_STATUS_GET_ITEMS_PENDING = 'home/GET_ITEMS_PENDING';
 const ASYNC_STATUS_GET_ITEMS_ERROR   = 'home/GET_ITEMS_ERROR';
 const ASYNC_STATUS_GET_ITEMS_SUCCESS = 'home/GET_ITEMS_SUCCESS';
 
-//async actionTypes for SUBMIT
-const ASYNC_STATUS_SUBMIT_PENDING = 'home/SUBMIT_PENDING';
-const ASYNC_STATUS_SUBMIT_ERROR = 'home/SUBMIT_ERROR';
-const ASYNC_STATUS_SUBMIT_SUCCESS = 'home/SUBMIT_SUCCESS';
+// async actionTypes for saveItem
+const ASYNC_STATUS_SAVE_ITEM_PENDING = 'home/SAVE_ITEM_PENDING';
+const ASYNC_STATUS_SAVE_ITEM_ERROR = 'home/SAVE_ITEM_ERROR';
+const ASYNC_STATUS_SAVE_ITEM_SUCCESS = 'home/SAVE_ITEM_SUCCESS';
 
 // async actionTypes for removeItem
 const ASYNC_STATUS_REMOVE_ITEM_PENDING = 'home/REMOVE_ITEM_PENDING';
@@ -42,7 +42,7 @@ const ASYNC_STATUS_REMOVE_ITEM_SUCCESS = 'home/REMOVE_ITEM_SUCCESS';
 //-------------------------------------------------------------------------------------
 // const CHANGE = 'home/CHANGE';
 const SET_MODE = 'home/SET_MODE';
-const ADD_ITEM = 'home/ADD_ITEM';
+const SET_ADD_ITEM_MODE = 'home/SET_ADD_ITEM_MODE';
 
 
 //-------------------------------------------------------------------------------------
@@ -105,40 +105,24 @@ function removeItemAPI(id){
     return fetch('/api/item/remove/'+id).then(function(response){return response.json()});
 }
 
-// // async actionCreatorFn for remove
-// export const removeItem = (id) => async (dispatch) => {
-//     dispatch({ type: ASYNC_STATUS_REMOVE_PENDING });
-//     try{
-//         const response = await removeItemAPI(id);
-//         dispatch({type: ASYNC_STATUS_REMOVE_SUCCESS, payload : response});
-//     }
-//     catch(e){
-//         dispatch({type:ASYNC_STATUS_REMOVE_ERROR, payload: e});
-//     }
-// };
-// // fetch fn for async actionCreatorFn for delete
-// function removeItemAPI(id){
-//     return fetch('/api/item/remove/'+id).then(function(response){return response.json()});
-// }
-
-// async function : submit(payload)
-export const submit = (payload) => async (dispatch) => {
-    dispatch({ type: ASYNC_STATUS_SUBMIT_PENDING });
+// async function : saveItem(payload)
+export const saveItem = (payload) => async (dispatch) => {
+    dispatch({ type: ASYNC_STATUS_SAVE_ITEM_PENDING });
     try{
         // lsj-TIP : promise (방법1): submitAPI(payload)에서 처리된 prom을 then()메서드로 받아서, 그 안에서 dispatch를 바로 처리.
         // submitAPI(payload).then((response)=>{
         //     dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:response});
         // });
         // lsj-TIP : promise (방법2) : await로 처리
-        const newItem = await submitAPI(payload);
-        dispatch({type:ASYNC_STATUS_SUBMIT_SUCCESS, payload:newItem});
+        const newItem = await saveItemAPI(payload);
+        dispatch({type:ASYNC_STATUS_SAVE_ITEM_SUCCESS, payload:newItem});
 
     }
     catch(e){
-        dispatch({type:ASYNC_STATUS_SUBMIT_ERROR, payload: e});
+        dispatch({type:ASYNC_STATUS_SAVE_ITEM_ERROR, payload: e});
     }
 };
-function submitAPI(payload){
+function saveItemAPI(payload){
     return fetch(`/api/item/save`, {
         method:'POST',
         headers:{
@@ -157,18 +141,59 @@ function submitAPI(payload){
 //     return {type:CHANGE, payload: payload};
 // }
 
-
-// Sync function : setMode(mode) : set mode to 'edit' or 'view'
+// Sync function : setMode(mode) : set state mode to 'edit' or 'view'
 export function setMode(mode){
-    return {type:SET_MODE, mode: mode};
+   return {type : SET_MODE, mode:mode};
 }
 
-// Sync function : addItem() : add item in edit mode
-export function addItem(){
-    return {type : ADD_ITEM, mode:'edit'};
+// // Sync function : addItem() : create a item and set state mode to 'edit'
+// export function addItem(){
+//     return {type : ADD_ITEM, mode:'edit'};
+// }
+// Sync actionCreatorFn : setAddItemMode passing params of action's type and opts
+export function setAddItemMode(mode){
+   return {type : SET_ADD_ITEM_MODE, mode:mode};
 }
 
+//=========================================================================================
+// sync actionTypes for setAddItemMode, home
+//       setAddItemMode, SetAddItemMode, SET_ADD_ITEM_MODE, Home
 
+// Tips :
+// 1) If there is some intermediate compos... relay the props for states and actionDispatchers
+// 2) Add handleOnSetAddItemModeFn in PresentCompo and apply it to element in render()
+// 3) Add mapStateToProps and mapDispatchToProps in ContainerCompo
+// 4) Add actiontype sync, actionCreatorFn, initialStates, reducer in module
+// 5) remove not-needed for params or actionOption
+//======== Add handleOnSetAddItemModeFn in PresentCompo ==================================
+// handleOnSetAddItemMode = (e, mode) => {
+//     e.stopPropagation();
+//     this.props.onSetAddItemMode(mode);
+// };
+
+//======== Add mapStateToProps and mapDispatchToProps in ContainerCompo ====================
+// // mapStateToProps for setAddItemMode
+//
+// not-needed :  home.not-needed,
+//
+// // mapDispatchToProps for setAddItemMode
+
+//============ add actionType sync in module ===============================================
+// sync actionType for setAddItemMode
+//
+
+//
+// // initialState for setAddItemMode
+//    not-needed :     not-needed, // if new initial state needed
+
+// reducer
+//case SET_ADD_ITEM_MODE :
+//    return {
+//        ...state,
+//        mode:action.mode,
+//        [not-needed]
+//    };
+//=========================================================================================
 //-------------------------------------------------------------------------------------
 //3) define initialState for module
 //-------------------------------------------------------------------------------------
@@ -190,8 +215,9 @@ export const initialState = {
         removeItemPending:   false,
         removeItemError:     false,
 
-        submitPending:  false,
-        submitError:    false,
+        // initialState for async saveItem
+        saveItemPending:   false,
+        saveItemError:     false,
 
     };
 
@@ -219,7 +245,7 @@ export default function home(state = initialState, action) {
         case ASYNC_STATUS_GET_ITEM_SUCCESS:
             return{
                 ...state,
-                getItemsPending :false,
+                getItemPending :false,
                 getItemError : false,
                 item : action.payload
             };
@@ -240,7 +266,7 @@ export default function home(state = initialState, action) {
         case ASYNC_STATUS_GET_ITEMS_SUCCESS:
             return{
                 ...state,
-                getItemssPending :false,
+                getItemsPending :false,
                 getItemsError : false,
                 items : action.payload
             };
@@ -269,53 +295,48 @@ export default function home(state = initialState, action) {
                 item : item,
             };
 
-        case ASYNC_STATUS_SUBMIT_PENDING:
+        // reducer for async saveItem
+        case ASYNC_STATUS_SAVE_ITEM_PENDING:
             return {
                 ...state,
-                submitPending: true,
-                submitError: false,
+                saveItemPending : true,
+                saveItemError : false,
             };
-        case ASYNC_STATUS_SUBMIT_ERROR:
+        case ASYNC_STATUS_SAVE_ITEM_ERROR:
             return {
                 ...state,
-                submitPending: false,
-                submitError: true
+                saveItemPending : false,
+                saveItemError : true
             };
-        case ASYNC_STATUS_SUBMIT_SUCCESS:
-            newItems = Array.from(state.items);
+        case ASYNC_STATUS_SAVE_ITEM_SUCCESS:
+            newItems = [...state.items];
             idx = newItems.findIndex(el=>el.id == action.payload.id);
-            if(idx == null){
+            if(idx < 0){
                 newItems.push(action.payload);
+                console.log(newItems);
             }
             else{
                 newItems[idx] = action.payload;
             }
             return {
                 ...state,
-                submitPending: false,
-                submitError: false,
+                saveItemPending: false,
+                saveItemError: false,
                 items: newItems,
                 item: action.payload,
             };
+
         case SET_MODE:
             return {
                 ...state,
                 mode:action.mode
             };
-        case ADD_ITEM :
-            return {
-                ...state,
-                mode:action.mode,
-                item: {},
-            };
-        // case CHANGE:
-        //     return {
-        //         ...state,
-        //         fullname:{
-        //             ...state.fullname,
-        //             ...action.payload
-        //         }
-        //     };
+        case SET_ADD_ITEM_MODE :
+           return {
+               ...state,
+               mode:action.mode,
+               item:{},
+           };
         default:
             return state;
     }
