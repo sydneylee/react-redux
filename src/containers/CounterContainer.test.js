@@ -36,7 +36,7 @@ describe('CounterContainer', ()=>{
     // 이 작동이 일어나면 mockStore는 dispatched action을 받아두고 있는데 이것을 expected action과 비교해보는것.
     it('should dispatch increase action by simulating its child comp button click', ()=>{
        component.find('button#incBtn').simulate('click');
-       expect(store.getActions()[0]).toEqual(counterExports.increment());
+       expect(store.getActions()[0]).toEqual(counterExports.incrementSync());
     });
 
 

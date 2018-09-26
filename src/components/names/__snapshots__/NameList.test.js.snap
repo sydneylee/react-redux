@@ -3,10 +3,10 @@
 exports[`NameList matches snapshot 1`] = `
 <ul>
   <li>
-    벨로퍼트
+    undefined  undefined
   </li>
   <li>
-    김민준
+    undefined  undefined
   </li>
 </ul>
 `;

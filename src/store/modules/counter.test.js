@@ -13,8 +13,8 @@ describe('counter module:actionCreators and reducer', ()=>{
             ];
             // actual actions from actionCreators
             const actualActionsFrActionCreator=[
-                counterExports.increment(),
-                counterExports.decrement(),
+                counterExports.incrementSync(),
+                counterExports.decrementSync(),
             ];
 
             expect(actualActionsFrActionCreator).toEqual(expectedActions);
@@ -34,12 +34,12 @@ describe('counter module:actionCreators and reducer', ()=>{
         });
 
         it('should increase for INCREMENT action.type', ()=>{
-            state = counter(state, counterExports.increment());
+            state = counter(state, counterExports.incrementSync());
             expect(state).toHaveProperty('number', 1);
         });
 
         it('should decrease for DECREMENT action.type', ()=>{
-            state = counter(state, counterExports.decrement());
+            state = counter(state, counterExports.decrementSync());
             expect(state).toHaveProperty('number', 0);
         });
     });

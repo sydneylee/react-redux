@@ -48,8 +48,8 @@ const mapStateToProps= (state)=>{
 // Next TODO : define actioType and actionCreators for increment() used here in store/module
 const mapActionDispatchersToProps= (dispatch)=>{
     return {
-        onIncrement : ()=>{dispatch(counterActionCreators.increment())},
-        onDecrement : ()=>{dispatch(counterActionCreators.decrement())},
+        onIncrement : ()=>{dispatch(counterActionCreators.incrementSync())},
+        onDecrement : ()=>{dispatch(counterActionCreators.decrementSync())},
     };
 };
 export default connect(mapStateToProps, mapActionDispatchersToProps)(CounterContainer);
